@@ -105,6 +105,29 @@ public class IpdMainPageController {
         }
         return null;
     }
+    private Concept insertConcept(ConceptService conceptService,
+                                  String dataTypeName, String conceptClassName, String concept) {
+        try {
+            ConceptDatatype datatype = Context.getConceptService()
+                    .getConceptDatatypeByName(dataTypeName);
+            ConceptClass conceptClass = conceptService
+                    .getConceptClassByName(conceptClassName);
+            Concept con = conceptService.getConcept(concept);
+            // System.out.println(con);
+            if (con == null) {
+                con = new Concept();
+                ConceptName name = new ConceptName(concept,
+                        Context.getLocale());
+                con.addName(name);
+                con.setDatatype(datatype);
+                con.setConceptClass(conceptClass);
+                return conceptService.saveConcept(con);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

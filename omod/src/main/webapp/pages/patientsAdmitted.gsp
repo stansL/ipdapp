@@ -9,7 +9,7 @@
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
     <thead>
         <tr align="center" >
-            <th>${ui.message("ipd.patient.admissionDate")}</th>
+            <th>${ui.message("ipd.admissionDate")}</th>
             <th>${ui.message("ipd.patient.patientId")}</th>
             <th>${ui.message("ipd.patient.patientName")}</th>
             <th>${ui.message("ipd.patient.bedNumber")}</th>
@@ -20,7 +20,7 @@
     <% if(listPatientAdmitted!=null || listPatientAdmitted!=""){ %>
         <% listPatientAdmitted.each { queue -> %>
             <tr align="center" >
-                <td>${queue.admissionDate}</td>
+                <td>${ui.formatDatePretty(queue.admissionDate)}</td>
                 <td>${queue.patientIdentifier}</td>
                 <td>${queue.patientName}</td>
                 <td>${queue.bed}</td>

@@ -81,6 +81,30 @@ public class IpdMainPageController {
             Context.getConceptService().saveConcept(concept);
         }
     }
+    private Concept insertHospital(ConceptService conceptService,
+                                   String hospitalName) {
+        try {
+            ConceptDatatype datatype = Context.getConceptService()
+                    .getConceptDatatypeByName("N/A");
+            ConceptClass conceptClass = conceptService
+                    .getConceptClassByName("Misc");
+            Concept con = conceptService.getConceptByName(hospitalName);
+            // System.out.println(con);
+            if (con == null) {
+                con = new Concept();
+                ConceptName name = new ConceptName(hospitalName,
+                        Context.getLocale());
+                con.addName(name);
+                con.setDatatype(datatype);
+                con.setConceptClass(conceptClass);
+                return conceptService.saveConcept(con);
+            }
+            return con;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

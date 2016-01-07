@@ -27,7 +27,7 @@ public class IpdMainPageController {
             @RequestParam(value = "ipdWard", required = false) String ipdWard,
             @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
             @RequestParam(value = "doctor", required = false) String[] doctor,
-            Model model) {
+            PageModel model) {
 
 
         creatConceptQuestionAndAnswer(Context.getConceptService(), Context.getAuthenticatedUser(), HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME, new String[]{"Improve", "Cured", "Discharge on request", "LAMA", "Absconding", "Death"});
@@ -128,6 +128,4 @@ public class IpdMainPageController {
         }
         return null;
     }
-
-
 }

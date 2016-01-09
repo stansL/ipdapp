@@ -103,12 +103,6 @@
                     <input type="number">
                 </div>
                 <div class="persondatalabel">
-                    <h2>Temperature(C)</h2>
-                    <p>
-                     <input placeholder="Temperature"  type="number"> </input>
-                    </p>
-                </div>
-                <div class="persondatalabel">
                     <h2>Diet Advised</h2>
                     <select>
                         <option>Item 1</option>
@@ -116,11 +110,21 @@
                         <option>Item 3</option>
                     </select>
                 </div>
+                <div class="persondatalabel">
+                    <h2>Temperature(C)</h2>
+                    <p>
+                     <input placeholder="Temperature"  type="number"> </input>
+                    </p>
+                </div>
                 <div class="clearboth"></div>
-                <div>
+                <div class="">
                     <h2>Notes if any</h2>
                     <textarea></textarea>
                 </div>
+                <div class="" style="margin-top:15px" >
+                    <a class="button confirm">Submit</a>
+                </div>
+
             </div>
             </form>
         </section>
@@ -156,6 +160,9 @@
                     <div class="persondatalabel" >
                         <h2>Comments</h2>
                         <textarea></textarea>
+                    </div>
+                    <div class="persondatalabel" >
+                        <a class="button confirm">Submit</a>
                     </div>
                 </div>
             </form>

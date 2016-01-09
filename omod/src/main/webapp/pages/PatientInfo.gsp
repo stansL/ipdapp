@@ -10,6 +10,7 @@
         width:50%;
         border: 1px;
         float: left;
+        margin-bottom: 15px;
     }
     .clearboth{
         clear: both;
@@ -22,6 +23,11 @@
         display: inline;
         width: 50%;
     }
+    .morebuttons{
+        display: inline;
+        float: left;
+        margin-left: 20px;
+    }
 </style>
 </head>
 <body>
@@ -29,7 +35,7 @@
 <div id="tabs">
     <ul>
         <li><a href="#tabs-1">Patient Details</a></li>
-        <li><a href="#tabs-2">Enter Vitals</a></li>
+        <li><a href="#tabs-2">Daily Vitals</a></li>
         <li><a href="#tabs-3">Treatment</a></li>
         <li><a href="#tabs-4">Transfer</a></li>
     </ul>
@@ -67,14 +73,67 @@
             <h3> ....</h3>
         </div>
         <div class="clearboth"></div>
+
+        <div style="margin-top: 30px;">
+            <a class="button confirm morebuttons">Discharge</a>
+            <a class="button confirm morebuttons">Request for Discharge</a>
+            <a class="button confirm morebuttons">Abscord</a>
+            <a class="button confirm morebuttons">Print</a>
+            <div class="clearboth"></div>
+        </div>
     </div>
     <div id="tabs-2">
-        <p>Enter Vitals</p>
+        <section>
+            <form>
+            <div class="simple-form-ui">
+                <div class="persondatalabel">
+                    <h2>S.No:</h2>
+                    <h3>...</h3>
+                </div>
+                <div class="persondatalabel">
+                    <h2>Date/Time:</h2>
+                    <h3> ....</h3>
+                </div>
+                <div class="persondatalabel">
+                    <h2>Blood Pressure</h2>
+                    <input type="number">
+                </div>
+                <div class="persondatalabel">
+                    <h2>Pulse Rate(/min)</h2>
+                    <input type="number">
+                </div>
+                <div class="persondatalabel">
+                    <h2>Temperature(C)</h2>
+                    <p>
+                     <input placeholder="Temperature"  type="number"> </input>
+                    </p>
+                </div>
+                <div class="persondatalabel">
+                    <h2>Diet Advised</h2>
+                    <select>
+                        <option>Item 1</option>
+                        <option>Item 2</option>
+                        <option>Item 3</option>
+                    </select>
+                </div>
+                <div class="clearboth"></div>
+                <div>
+                    <h2>Notes if any</h2>
+                    <textarea></textarea>
+                </div>
+            </div>
+            </form>
+        </section>
     </div>
     <div id="tabs-3">
-        <p>Treatment</p>
+
     </div>
     <div id="tabs-4">
-        <p>Transfer</p>
+        <section>
+            <form>
+                <div class="simple-form-ui">
+                </div>
+            </form>
+        </section>
     </div>
 </div>

@@ -1,4 +1,5 @@
 <% ui.decorateWith("appui", "standardEmrPage") %>
+
 <script>
     var jq = jQuery;
     jq(function() {
@@ -41,37 +42,38 @@
     </ul>
     <div id="tabs-1">
         <div class="persondatalabel">
-            <h2>Admission Date:</h2>
-            <h3>...</h3>
+            <h2>Admission Date: </h2>
+            <h3> ${ui.formatDatePretty(patientInformation.admissionDate)}</h3>
         </div>
         <div class="persondatalabel">
-            <h2>Patient ID:</h2>
-            <h3> ....</h3>
+            <h2>Patient ID: </h2>
+            <h3> ${patientInformation.patientIdentifier}</h3>
         </div>
         <div class="persondatalabel">
-            <h2>Name:</h2>
-            <h3> ....</h3>
+            <h2>Name: </h2>
+            <h3> ${patientInformation.patientName}</h3>
         </div>
         <div class="persondatalabel">
-            <h2>Bed Number:</h2>
-            <h3> ....</h3>
+            <h2>Bed Number: </h2>
+            <h3> ${patientInformation.bed}</h3>
         </div>
         <div class="persondatalabel">
-            <h2>Age:</h2>
-            <h3> ....</h3>
+            <h2>Age: </h2>
+            <h3> ${patientInformation.age}</h3>
         </div>
         <div class="persondatalabel">
-            <h2>Gender:</h2>
-            <h3> ....</h3>
+            <h2>Gender: </h2>
+            <h3> ${patientInformation.gender}</h3>
+        </div>
+        <div class="persondatalabel">
+            <h2>Admission By: </h2>
+            <h3> ${patientInformation.ipdAdmittedUser.givenName}</h3>
         </div>
         <div class="persondatalabel">
             <h2>Admission Ward :</h2>
-            <h3> ....</h3>
+            <h3> ${patientInformation.admittedWard.name}</h3>
         </div>
-        <div class="persondatalabel">
-            <h2>Admission By:</h2>
-            <h3> ....</h3>
-        </div>
+
         <div class="clearboth"></div>
 
         <div style="margin-top: 30px;">

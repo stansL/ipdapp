@@ -132,6 +132,31 @@
         <section>
             <form>
                 <div class="simple-form-ui">
+                    <div class="persondatalabel">
+                        <h2>Select Ward</h2>
+                        <select>
+                            <option>Item 1</option>
+                            <option>Item 2</option>
+                            <option>Item 3</option>
+                        </select>
+                    </div>
+                    <div class="persondatalabel">
+                        <h2>Select Doctor</h2>
+                        <select>
+                            <option>Item 1</option>
+                            <option>Item 2</option>
+                            <option>Item 3</option>
+                        </select>
+                    </div>
+                    <div class="persondatalabel">
+                        <h2>Bed Number</h2>
+                        <input type="number">
+                    </div>
+
+                    <div class="persondatalabel" >
+                        <h2>Comments</h2>
+                        <textarea></textarea>
+                    </div>
                 </div>
             </form>
         </section>

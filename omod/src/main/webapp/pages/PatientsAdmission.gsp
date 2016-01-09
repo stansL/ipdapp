@@ -22,7 +22,7 @@
                         <td>${ui.formatDatePretty(pAdmission.admissionDate)}</td>
                         <td>${pAdmission.patientIdentifier}</td>
                         <td>${pAdmission.patientName}</td>
-                        <td><button style="color:#00463F">View More</button></td>
+                        <td><a class="button task" style=""><i class="icon-plus-sign"></i>  View More</a></td>
                     </tr>
                 <% } %>
             <% } else { %>

@@ -6,7 +6,7 @@
 </head>
 
 <div  style="margin-bottom: 15px">
-<table cellpadding="5" cellspacing="0" width="100%" id="queueList">
+<table style="margin: 10px" cellpadding="5" cellspacing="0" width="100%" id="queueList">
     <thead>
         <tr align="center" >
             <th>${ui.message("ipd.admissionDate")}</th>
@@ -24,8 +24,8 @@
                 <td>${queue.patientIdentifier}</td>
                 <td>${queue.patientName}</td>
                 <td>${queue.bed}</td>
-                <td><button style="color:#00463F">View More</button></td>
-            </tr>
+                <td><a class="button task" style=""><i class="icon-plus-sign"></i>  View More</a></td>
+    </tr>
         <% } %>
     <% } else { %>
         <tr align="center" >

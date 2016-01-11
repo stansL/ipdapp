@@ -132,6 +132,68 @@
         </section>
     </div>
     <div id="tabs-3">
+        <form method="post">
+            <div>
+                <p class="input-position-class">
+                    <label for="procedure">Post for Procedure:</label>
+                    <input type="text" id="procedure" name="procedure" />
+                </p>
+                <div data-bind="foreach: procedures">
+                    <p data-bind="text: label"></p>
+                    <span data-bind="if: schedulable">Schedule:<input type="date"></span>
+                    <button data-bind="click: \$root.removeProcedure">Remove</button>
+                </div>
+            </div>
+
+            </form>
+        <div>
+            <p class="input-position-class">
+                <label for="investigation">Investigation:</label>
+                <input type="text" id="investigation" name="investigation" />
+            </p>
+            <div data-bind="foreach: investigations">
+                <p data-bind="text: label"></p>
+                <button data-bind="click: \$root.removeInvestigation">Remove</button>
+            </div>
+        </div>
+        <p class="input-position-class prescription">
+            <label>Prescription</label>
+        <table>
+            <thead>
+            <th>Drug Name</th>
+            <th>Formulation</th>
+            <th>Frequency</th>
+            <th>Number of Days</th>
+            <th>Comment</th>
+            <th></th>
+            </thead>
+            <tbody data-bind="foreach: drugs">
+            <td>
+                <input class="drug-name" type="text" data-bind="value: name, valueUpdate: 'blur'" >
+            </td>
+            <td>
+                <select data-bind="options: formulationOpts, value: formulation, optionsText: 'label'"></select>
+            </td>
+            <td>
+                <select data-bind="options: \$root.frequencyOpts, value: frequency, optionsText: 'label'"></select>
+            </td>
+            <td>
+                <input type="text" data-bind="value: numberOfDays" >
+            </td>
+            <td>
+                <textarea data-bind="value: comment"></textarea>
+            </td>
+            <td>
+                <button data-bind="click: \$root.removeDrug">Remove</button>
+            </td>
+            </tbody>
+        </table>
+        <button data-bind="click: addDrug">Add</button>
+    </p>
+        <p class="input-position-class">
+            <label for="note">Other Instructions</label>
+            <input  data-bind="value: \$root.otherInstructions" type="text" id="note" name="note" />
+        </p>
 
     </div>
     <div id="tabs-4">

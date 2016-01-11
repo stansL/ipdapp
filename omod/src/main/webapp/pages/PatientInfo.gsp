@@ -139,19 +139,29 @@
             <form>
                 <div class="simple-form-ui">
                     <div class="persondatalabel">
-                        <h2>Select Ward</h2>
-                        <select>
-                            <option>Item 1</option>
-                            <option>Item 2</option>
-                            <option>Item 3</option>
+                        <h2>Select Ward: </h2>
+                        <select id="ipdWard"  name="ipdWard"  style="width: 150px;">
+                            <option value="">Select Ward</option>
+                            <% if (listIpd!=null && listIpd!="") { %>
+                            <% listIpd.each { ipd -> %>
+                            <option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
+                                ${ipd.answerConcept.name}
+                            </option>
+                            <%}%>
+                            <%}%>
                         </select>
                     </div>
                     <div class="persondatalabel">
-                        <h2>Select Doctor</h2>
-                        <select>
-                            <option>Item 1</option>
-                            <option>Item 2</option>
-                            <option>Item 3</option>
+                        <h2>Select Doctor: </h2>
+                        <select id="doctor"  name="doctor"  >
+                            <option value="">Select Doctor On Call</option>
+                            <% if (listDoctor!=null && listDoctor!=""){ %>
+                            <% listDoctor.each { doct -> %>
+                            <option title="${doct.givenName}"   value="${doct.id}">
+                                ${doct.givenName}
+                            </option>
+                            <% } %>
+                            <% } %>
                         </select>
                     </div>
                     <div class="persondatalabel">

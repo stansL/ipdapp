@@ -39,4 +39,18 @@ public class ChooseIpdWardPageController {
         model.addAttribute("tab", tab.intValue());
 
     }
+    public void creatConceptQuestionAndAnswer(ConceptService conceptService,  User user ,String conceptParent, String...conceptChild) {
+        // System.out.println("========= insertExternalHospitalConcepts =========");
+        Concept concept = conceptService.getConcept(conceptParent);
+        if(concept == null){
+            insertConcept(conceptService, "Coded", "Question" , conceptParent);
+        }
+        if (concept != null) {
+
+            for (String hn : conceptChild) {
+                insertHospital(conceptService, hn);
+            }
+            addConceptAnswers(concept, conceptChild, user);
+        }
+    }
 }

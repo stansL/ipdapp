@@ -53,4 +53,24 @@ public class ChooseIpdWardPageController {
             addConceptAnswers(concept, conceptChild, user);
         }
     }
+    private void addConceptAnswers(Concept concept, String[] answerNames,
+                                   User creator) {
+        Set<Integer> currentAnswerIds = new HashSet<Integer>();
+        for (ConceptAnswer answer : concept.getAnswers()) {
+            currentAnswerIds.add(answer.getAnswerConcept().getConceptId());
+        }
+        boolean changed = false;
+        for (String answerName : answerNames) {
+            Concept answer = Context.getConceptService().getConcept(answerName);
+            if (!currentAnswerIds.contains(answer.getConceptId())) {
+                changed = true;
+                ConceptAnswer conceptAnswer = new ConceptAnswer(answer);
+                conceptAnswer.setCreator(creator);
+                concept.addAnswer(conceptAnswer);
+            }
+        }
+        if (changed) {
+            Context.getConceptService().saveConcept(concept);
+        }
+    }
 }

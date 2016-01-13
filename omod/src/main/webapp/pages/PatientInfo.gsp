@@ -174,6 +174,11 @@
             <div class="persondatalabel">
                 <h2>Post for Procedure:</h2>
                 <input type="text" id="procedure" name="procedure" />
+                <div data-bind="foreach: procedures">
+                    <p data-bind="text: label"></p>
+                    <span data-bind="if: schedulable">Schedule:<input type="date"></span>
+                    <button data-bind="click: \$root.removeProcedure">Remove</button>
+                </div>
             </div>
             <div class="persondatalabel">
                 <h2>Investigation:</h2>

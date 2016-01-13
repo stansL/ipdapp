@@ -6,6 +6,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
+import org.openmrs.module.hospitalcore.model.InventoryDrug;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.ipdui.model.Procedure;
@@ -37,5 +38,11 @@ public class PatientInfoFragmentController {
         List<Concept> investigations = Context.getService(PatientDashboardService.class).searchInvestigation(name);
         List<SimpleObject> investigationsList = SimpleObject.fromCollection(investigations, ui, "id", "name");
         return investigationsList;
+    }
+    public List<SimpleObject> getDrugs(@RequestParam(value="q") String name,UiUtils ui)
+    {
+        List<InventoryDrug> drugs = Context.getService(PatientDashboardService.class).findDrug(name);
+        List<SimpleObject> drugList = SimpleObject.fromCollection(drugs, ui, "id", "name");
+        return drugList;
     }
 }

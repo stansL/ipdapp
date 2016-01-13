@@ -183,6 +183,10 @@
             <div class="persondatalabel">
                 <h2>Investigation:</h2>
                 <input type="text" id="investigation" name="investigation" />
+                <div data-bind="foreach: investigations">
+                    <p data-bind="text: label"></p>
+                    <button data-bind="click: \$root.removeInvestigation">Remove</button>
+                </div>
             </div>
 
 

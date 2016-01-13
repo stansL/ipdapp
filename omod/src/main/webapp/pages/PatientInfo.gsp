@@ -1,9 +1,43 @@
+<head>
+
+</head>
 <% ui.decorateWith("appui", "standardEmrPage") %>
 
 <script>
     var jq = jQuery;
     jq(function() {
         jq( "#tabs" ).tabs();
+        jq("#procedure").autocomplete({
+            source: function( request, response ) {
+                jq.getJSON('${ ui.actionLink("patientdashboardui", "ClinicalNotes", "getProcedures") }',
+                        {
+                            q: request.term
+                        }
+                ).success(function(data) {
+                            procedureMatches = [];
+                            for (var i in data) {
+                                var result = { label: data[i].label, value: data[i].id, schedulable: data[i].schedulable };
+                                procedureMatches.push(result);
+                            }
+                            response(procedureMatches);
+                        });
+            },
+            minLength: 3,
+            select: function( event, ui ) {
+                event.preventDefault();
+                jq(this).val(ui.item.label);
+                var procedure = procedureMatches.find(function (procedureMatch) {
+                    return procedureMatch.value === ui.item.value;
+                });
+                note.addProcedure(new Procedure({id: procedure.value, label: procedure.label, schedulable: procedure.schedulable}));
+            },
+            open: function() {
+                jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+            },
+            close: function() {
+                jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+            }
+        });
     });
 </script>
 <style>
@@ -181,7 +215,7 @@
             <button data-bind="click: addDrug">Add</button>
         </div>
         <div style="clear:both;"></div>
-        
+
         <div style="clear:both;"></div>
         <div class="persondatalabel">
             <h2>Other Instructions:</h2>

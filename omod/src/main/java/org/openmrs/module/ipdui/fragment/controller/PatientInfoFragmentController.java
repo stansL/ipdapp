@@ -3,10 +3,12 @@ package org.openmrs.module.ipdui.fragment.controller;
 import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.hospitalcore.InventoryCommonService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientDashboardService;
 import org.openmrs.module.hospitalcore.model.DepartmentConcept;
 import org.openmrs.module.hospitalcore.model.InventoryDrug;
+import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.ipdui.model.Procedure;
@@ -44,5 +46,20 @@ public class PatientInfoFragmentController {
         List<InventoryDrug> drugs = Context.getService(PatientDashboardService.class).findDrug(name);
         List<SimpleObject> drugList = SimpleObject.fromCollection(drugs, ui, "id", "name");
         return drugList;
+    }
+    public List<SimpleObject> getFormulationByDrugName(@RequestParam(value="drugName") String drugName,UiUtils ui)
+    {
+
+        InventoryCommonService inventoryCommonService = (InventoryCommonService) Context.getService(InventoryCommonService.class);
+        InventoryDrug drug = inventoryCommonService.getDrugByName(drugName);
+
+        List<SimpleObject> formulationsList = null;
+
+        if(drug != null){
+            List<InventoryDrugFormulation> formulations = new ArrayList<InventoryDrugFormulation>(drug.getFormulations());
+            formulationsList = SimpleObject.fromCollection(formulations, ui, "id", "name");
+        }
+
+        return formulationsList;
     }
 }

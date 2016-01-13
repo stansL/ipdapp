@@ -32,4 +32,10 @@ public class PatientInfoFragmentController {
         List<SimpleObject> proceduresList = SimpleObject.fromCollection(proceduresPriority, ui, "id", "label", "schedulable");
         return proceduresList;
     }
+    public List<SimpleObject> getInvestigations(@RequestParam(value="q") String name,UiUtils ui)
+    {
+        List<Concept> investigations = Context.getService(PatientDashboardService.class).searchInvestigation(name);
+        List<SimpleObject> investigationsList = SimpleObject.fromCollection(investigations, ui, "id", "name");
+        return investigationsList;
+    }
 }

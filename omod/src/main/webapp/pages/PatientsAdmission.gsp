@@ -22,7 +22,37 @@
                         <td>${ui.formatDatePretty(pAdmission.admissionDate)}</td>
                         <td>${pAdmission.patientIdentifier}</td>
                         <td>${pAdmission.patientName}</td>
-                        <td><a class="button task" style=""><i class="icon-plus-sign"></i>  View More</a></td>
+                        <td>
+                            <div style="position: static" class="dropdown">
+                                <span class="dropdown-name">
+                                    <i class="icon-cog"></i>
+                                        Actions
+                                    <i class="icon-sort-down"></i>
+                                </span>
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon-signin"></i>
+                                            Admit
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon-remove"></i>
+                                           Remove
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon-thumbs-down "></i>
+                                            No bed
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </td>
                     </tr>
                 <% } %>
             <% } else { %>

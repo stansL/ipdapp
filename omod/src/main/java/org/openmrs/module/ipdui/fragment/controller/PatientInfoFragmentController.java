@@ -3,21 +3,18 @@ package org.openmrs.module.ipdui.fragment.controller;
 import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.hospitalcore.InventoryCommonService;
-import org.openmrs.module.hospitalcore.IpdService;
-import org.openmrs.module.hospitalcore.PatientDashboardService;
-import org.openmrs.module.hospitalcore.model.DepartmentConcept;
-import org.openmrs.module.hospitalcore.model.InventoryDrug;
-import org.openmrs.module.hospitalcore.model.InventoryDrugFormulation;
-import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.*;
+import org.openmrs.module.hospitalcore.model.*;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.ipdui.model.Procedure;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,4 +59,27 @@ public class PatientInfoFragmentController {
 
         return formulationsList;
     }
+    
+    public void requestForDischarge(@RequestParam(value = "id", required = false) Integer admittedId,
+                                    @RequestParam(value = "ipdWard", required = false) String ipdWard,
+                                    @RequestParam(value = "obStatus", required = false) Integer obStatus) {
+
+        int requestForDischargeStatus = 1;
+        IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+        IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+
+        IpdPatientAdmissionLog ipal = admitted.getPatientAdmissionLog();
+        ipal.setAbsconded(obStatus);
+
+        admitted.setRequestForDischargeStatus(requestForDischargeStatus);
+        admitted.setAbsconded(obStatus);
+
+
+        admitted=ipdService.saveIpdPatientAdmitted(admitted);
+        IpdPatientAdmissionLog ipdPatientAdmissionLog=admitted.getPatientAdmissionLog();
+        ipdPatientAdmissionLog.setRequestForDischargeStatus(requestForDischargeStatus);
+        ipdService.saveIpdPatientAdmissionLog(ipdPatientAdmissionLog);
+    }
+
+
 }

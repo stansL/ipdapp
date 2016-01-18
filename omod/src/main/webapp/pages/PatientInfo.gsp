@@ -9,7 +9,7 @@
         jq( "#tabs" ).tabs();
         jq("#procedure").autocomplete({
             source: function( request, response ) {
-                jq.getJSON('${ ui.actionLink("patientdashboardui", "ClinicalNotes", "getProcedures") }',
+                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getProcedures") }',
                         {
                             q: request.term
                         }
@@ -24,12 +24,7 @@
             },
             minLength: 3,
             select: function( event, ui ) {
-                event.preventDefault();
-                jq(this).val(ui.item.label);
-                var procedure = procedureMatches.find(function (procedureMatch) {
-                    return procedureMatch.value === ui.item.value;
-                });
-                note.addProcedure(new Procedure({id: procedure.value, label: procedure.label, schedulable: procedure.schedulable}));
+
             },
             open: function() {
                 jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
@@ -115,7 +110,7 @@
         <div class="clearboth"></div>
 
         <div style="margin-top: 30px;">
-            <a class="button confirm morebuttons">Discharge</a>
+            <a class="button confirm morebuttons" href="${ui.pageLink("ipdui", "PatientInfo", [patientId: "discharge"])}">Discharge</a>
             <a class="button confirm morebuttons">Request for Discharge</a>
             <a class="button confirm morebuttons">Abscord</a>
             <a class="button confirm morebuttons">Print</a>

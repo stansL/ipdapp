@@ -74,6 +74,10 @@ public class PatientInfoFragmentController {
         admitted.setRequestForDischargeStatus(requestForDischargeStatus);
         admitted.setAbsconded(obStatus);
 
+        if(obStatus==1){
+            Date date = new Date();
+            admitted.setAbscondedDate(date);
+        }
 
         admitted=ipdService.saveIpdPatientAdmitted(admitted);
         IpdPatientAdmissionLog ipdPatientAdmissionLog=admitted.getPatientAdmissionLog();

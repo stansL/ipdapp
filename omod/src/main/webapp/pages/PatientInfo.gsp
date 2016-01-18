@@ -111,8 +111,12 @@
 
         <div style="margin-top: 30px;">
             <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "dischargePatient")}">Discharge</a>
-            <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
-            <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
+            <% if (patientInformation.requestForDischargeStatus == 0) { %>
+                <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
+            <% } %>
+            <% if (patientInformation.absconded == 0) { %>
+                 <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
+            <% } %>
             <a class="button confirm morebuttons">Print</a>
             <div class="clearboth"></div>
         </div>

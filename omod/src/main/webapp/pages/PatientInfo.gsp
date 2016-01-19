@@ -33,6 +33,16 @@
                 jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
             }
         });
+        jq("#printButton").click(function(){
+            var printDiv = jq("#printArea").html();
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>Patient Information</title>');
+            printWindow.document.write(printDiv);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+
     });
 </script>
 <style>
@@ -74,37 +84,39 @@
         <li><a href="#tabs-4">Transfer</a></li>
     </ul>
     <div id="tabs-1">
-        <div class="persondatalabel">
-            <h2>Admission Date: </h2>
-            <h3> ${ui.formatDatePretty(patientInformation.admissionDate)}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Patient ID: </h2>
-            <h3> ${patientInformation.patientIdentifier}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Name: </h2>
-            <h3> ${patientInformation.patientName}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Bed Number: </h2>
-            <h3> ${patientInformation.bed}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Age: </h2>
-            <h3> ${patientInformation.age}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Gender: </h2>
-            <h3> ${patientInformation.gender}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Admission By: </h2>
-            <h3> ${patientInformation.ipdAdmittedUser.givenName}</h3>
-        </div>
-        <div class="persondatalabel">
-            <h2>Admission Ward :</h2>
-            <h3> ${patientInformation.admittedWard.name}</h3>
+        <div id="printArea">
+            <div class="persondatalabel">
+                <h2>Admission Date: </h2>
+                <h3> ${ui.formatDatePretty(patientInformation.admissionDate)}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Patient ID: </h2>
+                <h3> ${patientInformation.patientIdentifier}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Name: </h2>
+                <h3> ${patientInformation.patientName}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Bed Number: </h2>
+                <h3> ${patientInformation.bed}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Age: </h2>
+                <h3> ${patientInformation.age}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Gender: </h2>
+                <h3> ${patientInformation.gender}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Admission By: </h2>
+                <h3> ${patientInformation.ipdAdmittedUser.givenName}</h3>
+            </div>
+            <div class="persondatalabel">
+                <h2>Admission Ward :</h2>
+                <h3> ${patientInformation.admittedWard.name}</h3>
+            </div>
         </div>
 
         <div class="clearboth"></div>
@@ -117,7 +129,7 @@
             <% if (patientInformation.absconded == 0) { %>
                  <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
             <% } %>
-            <a class="button confirm morebuttons">Print</a>
+            <a class="button confirm morebuttons" id="printButton">Print</a>
             <div class="clearboth"></div>
         </div>
     </div>

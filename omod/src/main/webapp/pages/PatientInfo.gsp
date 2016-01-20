@@ -114,6 +114,15 @@
         width: auto;
         min-width: 10px;
     }
+    .vitalstatisticselements{
+        float:left;
+        margin-left:10px;
+        margin-bottom: 10px;
+    }
+    .vitalstatisticselements textarea{
+        height: 23px;
+        width: 183px;
+    }
 </style>
 </head>
 <body>
@@ -179,43 +188,118 @@
         <section>
             <form>
             <div class="simple-form-ui">
-                <div class="persondatalabel">
-                    <h2>S.No:</h2>
-                    <h3>...</h3>
+
+                <div class="vitalstatisticselements" >
+                    <input placeholder="Blood Pressure" type="number">
                 </div>
-                <div class="persondatalabel">
-                    <h2>Date/Time:</h2>
-                    <h3> ....</h3>
+                <div class="vitalstatisticselements">
+                    <input placeholder="Pulse Rate(/min)" type="number">
                 </div>
-                <div class="persondatalabel">
-                    <h2>Blood Pressure</h2>
-                    <input type="number">
+                <div class="vitalstatisticselements" >
+                    <input placeholder="Temperature(C)"  type="number"> </input>
                 </div>
-                <div class="persondatalabel">
-                    <h2>Pulse Rate(/min)</h2>
-                    <input type="number">
-                </div>
-                <div class="persondatalabel">
-                    <h2>Diet Advised</h2>
+                <div class="vitalstatisticselements" >
                     <select>
-                        <option>Item 1</option>
+                        <option>Select Diet Advised</option>
                         <option>Item 2</option>
                         <option>Item 3</option>
                     </select>
                 </div>
-                <div class="persondatalabel">
-                    <h2>Temperature(C)</h2>
-                    <p>
-                     <input placeholder="Temperature"  type="number"> </input>
-                    </p>
+
+                <div class="vitalstatisticselements">
+                    <textarea placeholder="Notes if any"></textarea>
                 </div>
-                <div class="clearboth"></div>
-                <div class="">
-                    <h2>Notes if any</h2>
-                    <textarea></textarea>
-                </div>
-                <div class="" style="margin-top:15px" >
+                <div class="vitalstatisticselements">
                     <a class="button confirm">Submit</a>
+                </div>
+                <div>
+                    <table id="vitalSummary">
+                        <thead>
+                            <tr >
+                                <th>S.No</th>
+                                <th>Date/Time</th>
+                                <th>Blood Pressure</th>
+                                <th>Pulse Rate</th>
+                                <th>Temperature</th>
+                                <th>Diet Advised</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2016-01-19 09:59:57.0</td>
+                                <td>54</td>
+                                <td>66</td>
+                                <td>74</td>
+                                <td>Solid</td>
+                                <td>test note</td>
+                            </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2016-01-19 09:59:57.0</td>
+                            <td>54</td>
+                            <td>66</td>
+                            <td>74</td>
+                            <td>Solid</td>
+                            <td>test note</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

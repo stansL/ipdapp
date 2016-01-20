@@ -33,6 +33,15 @@
                 jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
             }
         });
+        jq("#printButton").click(function(){
+            var printDiv = jq("#printArea").html();
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>Patient Information</title>');
+            printWindow.document.write(printDiv);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
 /*        //transfer patient
                jq("#transferButton").click(function(){
                                 var transferForm = jq("#transferForm");

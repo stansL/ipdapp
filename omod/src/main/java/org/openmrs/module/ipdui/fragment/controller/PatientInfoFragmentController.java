@@ -85,5 +85,16 @@ public class PatientInfoFragmentController {
         ipdService.saveIpdPatientAdmissionLog(ipdPatientAdmissionLog);
     }
 
+    public void transferPatient(@RequestParam("admittedId") Integer id,
+                                @RequestParam("toWard") Integer toWardId,
+                                @RequestParam("doctor") Integer doctorId,
+                                @RequestParam(value = "bedNumber", required = false) String bed,
+                                @RequestParam(value = "comments", required = false) String comments,
+                                PageModel model){
+        IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+        ipdService.transfer(id, toWardId, doctorId, bed,comments);
+
+    }
+
 
 }

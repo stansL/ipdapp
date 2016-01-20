@@ -33,15 +33,48 @@
                 jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
             }
         });
-        jq("#printButton").click(function(){
-            var printDiv = jq("#printArea").html();
-            var printWindow = window.open('', '', 'height=400,width=800');
-            printWindow.document.write('<html><head><title>Patient Information</title>');
-            printWindow.document.write(printDiv);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
+/*        //transfer patient
+               jq("#transferButton").click(function(){
+                                var transferForm = jq("#transferForm");
+                                transferForm.submit(
+                                        function (ev) {
+                                            jq.ajax({
+                                                type: transferForm.attr('method'),
+                                                url: '${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',
+                                                data: transferForm.serialize(),
+                                                success: function (data) {
+                                                    alert('ok');
+                        }
+                    });
+                });
+        });*/
+
+        jq("#transferButton").click(function(event){
+            var transferForm = jq("#transferForm");
+            var transferFormData = {
+                'admittedId': jq('#transferAdmittedID').val(),
+                'toWard': jq('#transferIpdWard').val(),
+                'doctor': jq('#transferDoctor').val(),
+                'bedNumber': jq('#transferBedNumber').val(),
+                'comments': jq('#transferComment').val(),
+            };
+
+
+
+            transferForm.submit(
+                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',transferFormData)
+                        .success(function(data) {
+                            alert('ok');
+                        })
+                        .error(function(xhr, status, err) {
+                            alert('AJAX error ' + err);
+                        })
+            );
         });
+
+
+
+
 
     });
 </script>
@@ -249,24 +282,25 @@
     </div>
     <div id="tabs-4">
         <section>
-            <form>
+            <form method="post" id="transferForm">
                 <div class="simple-form-ui">
                     <div class="persondatalabel">
                         <h2>Select Ward: </h2>
-                        <select id="ipdWard"  name="ipdWard"  style="width: 150px;">
+                        <select required  name="transferIpdWard" id="transferIpdWard"  name="ipdWard"  style="width: 150px;">
                             <option value="">Select Ward</option>
                             <% if (listIpd!=null && listIpd!="") { %>
-                            <% listIpd.each { ipd -> %>
-                            <option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
-                                ${ipd.answerConcept.name}
-                            </option>
-                            <%}%>
+                                <% listIpd.each { ipd -> %>
+                                    <option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
+                                        ${ipd.answerConcept.name}
+                                    </option>
+                                <%}%>
                             <%}%>
                         </select>
                     </div>
+
                     <div class="persondatalabel">
                         <h2>Select Doctor: </h2>
-                        <select id="doctor"  name="doctor"  >
+                        <select required name="transferDoctor" id="transferDoctor"  name="doctor"  >
                             <option value="">Select Doctor On Call</option>
                             <% if (listDoctor!=null && listDoctor!=""){ %>
                             <% listDoctor.each { doct -> %>
@@ -279,15 +313,16 @@
                     </div>
                     <div class="persondatalabel">
                         <h2>Bed Number</h2>
-                        <input type="number">
-                    </div>
+                        <input required name="transferBedNumber" id="transferBedNumber" type="number">
+                </div>
 
                     <div class="persondatalabel" >
                         <h2>Comments</h2>
-                        <textarea></textarea>
+                        <textarea name="transferComment" id="transferComment"></textarea>
                     </div>
                     <div class="persondatalabel" >
-                        <a class="button confirm">Submit</a>
+                        <input required name="transferAdmittedID" id="transferAdmittedID" value="${patientInformation.id}" type="hidden">
+                        <a type="submit" class="button confirm" id="transferButton">Submit</a>
                     </div>
                 </div>
             </form>

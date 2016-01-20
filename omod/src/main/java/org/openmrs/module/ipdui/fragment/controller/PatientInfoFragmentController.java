@@ -2,6 +2,8 @@ package org.openmrs.module.ipdui.fragment.controller;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.Concept;
+import org.openmrs.Patient;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.*;
 import org.openmrs.module.hospitalcore.model.*;
@@ -95,6 +97,30 @@ public class PatientInfoFragmentController {
         ipdService.transfer(id, toWardId, doctorId, bed,comments);
 
     }
-
-
+    public void saveVitalStatistics(@RequestParam("admittedId") Integer admittedId,
+                                    @RequestParam("patientId") Integer patientId,
+                                    @RequestParam(value = "bloodPressure", required = false) String bloodPressure,
+                                    @RequestParam(value = "pulseRate", required = false) String pulseRate,
+                                    @RequestParam(value = "temperature", required = false) String temperature,
+                                    @RequestParam(value = "dietAdvised", required = false) String dietAdvised,
+                                    @RequestParam(value = "notes", required = false) String notes,
+                                    @RequestParam(value = "ipdWard", required = false) String ipdWard,PageModel model)
+    {
+        IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+        PatientService patientService = Context.getPatientService();
+        Patient patient = patientService.getPatient(patientId);
+        IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
+        String dietAdvise = "";
+        IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
+        ipdPatientVitalStatistics.setPatient(patient);
+        ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
+        ipdPatientVitalStatistics.setBloodPressure(bloodPressure);
+        ipdPatientVitalStatistics.setPulseRate(pulseRate);
+        ipdPatientVitalStatistics.setTemperature(temperature);
+        ipdPatientVitalStatistics.setDietAdvised(dietAdvise);
+        ipdPatientVitalStatistics.setNote(notes);
+        ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
+        ipdPatientVitalStatistics.setCreatedOn(new Date());
+        ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
+    }
 }

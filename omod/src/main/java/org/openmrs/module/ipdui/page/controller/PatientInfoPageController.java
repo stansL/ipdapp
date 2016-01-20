@@ -25,6 +25,7 @@ public class PatientInfoPageController {
         PatientService patientService = Context.getService(PatientService.class);
 
         List<Patient> patientList = patientService.getPatients(null,search, null, true,null,null);
+        model.addAttribute("patientID", patientList.get(0).getPatientId());
         IpdPatientAdmitted patientInformation = ipdService.getAdmittedByPatientId(patientList.get(0).getPatientId());
         model.addAttribute("patientInformation",patientInformation );
 

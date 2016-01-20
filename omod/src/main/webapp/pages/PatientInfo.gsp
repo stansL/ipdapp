@@ -79,9 +79,35 @@
                             alert('AJAX error ' + err);
                         })
             );
+
         });
 
+        jq("#vitalStatisticsButton").click(function(event){
+            var vitalStatisticsForm = jq("#vitalStatisticsForm");
+            var vitalStatisticsFormData = {
+                'admittedId': jq('#vitalStatisticsrAdmittedID').val(),
+                'patientId': jq('#vitalStatisticsPatientID').val(),
+                'bloodPressure': jq('#vitalStatisticsBloodPressure').val(),
+                'pulseRate': jq('#vitalStatisticsPulseRate').val(),
+                'temperature': jq('#vitalStatisticsTemperature').val(),
+                'dietAdvised': jq('#vitalStatisticsDietAdvised').val(),
+                'notes': jq('#vitalStatisticsComment').val(),
+                'ipdWard': jq('#vitalStatisticsIPDWard').val(),
+            };
+            console.log(vitalStatisticsFormData);
 
+
+            vitalStatisticsForm.submit(
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "saveVitalStatistics") }',vitalStatisticsFormData)
+                            .success(function(data) {
+                                alert('ok');
+                            })
+                            .error(function(xhr, status, err) {
+                                alert('AJAX error ' + err);
+                            })
+            );
+
+        });
 
 
 
@@ -186,32 +212,36 @@
     </div>
     <div id="tabs-2">
         <section>
-            <form>
-            <div class="simple-form-ui">
+            <form method="post" id="vitalStatisticsForm">
+                <div class="simple-form-ui">
 
-                <div class="vitalstatisticselements" >
-                    <input placeholder="Blood Pressure" type="number">
-                </div>
-                <div class="vitalstatisticselements">
-                    <input placeholder="Pulse Rate(/min)" type="number">
-                </div>
-                <div class="vitalstatisticselements" >
-                    <input placeholder="Temperature(C)"  type="number"> </input>
-                </div>
-                <div class="vitalstatisticselements" >
-                    <select>
-                        <option>Select Diet Advised</option>
-                        <option>Item 2</option>
-                        <option>Item 3</option>
-                    </select>
-                </div>
+                    <div class="vitalstatisticselements">
+                        <input id="vitalStatisticsBloodPressure" name="vitalStatisticsBloodPressure" placeholder="Blood Pressure" type="number">
+                    </div>
+                    <div class="vitalstatisticselements">
+                        <input id="vitalStatisticsPulseRate" name="vitalStatisticsPulseRate" placeholder="Pulse Rate(/min)" type="number">
+                    </div>
+                    <div class="vitalstatisticselements" >
+                        <input id="vitalStatisticsDietTemperature" name="vitalStatisticsTemperature" placeholder="Temperature(C)"  type="number"> </input>
+                    </div>
+                    <div class="vitalstatisticselements" >
+                        <select name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised">
+                            <option>Select Diet Advised</option>
+                            <option>Item 2</option>
+                            <option>Item 3</option>
+                        </select>
+                    </div>
 
-                <div class="vitalstatisticselements">
-                    <textarea placeholder="Notes if any"></textarea>
+                    <div class="vitalstatisticselements">
+                        <textarea name="vitalStatisticsComment" id="vitalStatisticsComment" placeholder="Notes if any"></textarea>
+                    </div>
+                    <div class="vitalstatisticselements"> <input required name="vitalStatisticsrAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
+                        <input value="${patientInformation.admittedWard.id}" name="vitalStatisticsIPDWard" id="vitalStatisticsIPDWard" type="hidden">
+                        <input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patientID}" type="hidden">
+                        <a id="vitalStatisticsButton" name="vitalStatisticsButton" class="button confirm">Submit</a>
+                    </div>
                 </div>
-                <div class="vitalstatisticselements">
-                    <a class="button confirm">Submit</a>
-                </div>
+            </form>
                 <div>
                     <table id="vitalSummary">
                         <thead>
@@ -301,9 +331,6 @@
                         </tbody>
                     </table>
                 </div>
-
-            </div>
-            </form>
         </section>
     </div>
     <div id="tabs-3">

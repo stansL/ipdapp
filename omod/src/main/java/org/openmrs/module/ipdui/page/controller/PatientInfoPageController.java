@@ -45,6 +45,11 @@ public class PatientInfoPageController {
             model.addAttribute("listDoctor", listDoctor);
         }
 
+        //vital statistics
+        //diet list
+        List<Concept> dietConcept= ipdService.getDiet();
+        model.addAttribute("dietList", dietConcept);
+
     }
 
 }

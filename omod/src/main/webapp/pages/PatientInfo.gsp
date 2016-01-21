@@ -241,10 +241,15 @@
                         <input id="vitalStatisticsTemperature" name="vitalStatisticsTemperature" placeholder="Temperature(C)"  type="number"> </input>
                     </div>
                     <div class="vitalstatisticselements" >
-                        <select name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised">
-                            <option>Select Diet Advised</option>
-                            <option>Item 2</option>
-                            <option>Item 3</option>
+                        <select required name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised" >
+                            <option value="">Select Diet Advised</option>
+                            <% if (dietList!=null && dietList!=""){ %>
+                                <% dietList.each { dl -> %>
+                                    <option  value="${dl.name}">
+                                        ${dl.name}
+                                    </option>
+                                <% } %>
+                            <% } %>
                         </select>
                     </div>
 

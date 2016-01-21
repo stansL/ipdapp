@@ -101,7 +101,7 @@
         jq("#vitalStatisticsButton").click(function(event){
             var vitalStatisticsForm = jq("#vitalStatisticsForm");
             var vitalStatisticsFormData = {
-                'admittedId': jq('#vitalStatisticsrAdmittedID').val(),
+                'admittedId': jq('#vitalStatisticsAdmittedID').val(),
                 'patientId': jq('#vitalStatisticsPatientID').val(),
                 'bloodPressure': jq('#vitalStatisticsBloodPressure').val(),
                 'pulseRate': jq('#vitalStatisticsPulseRate').val(),
@@ -238,7 +238,7 @@
                         <input id="vitalStatisticsPulseRate" name="vitalStatisticsPulseRate" placeholder="Pulse Rate(/min)" type="number">
                     </div>
                     <div class="vitalstatisticselements" >
-                        <input id="vitalStatisticsDietTemperature" name="vitalStatisticsTemperature" placeholder="Temperature(C)"  type="number"> </input>
+                        <input id="vitalStatisticsTemperature" name="vitalStatisticsTemperature" placeholder="Temperature(C)"  type="number"> </input>
                     </div>
                     <div class="vitalstatisticselements" >
                         <select name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised">
@@ -251,7 +251,7 @@
                     <div class="vitalstatisticselements">
                         <textarea name="vitalStatisticsComment" id="vitalStatisticsComment" placeholder="Notes if any"></textarea>
                     </div>
-                    <div class="vitalstatisticselements"> <input required name="vitalStatisticsrAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
+                    <div class="vitalstatisticselements"> <input required name="vitalStatisticsAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
                         <input value="${patientInformation.admittedWard.id}" name="vitalStatisticsIPDWard" id="vitalStatisticsIPDWard" type="hidden">
                         <input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patientID}" type="hidden">
                         <a id="vitalStatisticsButton" name="vitalStatisticsButton" class="button confirm">Submit</a>

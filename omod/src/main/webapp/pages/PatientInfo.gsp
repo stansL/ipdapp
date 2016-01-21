@@ -1,10 +1,26 @@
 <head>
 
 </head>
-<% ui.decorateWith("appui", "standardEmrPage") %>
+<%
+    ui.decorateWith("appui", "standardEmrPage")
+    ui.includeJavascript("uicommons", "datetimepicker/bootstrap-datetimepicker.min.js")
+    ui.includeJavascript("uicommons", "handlebars/handlebars.min.js", Integer.MAX_VALUE - 1)
+    ui.includeJavascript("uicommons", "navigator/validators.js", Integer.MAX_VALUE - 19)
+    ui.includeJavascript("uicommons", "navigator/navigator.js", Integer.MAX_VALUE - 20)
+    ui.includeJavascript("uicommons", "navigator/navigatorHandlers.js", Integer.MAX_VALUE - 21)
+    ui.includeJavascript("uicommons", "navigator/navigatorModels.js", Integer.MAX_VALUE - 21)
+    ui.includeJavascript("uicommons", "navigator/navigatorTemplates.js", Integer.MAX_VALUE - 21)
+    ui.includeJavascript("uicommons", "navigator/exitHandlers.js", Integer.MAX_VALUE - 22)
+%>
 
 <script>
     var jq = jQuery;
+
+    var NavigatorController
+    jq(function(){
+        NavigatorController = new KeyboardController();
+    });
+
     jq(function() {
         jq( "#tabs" ).tabs();
         jq("#procedure").autocomplete({
@@ -334,71 +350,82 @@
         </section>
     </div>
     <div id="tabs-3">
-        <form method="post">
-            <div class="persondatalabel">
-                <h2>Post for Procedure:</h2>
-                <input type="text" id="procedure" name="procedure" />
-                <div data-bind="foreach: procedures">
-                    <p data-bind="text: label"></p>
-                    <span data-bind="if: schedulable">Schedule:<input type="date"></span>
-                    <button data-bind="click: \$root.removeProcedure">Remove</button>
-                </div>
-            </div>
-            <div class="persondatalabel">
-                <h2>Investigation:</h2>
-                <input type="text" id="investigation" name="investigation" />
-                <div data-bind="foreach: investigations">
-                    <p data-bind="text: label"></p>
-                    <button data-bind="click: \$root.removeInvestigation">Remove</button>
-                </div>
-            </div>
+        <div id="content" class="container">
+
+            <h1>Treatment</h1>
+
+            <form class="simple-form-ui" id="charges" method="post">
+
+                <section id="charges-info">
 
 
-            <div class="persondatalabel">
-                <h2>Prescription:</h2>
-                <table>
-                    <thead>
-                        <th>Drug Name</th>
-                        <th>Formulation</th>
-                        <th>Frequency</th>
-                        <th>Number of Days</th>
-                        <th>Comment</th>
-                        <th> </th>
-                    </thead>
-                    <tbody data-bind="foreach: drugs">
-                        <td>
-                            <input class="drug-name tableelement" type="text" data-bind="value: name, valueUpdate: 'blur'" >
-                        </td>
-                        <td>
-                            <select class="tableelement" data-bind="options: formulationOpts, value: formulation, optionsText: 'label'"></select>
-                        </td>
-                        <td>
-                            <select class="tableelement" data-bind="options: \$root.frequencyOpts, value: frequency, optionsText: 'label'"></select>
-                        </td>
-                        <td><input class="tableelement" type="text" data-bind="value: numberOfDays" >
-                        </td>
-                        <td>
-                            <textarea class="tableelement" data-bind="value: comment"></textarea>
-                        </td>
-                        <td>
-                            <button class="tableelement" data-bind="click: \$root.removeDrug">Remove</button>
-                        </td>
-                    </tbody>
-                </table>
-            <button data-bind="click: addDrug">Add</button>
-        </div>
-        <div style="clear:both;"></div>
+                    <fieldset>
 
-        <div style="clear:both;"></div>
-        <div class="persondatalabel">
-            <h2>Other Instructions:</h2>
-            <input  data-bind="value: \$root.otherInstructions" type="text" id="note" name="note" />
+                        <legend>Procedure</legend>
+
+                        <p>
+
+                            <input type="text" id="procedure" name="procedure" placeholder="Enter Procedure" />
+
+                        </p>
+
+                    </fieldset>
+
+                    <fieldset>
+
+                        <legend>Investigation</legend>
+
+                        <p>
+                            <input type="text" id="investigation" name="investigation" placeholder="Enter Investigation" />
+                        </p>
+
+                    </fieldset>
+                    <fieldset>
+
+                        <legend>Prescription</legend>
+
+                        <table>
+                            <thead>
+                            <th>Drug Name</th>
+                            <th>Formulation</th>
+                            <th>Frequency</th>
+                            <th>Number of Days</th>
+                            <th>Comment</th>
+                            </thead>
+                            <tbody data-bind="foreach: drugs">
+                            <td>
+                                #
+                            </td>
+                            <td>
+                                #
+                            </td>
+                            <td>
+                                #
+                            </td>
+                            <td>
+                                #
+                            </td>
+                            <td>
+                                #
+                            </td>
+                            </tbody>
+                        </table>
+
+                    </fieldset>
+                    <fieldset>
+
+                        <legend>Other Instructions</legend>
+
+                        <p>
+                            <textarea placeholder="Enter Other Instructions" style="width:400px"></textarea>
+                            <a style="margin-top:12px" class="button confirm">Submit</a>
+                        </p>
+
+                    </fieldset>
+                </section>
+
+            </form>
         </div>
-        <div style="clear:both;"></div>
-        <div class="" style="margin-top:15px" >
-            <a class="button confirm">Submit</a>
-        </div>
-    </form>
     </div>
     <div id="tabs-4">
         <section>

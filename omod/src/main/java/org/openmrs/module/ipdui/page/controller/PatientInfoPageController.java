@@ -6,6 +6,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
+import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
 import org.openmrs.module.hospitalcore.util.ConceptAnswerComparator;
 import org.openmrs.module.ipdui.utils.IpdConstants;
 import org.openmrs.ui.framework.page.PageModel;
@@ -22,10 +23,12 @@ public class PatientInfoPageController {
     public void get(@RequestParam(value = "search",required = true) String search, PageModel model) {
 
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
-        PatientService patientService = Context.getService(PatientService.class);
+        PatientService patientService = Context.getService(PatientService.class);;
 
         List<Patient> patientList = patientService.getPatients(null,search, null, true,null,null);
-        model.addAttribute("patientID", patientList.get(0).getPatientId());
+        int patientiID = patientList.get(0).getPatientId();
+
+        model.addAttribute("patientID", patientiID);
         IpdPatientAdmitted patientInformation = ipdService.getAdmittedByPatientId(patientList.get(0).getPatientId());
         model.addAttribute("patientInformation",patientInformation );
 
@@ -49,6 +52,10 @@ public class PatientInfoPageController {
         //diet list
         List<Concept> dietConcept= ipdService.getDiet();
         model.addAttribute("dietList", dietConcept);
+
+        //existing vital statistics
+        List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patientiID,patientInformation.getPatientAdmissionLog().getId());
+        model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
 
     }
 

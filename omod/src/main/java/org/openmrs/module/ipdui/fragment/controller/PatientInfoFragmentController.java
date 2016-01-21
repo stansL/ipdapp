@@ -110,14 +110,13 @@ public class PatientInfoFragmentController {
         PatientService patientService = Context.getPatientService();
         Patient patient = patientService.getPatient(patientId);
         IpdPatientAdmitted admitted = ipdService.getIpdPatientAdmitted(admittedId);
-        String dietAdvise = "";
         IpdPatientVitalStatistics ipdPatientVitalStatistics=new IpdPatientVitalStatistics();
         ipdPatientVitalStatistics.setPatient(patient);
         ipdPatientVitalStatistics.setIpdPatientAdmissionLog(admitted.getPatientAdmissionLog());
         ipdPatientVitalStatistics.setBloodPressure(bloodPressure);
         ipdPatientVitalStatistics.setPulseRate(pulseRate);
         ipdPatientVitalStatistics.setTemperature(temperature);
-        ipdPatientVitalStatistics.setDietAdvised(dietAdvise);
+        ipdPatientVitalStatistics.setDietAdvised(dietAdvised);
         ipdPatientVitalStatistics.setNote(notes);
         ipdPatientVitalStatistics.setCreator(Context.getAuthenticatedUser().getUserId());
         ipdPatientVitalStatistics.setCreatedOn(new Date());

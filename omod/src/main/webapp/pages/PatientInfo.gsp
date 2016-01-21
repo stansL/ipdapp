@@ -277,78 +277,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2016-01-19 09:59:57.0</td>
-                                <td>54</td>
-                                <td>66</td>
-                                <td>74</td>
-                                <td>Solid</td>
-                                <td>test note</td>
-                            </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2016-01-19 09:59:57.0</td>
-                            <td>54</td>
-                            <td>66</td>
-                            <td>74</td>
-                            <td>Solid</td>
-                            <td>test note</td>
-                        </tr>
+                        <% if (ipdPatientVitalStatistics!=null && ipdPatientVitalStatistics!=""){ %>
+                        <% ipdPatientVitalStatistics.eachWithIndex { ipvs , idx-> %>
+                                <tr>
+                                    <td>${idx+1}</td>
+                                    <td>${ipvs.createdOn}</td>
+                                    <td>${ipvs.bloodPressure}</td>
+                                    <td>${ipvs.pulseRate}</td>
+                                    <td>${ipvs.temperature}</td>
+                                    <td>${ipvs.dietAdvised}</td>
+                                    <td>${ipvs.note}</td>
+                                </tr>
+                            <% } %>
+                        <% } %>
                         </tbody>
                     </table>
                 </div>

@@ -26,8 +26,6 @@ public class PatientsAdmissionPageController {
                     @RequestParam(value = "doctorString", required = false) String doctorString, Model model) {
 
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
-	/*	List<IpdPatientAdmission> listPatientAdmission = ipdService.searchIpdPatientAdmission(searchPatient,
-		    IpdUtils.convertStringToList(doctorString), fromDate, toDate, IpdUtils.convertStringToList(ipdWardString), "");*/
 
         List<IpdPatientAdmission> listPatientAdmission = ipdService.searchIpdPatientAdmission(searchPatient,
                 IpdUtils.convertStringToList(doctorString), fromDate, toDate, ipdWard, "");

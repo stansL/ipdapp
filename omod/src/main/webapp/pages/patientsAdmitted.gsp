@@ -24,7 +24,7 @@
                 <td>${queue.patientIdentifier}</td>
                 <td>${queue.patientName}</td>
                 <td>${queue.bed}</td>
-                <td><a class="button task" style=""><i class="icon-plus-sign"></i>  View More</a></td>
+                <td><a class="button task" href="${ui.pageLink("ipdui", "patientInfo", [seach: queue.patientIdentifier])}"  style=""><i class="icon-plus-sign"></i>  View More</a></td>
     </tr>
         <% } %>
     <% } else { %>

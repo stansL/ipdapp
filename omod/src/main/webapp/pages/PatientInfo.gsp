@@ -122,11 +122,21 @@
                                 alert('AJAX error ' + err);
                             })
             );
-
         });
-
-
-
+        var adddrugdialog = emr.setupConfirmationDialog({
+            selector: '#addDrugDialog',
+            actions: {
+                confirm: function() {
+                    adddrugdialog.close();
+                },
+                cancel: function() {
+                    adddrugdialog.close();
+                }
+            }
+        });
+        jq("#addDrugsButton").on("click", function(e){
+            adddrugdialog.show();
+        });
     });
 </script>
 <style>
@@ -340,23 +350,19 @@
                             </thead>
                             <tbody data-bind="foreach: drugs">
                             <td>
-                                #
+
                             </td>
                             <td>
-                                #
                             </td>
                             <td>
-                                #
                             </td>
                             <td>
-                                #
                             </td>
                             <td>
-                                #
                             </td>
                             </tbody>
                         </table>
-
+                        <input type="button" value="Add" class="button confirm" name="addDrugsButton" id="addDrugsButton">
                     </fieldset>
                     <fieldset>
 
@@ -371,6 +377,40 @@
                 </section>
 
             </form>
+
+            </div>
+        <div id="addDrugDialog" class="dialog">
+            <div class="dialog-header">
+                <i class="icon-folder-open"></i>
+                <h3>Prescription</h3>
+            </div>
+            <div class="dialog-content">
+                <ul>
+                    <li>
+                        <span>Drug</span>
+                        <input class="drug-name" type="text" data-bind="value: name, valueUpdate: 'blur'" >
+                    </li>
+                    <li>
+                        <span>Formulation</span>
+                        <select data-bind="options: formulationOpts, value: formulation, optionsText: 'label'"></select>
+                    </li>
+                    <li>
+                        <span>Frequency</span>
+                        <select data-bind="options: frequencyOpts, value: frequency, optionsText: 'label'"></select>
+                    </li>
+                    <li>
+                        <span>Number of Days</span>
+                        <input type="text" data-bind="value: numberOfDays" >
+                    </li>
+                    <li>
+                        <span>Comment</span>
+                        <textarea data-bind="value: comment"></textarea>
+                    </li>
+                </ul>
+
+                <span class="button confirm right"> Confirm </span>
+                <span class="button cancel"> Cancel </span>
+            </div>
         </div>
     </div>
     <div id="tabs-4">

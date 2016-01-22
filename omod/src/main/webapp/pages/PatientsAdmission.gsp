@@ -22,6 +22,7 @@
                         <td>${ui.formatDatePretty(pAdmission.admissionDate)}</td>
                         <td>${pAdmission.patientIdentifier}</td>
                         <td>${pAdmission.patientName}</td>
+
                         <td>
                             <div style="position: static" class="dropdown">
                                 <span class="dropdown-name">
@@ -38,15 +39,18 @@
                                     </li>
 
                                     <li>
-                                        <a href="#">
+                                        <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id,action:1])}
+                                        ">
                                             <i class="icon-remove"></i>
                                            Remove
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id,action:2])}
+                                        ">
                                             <i class="icon-thumbs-down "></i>
                                             No bed
+
                                         </a>
                                     </li>
                                 </ul>

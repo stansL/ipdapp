@@ -4,18 +4,16 @@
 <head>
     <link rel="stylesheet" type="text/css"
           href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
-    <script>
-        var jq = jQuery;
-        jq(function () {
-            jq("#tabs").tabs();
-        });
-    </script>
     <script type="text/javascript" charset="utf8"
             src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
     <script>
         var jq = jQuery;
         jq(function () {
+            jq("#tabs").tabs();
+        });
+        jq(function () {
             jq("#queueList").dataTable();
+            jq("#queueList2").dataTable();
         });
     </script>
 </head>
@@ -30,7 +28,7 @@
 
     <div id="tabs-1">
 
-        <div style="margin-bottom: 15px">
+        <div style="margin-bottom: 25px">
             <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
                 <thead>
                 <tr align="center">
@@ -97,14 +95,13 @@
 
 
     <div id="tabs-2">
-        <div style="margin-bottom: 15px">
-            <table style="margin: 10px" cellpadding="5" cellspacing="0" width="100%" id="queueList">
+        <div style="margin-bottom: 25px">
+            <table style="margin: 10px" cellpadding="5" cellspacing="0" width="100%" id="queueList2">
                 <thead>
                 <tr align="center">
                     <th>${ui.message("ipd.admissionDate")}</th>
                     <th>${ui.message("ipd.patient.patientId")}</th>
                     <th>${ui.message("ipd.patient.patientName")}</th>
-                    <th>${ui.message("ipd.patient.bedNumber")}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -115,7 +112,6 @@
                     <td>${ui.formatDatePretty(queue.admissionDate)}</td>
                     <td>${queue.patientIdentifier}</td>
                     <td>${queue.patientName}</td>
-                    <td>${queue.bed}</td>
                     <td><a class="button task"
                            href="${ui.pageLink("ipdui", "patientInfo", [search: queue.patientIdentifier])}" style=""><i
                                 class="icon-plus-sign"></i>  View More</a></td>

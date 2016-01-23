@@ -40,6 +40,56 @@
             },
             minLength: 3,
             select: function( event, ui ) {
+                var selectedProcedure = document.createElement('option');
+                selectedProcedure.value = ui.item.value;
+                selectedProcedure.text = ui.item.label;
+                selectedProcedure.id = ui.item.value;
+                var selectedProcedureList = document.getElementById("selectedProcedureList");
+
+
+                //adds the selected procedures to the div
+                var selectedProcedureP = document.createElement("P");
+                selectedProcedureP.className = "selectp";
+
+                var selectedProcedureT = document.createTextNode(ui.item.label);
+                selectedProcedureP.id = ui.item.value;
+                selectedProcedureP.appendChild(selectedProcedureT);
+
+
+
+                var btnselectedRemoveIcon = document.createElement("p");
+                btnselectedRemoveIcon.className = "icon-remove selecticon";
+                btnselectedRemoveIcon.id = "procedureRemoveIcon";
+
+
+
+               /*
+                var btnselectedAnchor = document.createElement("a");
+                btnselectedAnchor.id = ui.item.value;
+
+                var btnselectedProcedure = document.createElement("input");
+                btnselectedProcedure.id = "remove";
+                btnselectedProcedure.type = "button";
+                btnselectedProcedure.appendChild(btnselectedRemoveIcon);
+                */
+                selectedProcedureP.appendChild(btnselectedRemoveIcon);
+
+                var selectedProcedureDiv = document.getElementById("selected-procedures");
+
+                //check if the item already exist before appending
+                var exists = false;
+                for (var i = 0; i < selectedProcedureList.length; i++) {
+                    if(selectedProcedureList.options[i].value==ui.item.value)
+                    {
+                        exists = true;
+                    }
+                }
+
+                if(exists == false)
+                {
+                    selectedProcedureList.appendChild(selectedProcedure);
+                    selectedProcedureDiv.appendChild(selectedProcedureP);
+                }
 
             },
             open: function() {
@@ -49,6 +99,20 @@
                 jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
             }
         });
+        jq("#selected-procedures").on("click", "#procedureRemoveIcon",function(){
+            var procedureId = jq(this).parent("p").attr("id");
+            var procedureP = jq(this).parent("p");
+
+            var divProcedure = procedureP.parent("div");
+            var selectInputPosition = divProcedure.siblings("p");
+            var selectedProcedure = selectInputPosition.find("select");
+            var removeProcedure = selectedProcedure.find("#" + procedureId);
+
+            procedureP.remove();
+            removeProcedure.remove();
+
+        });
+
         jq("#printButton").click(function(){
             var printDiv = jq("#printArea").html();
             var printWindow = window.open('', '', 'height=400,width=800');
@@ -174,6 +238,22 @@
     .vitalstatisticselements textarea{
         height: 23px;
         width: 183px;
+    }
+    .selecticon{
+        float: right;
+        vertical-align: middle;
+        font-size: x-large;
+    }
+    .selectp{
+        min-width: 450px;
+        border-bottom: solid;
+        border-bottom-width: 1px;
+        padding-left: 5px;
+        margin-top:20px;
+    }
+    .selectdiv{
+        width: 450px;
+        margin-top:10px;
     }
 </style>
 </head>
@@ -315,14 +395,15 @@
                 <section id="charges-info">
 
 
-                    <fieldset>
+                    <fieldset style="min-width: 500px; width: auto">
 
                         <legend>Procedure</legend>
 
                         <p>
 
-                            <input type="text" id="procedure" name="procedure" placeholder="Enter Procedure" />
-
+                            <input type="text" style="width: 450px" id="procedure" name="procedure" placeholder="Enter Procedure" />
+                            <select style="display: none" id="selectedProcedureList"></select>
+                            <div class="selectdiv"  id="selected-procedures"></div>
                         </p>
 
                     </fieldset>

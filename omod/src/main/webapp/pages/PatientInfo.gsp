@@ -390,10 +390,10 @@
 
         <div style="margin-top: 30px;">
             <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "dischargePatient")}">Discharge</a>
-            <% if (patientInformation.requestForDischargeStatus == 0) { %>
+            <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
                 <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
             <% } %>
-            <% if (patientInformation.absconded == 0) { %>
+            <% if (patientInformation.absconded != 1 && patientInformation.requestForDischargeStatus != 1) { %>
                  <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
             <% } %>
             <a class="button confirm morebuttons" id="printButton">Print</a>

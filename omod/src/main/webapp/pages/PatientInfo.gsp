@@ -634,12 +634,7 @@
             <h1>Discharge Patient</h1>
 
             <form class="simple-form-ui" id="charges2" method="post">
-
                 <section id="charges-info2">
-
-
-
-
                     <fieldset>
 
                         <legend>Diagnosis</legend>
@@ -672,6 +667,13 @@
                         <p>
                             <select class="selectdiv" id="dischargeOutcome">
                                 <option>Select Outcome</option>
+                                <% if (listOutCome!=null && listOutCome!=""){ %>
+                                <% listOutCome.each { outCome -> %>
+                                <option  value="${outCome.id}">
+                                    ${outCome.answerConcept.name}
+                                </option>
+                                <% } %>
+                                <% } %>
                             </select>
                         </p>
 

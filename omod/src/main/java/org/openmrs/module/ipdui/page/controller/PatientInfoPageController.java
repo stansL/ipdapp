@@ -8,6 +8,7 @@ import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
 import org.openmrs.module.hospitalcore.util.ConceptAnswerComparator;
+import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.ipdui.utils.IpdConstants;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,6 +57,11 @@ public class PatientInfoPageController {
         //existing vital statistics
         List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patientiID,patientInformation.getPatientAdmissionLog().getId());
         model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
+
+        //list of discharge outcomes
+        Concept outComeList = Context.getConceptService().getConceptByName(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
+
+        model.addAttribute("listOutCome", outComeList.getAnswers());
 
     }
 

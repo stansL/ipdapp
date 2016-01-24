@@ -349,6 +349,7 @@
         <li><a href="#tabs-2">Daily Vitals</a></li>
         <li><a href="#tabs-3">Treatment</a></li>
         <li><a href="#tabs-4">Transfer</a></li>
+        <li><a href="#tabs-5">Discharge</a></li>
     </ul>
     <div id="tabs-1">
         <div id="printArea">
@@ -389,7 +390,6 @@
         <div class="clearboth"></div>
 
         <div style="margin-top: 30px;">
-            <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "dischargePatient")}">Discharge</a>
             <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
                 <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
             <% } %>
@@ -470,7 +470,7 @@
         </section>
     </div>
     <div id="tabs-3">
-        <div id="content" class="container">
+        <div id="content2" class="container">
 
             <h1>Treatment</h1>
 
@@ -627,5 +627,71 @@
                 </div>
             </form>
         </section>
+    </div>
+    <div id="tabs-5">
+        <div id="content" class="container">
+
+            <h1>Discharge Patient</h1>
+
+            <form class="simple-form-ui" id="charges2" method="post">
+
+                <section id="charges-info2">
+
+
+
+
+                    <fieldset>
+
+                        <legend>Diagnosis</legend>
+
+                        <p>
+                            <input type="text" style="width: 450px" id="diagnosis" name="diagnosis" placeholder="Enter Diagnosis" />
+                            <select style="display: none" id="selectedDiagnosisList"></select>
+                        <div class="selectdiv"  id="selected-diagnoses"></div>
+                    </p>
+
+                    </fieldset>
+
+                    <fieldset style="min-width: 500px; width: auto">
+
+                        <legend>Procedure</legend>
+
+                        <p>
+
+                            <input type="text" style="width: 450px" id="procedure2" name="procedure" placeholder="Enter Procedure" />
+                            <select style="display: none" id="selectedProcedureList2"></select>
+                        <div class="selectdiv"  id="selected-procedures2"></div>
+                    </p>
+
+                    </fieldset>
+
+                    <fieldset>
+
+                        <legend>Outcome*</legend>
+
+                        <p>
+                            <select class="selectdiv" id="dischargeOutcome">
+                                <option>Select Outcome</option>
+                            </select>
+                        </p>
+
+                    </fieldset>
+
+                    <fieldset>
+
+                        <legend>Other Instructions</legend>
+
+                        <p>
+                            <textarea placeholder="Enter Other Instructions" style="width:400px"></textarea>
+                            <a style="margin-top:12px" class="button confirm">Submit</a>
+                        </p>
+
+                    </fieldset>
+                </section>
+
+            </form>
+
+        </div>
+
     </div>
 </div>

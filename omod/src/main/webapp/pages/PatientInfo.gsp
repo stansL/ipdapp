@@ -271,6 +271,33 @@
                             })
             );
         });
+
+
+        //dicharge patient send post information
+        jq("#dischargeSubmit").click(function(event){
+            var dischargeForm = jq("#dischargeForm");
+            var dischargeFormData = {
+                'selectedDiagnosisList': jq('#selectedDiagnosisList').val(),
+                'selectedDischargeProcedureList': jq('#selectedDischargeProcedureList').val(),
+                'dischargeOutcomes': jq('#dischargeOutcomes').val(),
+                'otherDischargeInstructions': jq('#otherDischargeInstructions').val(),
+            };
+
+
+
+            transferForm.submit(
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "dischargePatient") }',dischargeFormData)
+                            .success(function(data) {
+                                alert('ok');
+                            })
+                            .error(function(xhr, status, err) {
+                                alert('AJAX error ' + err);
+                            })
+            );
+
+        });
+
+
         var adddrugdialog = emr.setupConfirmationDialog({
             selector: '#addDrugDialog',
             actions: {
@@ -633,7 +660,7 @@
 
             <h1>Discharge Patient</h1>
 
-            <form class="simple-form-ui" id="charges2" method="post">
+            <form class="simple-form-ui" id="dischargeForm" method="post">
                 <section id="charges-info2">
                     <fieldset>
 
@@ -641,7 +668,7 @@
 
                         <p>
                             <input type="text" style="width: 450px" id="diagnosis" name="diagnosis" placeholder="Enter Diagnosis" />
-                            <select style="display: none" id="selectedDiagnosisList"></select>
+                            <select multiple style="display: none" id="selectedDiagnosisList"></select>
                         <div class="selectdiv"  id="selected-diagnoses"></div>
                     </p>
 
@@ -653,8 +680,8 @@
 
                         <p>
 
-                            <input type="text" style="width: 450px" id="procedure2" name="procedure" placeholder="Enter Procedure" />
-                            <select style="display: none" id="selectedProcedureList2"></select>
+                            <input type="text" style="width: 450px" id="dischargeProcedures" placeholder="Enter Procedure" />
+                            <select multiple style="display: none" id="selectedDischargeProcedureList"></select>
                         <div class="selectdiv"  id="selected-procedures2"></div>
                     </p>
 
@@ -665,7 +692,7 @@
                         <legend>Outcome*</legend>
 
                         <p>
-                            <select class="selectdiv" id="dischargeOutcome">
+                            <select class="selectdiv" id="dischargeOutcomes">
                                 <option>Select Outcome</option>
                                 <% if (listOutCome!=null && listOutCome!=""){ %>
                                 <% listOutCome.each { outCome -> %>
@@ -684,8 +711,8 @@
                         <legend>Other Instructions</legend>
 
                         <p>
-                            <textarea placeholder="Enter Other Instructions" style="width:400px"></textarea>
-                            <a style="margin-top:12px" class="button confirm">Submit</a>
+                            <textarea id="otherDischargeInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
+                            <a style="margin-top:12px" id="dischargeSubmit" class="button confirm">Submit</a>
                         </p>
 
                     </fieldset>

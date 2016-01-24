@@ -277,6 +277,8 @@
         jq("#dischargeSubmit").click(function(event){
             var dischargeForm = jq("#dischargeForm");
             var dischargeFormData = {
+                'dischargeAdmittedID': jq('dischargeAdmittedID').val(),
+                'patientId': jq('#dischargePatientID').val(),
                 'selectedDiagnosisList': jq('#selectedDiagnosisList').val(),
                 'selectedDischargeProcedureList': jq('#selectedDischargeProcedureList').val(),
                 'dischargeOutcomes': jq('#dischargeOutcomes').val(),
@@ -457,7 +459,8 @@
                     <div class="vitalstatisticselements">
                         <textarea name="vitalStatisticsComment" id="vitalStatisticsComment" placeholder="Notes if any"></textarea>
                     </div>
-                    <div class="vitalstatisticselements"> <input required name="vitalStatisticsAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
+                    <div class="vitalstatisticselements">
+                        <input required name="vitalStatisticsAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
                         <input value="${patientInformation.admittedWard.id}" name="vitalStatisticsIPDWard" id="vitalStatisticsIPDWard" type="hidden">
                         <input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patientID}" type="hidden">
                         <a id="vitalStatisticsButton" name="vitalStatisticsButton" class="button confirm">Submit</a>
@@ -712,6 +715,8 @@
 
                         <p>
                             <textarea id="otherDischargeInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
+                            <input required name="dischargeAdmittedID" id="dischargeAdmittedID" value="${patientInformation.id}" type="hidden">
+                            <input name="dischargePatientID" id="dischargePatientID" value="${patientID}" type="hidden">
                             <a style="margin-top:12px" id="dischargeSubmit" class="button confirm">Submit</a>
                         </p>
 

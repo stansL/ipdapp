@@ -63,15 +63,15 @@
 
 
 
-               /*
-                var btnselectedAnchor = document.createElement("a");
-                btnselectedAnchor.id = ui.item.value;
+                /*
+                 var btnselectedAnchor = document.createElement("a");
+                 btnselectedAnchor.id = ui.item.value;
 
-                var btnselectedProcedure = document.createElement("input");
-                btnselectedProcedure.id = "remove";
-                btnselectedProcedure.type = "button";
-                btnselectedProcedure.appendChild(btnselectedRemoveIcon);
-                */
+                 var btnselectedProcedure = document.createElement("input");
+                 btnselectedProcedure.id = "remove";
+                 btnselectedProcedure.type = "button";
+                 btnselectedProcedure.appendChild(btnselectedRemoveIcon);
+                 */
                 selectedProcedureP.appendChild(btnselectedRemoveIcon);
 
                 var selectedProcedureDiv = document.getElementById("selected-procedures");
@@ -386,21 +386,21 @@
             printWindow.document.close();
             printWindow.print();
         });
-/*        //transfer patient
-               jq("#transferButton").click(function(){
-                                var transferForm = jq("#transferForm");
-                                transferForm.submit(
-                                        function (ev) {
-                                            jq.ajax({
-                                                type: transferForm.attr('method'),
-                                                url: '${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',
-                                                data: transferForm.serialize(),
-                                                success: function (data) {
-                                                    alert('ok');
-                        }
-                    });
-                });
-        });*/
+        /*        //transfer patient
+         jq("#transferButton").click(function(){
+         var transferForm = jq("#transferForm");
+         transferForm.submit(
+         function (ev) {
+         jq.ajax({
+         type: transferForm.attr('method'),
+         url: '${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',
+         data: transferForm.serialize(),
+         success: function (data) {
+         alert('ok');
+         }
+         });
+         });
+         });*/
 
         jq("#transferButton").click(function(event){
             var transferForm = jq("#transferForm");
@@ -415,13 +415,13 @@
 
 
             transferForm.submit(
-                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',transferFormData)
-                        .success(function(data) {
-                            alert('ok');
-                        })
-                        .error(function(xhr, status, err) {
-                            alert('AJAX error ' + err);
-                        })
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',transferFormData)
+                            .success(function(data) {
+                                alert('ok');
+                            })
+                            .error(function(xhr, status, err) {
+                                alert('AJAX error ' + err);
+                            })
             );
 
         });
@@ -455,19 +455,36 @@
 
         //dicharge patient send post information
         jq("#dischargeSubmit").click(function(event){
+
+            alert("The discharge submit button has bee clicked");
             var dischargeForm = jq("#dischargeForm");
+
+            //fetch the selected discharge diagnoses and store in an array
+            var selectedDiag = new Array;
+
+            jq("#selectedDiagnosisList option").each  ( function() {
+                selectedDiag.push ( jq(this).val() );
+            });
+
+            //get the list of selected procedures and store them in an array
+            var selectedDischargeProcedureList = new Array;
+
+            jq("#selectedDischargeProcedureList option").each  ( function() {
+                selectedDischargeProcedureList.push ( jq(this).val() );
+            });
+
             var dischargeFormData = {
-                'dischargeAdmittedID': jq('dischargeAdmittedID').val(),
+                'dischargeAdmittedID': jq('#dischargeAdmittedID').val(),
                 'patientId': jq('#dischargePatientID').val(),
-                'selectedDiagnosisList': jq('#selectedDiagnosisList').val(),
-                'selectedDischargeProcedureList': jq('#selectedDischargeProcedureList').val(),
+                'selectedDiagnosisList': selectedDiag,
+                'selectedDischargeProcedureList': selectedDischargeProcedureList,
                 'dischargeOutcomes': jq('#dischargeOutcomes').val(),
                 'otherDischargeInstructions': jq('#otherDischargeInstructions').val(),
             };
 
+            console.log(dischargeFormData);
 
-
-            transferForm.submit(
+            dischargeForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "dischargePatient") }',dischargeFormData)
                             .success(function(data) {
                                 alert('ok');
@@ -497,57 +514,57 @@
     });
 </script>
 <style>
-    .persondatalabel{
-        width:50%;
-        border: 1px;
-        float: left;
-        margin-bottom: 15px;
-    }
-    .clearboth{
-        clear: both;
-    }
-    .persondatalabel h3{
-        display: inline;
-        width: 50%;
-    }
-    .persondatalabel h2{
-        display: inline;
-        width: 50%;
-    }
-    .morebuttons{
-        display: inline;
-        float: left;
-        margin-left: 20px;
-    }
-    .tableelement{
-        width: auto;
-        min-width: 10px;
-    }
-    .vitalstatisticselements{
-        float:left;
-        margin-left:10px;
-        margin-bottom: 10px;
-    }
-    .vitalstatisticselements textarea{
-        height: 23px;
-        width: 183px;
-    }
-    .selecticon{
-        float: right;
-        vertical-align: middle;
-        font-size: x-large;
-    }
-    .selectp{
-        min-width: 450px;
-        border-bottom: solid;
-        border-bottom-width: 1px;
-        padding-left: 5px;
-        margin-top:20px;
-    }
-    .selectdiv{
-        width: 450px;
-        margin-top:10px;
-    }
+.persondatalabel{
+    width:50%;
+    border: 1px;
+    float: left;
+    margin-bottom: 15px;
+}
+.clearboth{
+    clear: both;
+}
+.persondatalabel h3{
+    display: inline;
+    width: 50%;
+}
+.persondatalabel h2{
+    display: inline;
+    width: 50%;
+}
+.morebuttons{
+    display: inline;
+    float: left;
+    margin-left: 20px;
+}
+.tableelement{
+    width: auto;
+    min-width: 10px;
+}
+.vitalstatisticselements{
+    float:left;
+    margin-left:10px;
+    margin-bottom: 10px;
+}
+.vitalstatisticselements textarea{
+    height: 23px;
+    width: 183px;
+}
+.selecticon{
+    float: right;
+    vertical-align: middle;
+    font-size: x-large;
+}
+.selectp{
+    min-width: 450px;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    padding-left: 5px;
+    margin-top:20px;
+}
+.selectdiv{
+    width: 450px;
+    margin-top:10px;
+}
 </style>
 </head>
 <body>
@@ -600,10 +617,10 @@
 
         <div style="margin-top: 30px;">
             <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
-                <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
+            <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
             <% } %>
             <% if (patientInformation.absconded != 1 && patientInformation.requestForDischargeStatus != 1) { %>
-                 <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
+            <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
             <% } %>
             <a class="button confirm morebuttons" id="printButton">Print</a>
             <div class="clearboth"></div>
@@ -627,11 +644,11 @@
                         <select required name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised" >
                             <option value="">Select Diet Advised</option>
                             <% if (dietList!=null && dietList!=""){ %>
-                                <% dietList.each { dl -> %>
-                                    <option  value="${dl.name}">
-                                        ${dl.name}
-                                    </option>
-                                <% } %>
+                            <% dietList.each { dl -> %>
+                            <option  value="${dl.name}">
+                                ${dl.name}
+                            </option>
+                            <% } %>
                             <% } %>
                         </select>
                     </div>
@@ -647,36 +664,36 @@
                     </div>
                 </div>
             </form>
-                <div>
-                    <table id="vitalSummary">
-                        <thead>
-                            <tr >
-                                <th>S.No</th>
-                                <th>Date/Time</th>
-                                <th>Blood Pressure</th>
-                                <th>Pulse Rate</th>
-                                <th>Temperature</th>
-                                <th>Diet Advised</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <% if (ipdPatientVitalStatistics!=null && ipdPatientVitalStatistics!=""){ %>
-                        <% ipdPatientVitalStatistics.eachWithIndex { ipvs , idx-> %>
-                                <tr>
-                                    <td>${idx+1}</td>
-                                    <td>${ipvs.createdOn}</td>
-                                    <td>${ipvs.bloodPressure}</td>
-                                    <td>${ipvs.pulseRate}</td>
-                                    <td>${ipvs.temperature}</td>
-                                    <td>${ipvs.dietAdvised}</td>
-                                    <td>${ipvs.note}</td>
-                                </tr>
-                            <% } %>
-                        <% } %>
-                        </tbody>
-                    </table>
-                </div>
+            <div>
+                <table id="vitalSummary">
+                    <thead>
+                    <tr >
+                        <th>S.No</th>
+                        <th>Date/Time</th>
+                        <th>Blood Pressure</th>
+                        <th>Pulse Rate</th>
+                        <th>Temperature</th>
+                        <th>Diet Advised</th>
+                        <th>Notes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if (ipdPatientVitalStatistics!=null && ipdPatientVitalStatistics!=""){ %>
+                    <% ipdPatientVitalStatistics.eachWithIndex { ipvs , idx-> %>
+                    <tr>
+                        <td>${idx+1}</td>
+                        <td>${ipvs.createdOn}</td>
+                        <td>${ipvs.bloodPressure}</td>
+                        <td>${ipvs.pulseRate}</td>
+                        <td>${ipvs.temperature}</td>
+                        <td>${ipvs.dietAdvised}</td>
+                        <td>${ipvs.note}</td>
+                    </tr>
+                    <% } %>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
     <div id="tabs-3">
@@ -697,8 +714,8 @@
 
                             <input type="text" style="width: 450px" id="procedure" name="procedure" placeholder="Enter Procedure" />
                             <select style="display: none" id="selectedProcedureList"></select>
-                            <div class="selectdiv"  id="selected-procedures"></div>
-                        </p>
+                        <div class="selectdiv"  id="selected-procedures"></div>
+                    </p>
 
                     </fieldset>
 
@@ -709,8 +726,8 @@
                         <p>
                             <input type="text" style="width: 450px" id="investigation" name="investigation" placeholder="Enter Investigations" />
                             <select style="display: none" id="selectedInvestigationList"></select>
-                            <div class="selectdiv"  id="selected-investigations"></div>
-                        </p>
+                        <div class="selectdiv"  id="selected-investigations"></div>
+                    </p>
 
                     </fieldset>
                     <fieldset>
@@ -755,7 +772,7 @@
 
             </form>
 
-            </div>
+        </div>
         <div id="addDrugDialog" class="dialog">
             <div class="dialog-header">
                 <i class="icon-folder-open"></i>
@@ -799,11 +816,11 @@
                         <select required  name="transferIpdWard" id="transferIpdWard"  name="ipdWard"  style="width: 150px;">
                             <option value="">Select Ward</option>
                             <% if (listIpd!=null && listIpd!="") { %>
-                                <% listIpd.each { ipd -> %>
-                                    <option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
-                                        ${ipd.answerConcept.name}
-                                    </option>
-                                <%}%>
+                            <% listIpd.each { ipd -> %>
+                            <option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
+                                ${ipd.answerConcept.name}
+                            </option>
+                            <%}%>
                             <%}%>
                         </select>
                     </div>
@@ -824,7 +841,7 @@
                     <div class="persondatalabel">
                         <h2>Bed Number</h2>
                         <input required name="transferBedNumber" id="transferBedNumber" type="number">
-                </div>
+                    </div>
 
                     <div class="persondatalabel" >
                         <h2>Comments</h2>

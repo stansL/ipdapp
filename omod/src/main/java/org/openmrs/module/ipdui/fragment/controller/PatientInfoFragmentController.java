@@ -130,17 +130,19 @@ public class PatientInfoFragmentController {
         ipdPatientVitalStatistics.setCreatedOn(new Date());
         ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
     }
-    public void dischargePatient( @RequestParam("dischargeAdmittedID") Integer dischargeAdmittedID,
-                                  @RequestParam("patientId") Integer patientId,
-                                  @RequestParam("selectedDiagnosisList") Integer[] selectedDiagnosisList,
-                                  @RequestParam("selectedDischargeProcedureList") Integer[] selectedDischargeProcedureList,
-                                  @RequestParam("dischargeOutcomes") Integer dischargeOutcomes,
-                                  @RequestParam("otherDischargeInstructions") Integer otherDischargeInstructions
+    public void dischargePatient( @RequestParam(value ="dischargeAdmittedID", required = false) Integer dischargeAdmittedID,
+                                  @RequestParam(value ="patientId", required = false) Integer patientId,
+                                  @RequestParam(value ="selectedDiagnosisList[]", required = false) Integer[] selectedDiagnosisList,
+                                  @RequestParam(value ="selectedDischargeProcedureList[]", required = false) Integer[] selectedDischargeProcedureList,
+                                  @RequestParam(value ="dischargeOutcomes", required = false) Integer dischargeOutcomes,
+                                  @RequestParam(value ="otherDischargeInstructions", required = false) String otherDischargeInstructions
     ){
-        IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+
         HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);
         PatientQueueService queueService = Context.getService(PatientQueueService.class);
         PatientSearch patientSearch = hospitalCoreService.getPatient(patientId);
+
+        IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 
         if (Context.getConceptService().getConcept(dischargeOutcomes).getName().getName().equalsIgnoreCase("DEATH")) {
 
@@ -257,9 +259,7 @@ public class PatientInfoFragmentController {
         Context.getEncounterService().saveEncounter(ipdEncounter);
 
 
-        //end
-
-        /*IpdPatientAdmittedLog ipdPatientAdmittedLog=ipdService.discharge(command.getAdmittedId(), dischargeOutcomes,  otherInstructions );
+        IpdPatientAdmittedLog ipdPatientAdmittedLog=ipdService.discharge(dischargeAdmittedID, dischargeOutcomes, otherDischargeInstructions );
         OpdPatientQueueLog opdPatientQueueLog=ipdPatientAdmittedLog.getPatientAdmissionLog().getOpdLog();
         opdPatientQueueLog.setVisitOutCome("DISCHARGE ON REQUEST");
         queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
@@ -268,39 +268,6 @@ public class PatientInfoFragmentController {
         PatientServiceBill patientServiceBill=billingService.getPatientServiceBillByEncounter(encounter);
         patientServiceBill.setDischargeStatus(1);
         billingService.savePatientServiceBill(patientServiceBill);
-        List<Obs> diagnosisList=hospitalCoreService.getObsByEncounterAndConcept(encounter, Context.getConceptService().getConcept("PROVISIONAL DIAGNOSIS"));
-        List<Obs> procedureList=hospitalCoreService.getObsByEncounterAndConcept(encounter, Context.getConceptService().getConcept("POST FOR PROCEDURE"));
-        PersonAddress personAddress = hospitalCoreService.getPersonAddress(Context.getPersonService().getPerson(Context.getPatientService().getPatient(command.getPatientId())));
-        model.addAttribute("ipdPatientAdmittedLog", ipdPatientAdmittedLog);
-        model.addAttribute("dischargeDate",new Date());
-        model.addAttribute("diagnosisList",diagnosisList);
-        model.addAttribute("comments",ipdPatientAdmittedLog.getComments());
-        model.addAttribute("procedureList",procedureList);
-        model.addAttribute("personAddress",personAddress);
-        model.addAttribute("urlS", "main.htm?tab=1");
-        model.addAttribute("message", "Succesfully");
 
-        PersonAttribute contactNumber = ipdPatientAdmittedLog.getPatient().getAttribute("Phone Number");
-        PersonAttribute fileNumber = ipdPatientAdmittedLog.getPatient().getAttribute("File Number");
-
-        PersonAttribute emailAddress = ipdPatientAdmittedLog.getPatient().getAttribute("Patient E-mail Address");
-
-        if(null != fileNumber)
-        {
-            model.addAttribute("fileNumber", fileNumber.getValue());
-        }
-        if(contactNumber!=null){
-            model.addAttribute("contactNumber", contactNumber.getValue());
-        }
-        else{
-            model.addAttribute("contactNumber", "");
-        }
-
-        if(emailAddress!=null){
-            model.addAttribute("emailAddress", emailAddress.getValue());
-        }
-        else{
-            model.addAttribute("emailAddress", "");
-        }*/
     }
 }

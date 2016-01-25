@@ -473,9 +473,7 @@
                 selectedDischargeProcedureList.push ( jq(this).val() );
             });
 
-            //convert to json
-            selectedDiag = JSON.stringify(selectedDiag);
-            selectedDischargeProcedureList = JSON.stringify(selectedDischargeProcedureList);
+
 
             var dischargeFormData = {
                 'dischargeAdmittedID': jq('#dischargeAdmittedID').val(),

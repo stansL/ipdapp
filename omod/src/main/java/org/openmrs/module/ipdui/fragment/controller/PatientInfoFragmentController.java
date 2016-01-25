@@ -61,6 +61,14 @@ public class PatientInfoFragmentController {
 
         return formulationsList;
     }
+
+    public List<SimpleObject> getDiagnosis(@RequestParam(value="q") String name,UiUtils ui)
+    {
+        List<Concept> diagnosis = Context.getService(PatientDashboardService.class).searchDiagnosis(name);
+
+        List<SimpleObject> diagnosisList = SimpleObject.fromCollection(diagnosis, ui, "id", "name");
+        return diagnosisList;
+    }
     
     public void requestForDischarge(@RequestParam(value = "id", required = false) Integer admittedId,
                                     @RequestParam(value = "ipdWard", required = false) String ipdWard,

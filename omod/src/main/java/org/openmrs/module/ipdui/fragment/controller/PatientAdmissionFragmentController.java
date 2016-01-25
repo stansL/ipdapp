@@ -1,6 +1,7 @@
 package org.openmrs.module.ipdui.fragment.controller;
 
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openmrs.*;
@@ -10,6 +11,7 @@ import org.openmrs.module.hospitalcore.HospitalCoreService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientQueueService;
 import org.openmrs.module.hospitalcore.model.*;
+import org.openmrs.module.hospitalcore.util.ConceptAnswerComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.Money;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +100,12 @@ public class PatientAdmissionFragmentController {
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
         Concept ipdConcept = Context.getConceptService().getConceptByName(
                 Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
-        model.addAttribute("listIpd", ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+        List<ConceptAnswer> list = (ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+        if (CollectionUtils.isNotEmpty(list)) {
+            Collections.sort(list, new ConceptAnswerComparator());
+        }
+
+        model.addAttribute("listIpd", list);
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
         if (admission != null) {
             PersonAddress add = admission.getPatient().getPersonAddress();
@@ -106,8 +114,7 @@ public class PatientAdmissionFragmentController {
             String district = add.getCountyDistrict();
             String upazila = add.getCityVillage();
 
-            String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(
-                    IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
+            String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
             Role doctorRole = Context.getUserService().getRole(doctorRoleProps);
             if (doctorRole != null) {
                 List<User> listDoctor = Context.getUserService().getUsersByRole(doctorRole);
@@ -148,5 +155,6 @@ public class PatientAdmissionFragmentController {
 
         /*return "redirect:/module/ipd/main.htm";*/
     }
+
 
 }

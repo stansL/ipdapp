@@ -197,6 +197,99 @@
 
         });
 
+
+
+        //autocomplete for the discharge tab
+        jq("#dischargeProcedures").autocomplete({
+            source: function( request, response ) {
+                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getProcedures") }',
+                        {
+                            q: request.term
+                        }
+                ).success(function(data) {
+                            procedureMatches = [];
+                            for (var i in data) {
+                                var result = { label: data[i].label, value: data[i].id, schedulable: data[i].schedulable };
+                                procedureMatches.push(result);
+                            }
+                            response(procedureMatches);
+                        });
+            },
+            minLength: 3,
+            select: function( event, ui ) {
+                var selectedProcedure = document.createElement('option');
+                selectedProcedure.value = ui.item.value;
+                selectedProcedure.text = ui.item.label;
+                selectedProcedure.id = ui.item.value;
+                var selectedProcedureList = document.getElementById("selectedDischargeProcedureList");
+
+
+                //adds the selected procedures to the div
+                var selectedProcedureP = document.createElement("P");
+                selectedProcedureP.className = "selectp";
+
+                var selectedProcedureT = document.createTextNode(ui.item.label);
+                selectedProcedureP.id = ui.item.value;
+                selectedProcedureP.appendChild(selectedProcedureT);
+
+
+
+                var btnselectedRemoveIcon = document.createElement("p");
+                btnselectedRemoveIcon.className = "icon-remove selecticon";
+                btnselectedRemoveIcon.id = "procedureRemoveIcon";
+
+
+
+                /*
+                 var btnselectedAnchor = document.createElement("a");
+                 btnselectedAnchor.id = ui.item.value;
+
+                 var btnselectedProcedure = document.createElement("input");
+                 btnselectedProcedure.id = "remove";
+                 btnselectedProcedure.type = "button";
+                 btnselectedProcedure.appendChild(btnselectedRemoveIcon);
+                 */
+                selectedProcedureP.appendChild(btnselectedRemoveIcon);
+
+                var selectedProcedureDiv = document.getElementById("selected-procedures2");
+
+                //check if the item already exist before appending
+                var exists = false;
+                for (var i = 0; i < selectedProcedureList.length; i++) {
+                    if(selectedProcedureList.options[i].value==ui.item.value)
+                    {
+                        exists = true;
+                    }
+                }
+
+                if(exists == false)
+                {
+                    selectedProcedureList.appendChild(selectedProcedure);
+                    selectedProcedureDiv.appendChild(selectedProcedureP);
+                }
+
+            },
+            open: function() {
+                jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+            },
+            close: function() {
+                jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+            }
+        });
+        jq("#selected-procedures2").on("click", "#procedureRemoveIcon",function(){
+            var procedureId = jq(this).parent("p").attr("id");
+            var procedureP = jq(this).parent("p");
+
+            var divProcedure = procedureP.parent("div");
+            var selectInputPosition = divProcedure.siblings("p");
+            var selectedProcedure = selectInputPosition.find("select");
+            var removeProcedure = selectedProcedure.find("#" + procedureId);
+
+            procedureP.remove();
+            removeProcedure.remove();
+
+        });
+
         jq("#printButton").click(function(){
             var printDiv = jq("#printArea").html();
             var printWindow = window.open('', '', 'height=400,width=800');

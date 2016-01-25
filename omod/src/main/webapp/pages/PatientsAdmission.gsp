@@ -55,7 +55,7 @@
                             </span>
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "admission", [admissionId: pAdmission.id])}">
                                         <i class="icon-signin"></i>
                                         Admit
                                     </a>

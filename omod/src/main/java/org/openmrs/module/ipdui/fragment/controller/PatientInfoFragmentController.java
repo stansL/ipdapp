@@ -130,12 +130,12 @@ public class PatientInfoFragmentController {
         ipdPatientVitalStatistics.setCreatedOn(new Date());
         ipdService.saveIpdPatientVitalStatistics(ipdPatientVitalStatistics);
     }
-    public void dischargePatient( @RequestParam("patientId") Integer patientId,
-                                  @RequestParam("dischargeOutcomes") Integer dischargeOutcomes,
-                                  @RequestParam("otherDischargeInstructions") Integer otherDischargeInstructions,
-                                  @RequestParam("dischargeAdmittedID") Integer dischargeAdmittedID,
+    public void dischargePatient( @RequestParam("dischargeAdmittedID") Integer dischargeAdmittedID,
+                                  @RequestParam("patientId") Integer patientId,
                                   @RequestParam("selectedDiagnosisList") Integer[] selectedDiagnosisList,
-                                  @RequestParam("selectedDischargeProcedureList") Integer[] selectedDischargeProcedureList
+                                  @RequestParam("selectedDischargeProcedureList") Integer[] selectedDischargeProcedureList,
+                                  @RequestParam("dischargeOutcomes") Integer dischargeOutcomes,
+                                  @RequestParam("otherDischargeInstructions") Integer otherDischargeInstructions
     ){
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
         HospitalCoreService hospitalCoreService = (HospitalCoreService) Context.getService(HospitalCoreService.class);

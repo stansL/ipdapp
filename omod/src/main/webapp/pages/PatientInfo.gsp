@@ -473,6 +473,10 @@
                 selectedDischargeProcedureList.push ( jq(this).val() );
             });
 
+            //convert to json
+            selectedDiag = JSON.stringify(selectedDiag);
+            selectedDischargeProcedureList = JSON.stringify(selectedDischargeProcedureList);
+
             var dischargeFormData = {
                 'dischargeAdmittedID': jq('#dischargeAdmittedID').val(),
                 'patientId': jq('#dischargePatientID').val(),
@@ -481,8 +485,6 @@
                 'dischargeOutcomes': jq('#dischargeOutcomes').val(),
                 'otherDischargeInstructions': jq('#otherDischargeInstructions').val(),
             };
-
-            console.log(dischargeFormData);
 
             dischargeForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "dischargePatient") }',dischargeFormData)

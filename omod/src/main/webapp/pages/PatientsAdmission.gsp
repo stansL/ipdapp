@@ -64,21 +64,20 @@
                             </span>
                             <ul>
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "admission", [admissionId: pAdmission.id])}">
-                                        <i class="icon-signin"></i>
-                                        Admit
-                                    </a>
+
+                                    <a href="http://localhost:9001/openmrs/ipdui/admissionForm.page?admissionId=${pAdmission.id}"><i class="icon-signin"></i>
+                                        Admit</a>
                                 </li>
 
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 1])}
+                                    <a href="${ui.actionLink("ipdui", "patientsAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 1])}
                                     ">
                                         <i class="icon-remove"></i>
                                         Remove
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 2])}
+                                    <a href="${ui.actionLink("ipdui", "patientsAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 2])}
                                     ">
                                         <i class="icon-thumbs-down "></i>
                                         No bed

@@ -584,12 +584,11 @@
 
                     jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getFormulationByDrugName") }',
                             {
-                                "drugName": ui.item.name
+                                "drugName": ui.item.label
                             }
                     ).success(function(data) {
                                 var formulations = jq.map(data, function (formulation) {
-                                    console.log(formulation);
-                                    return new Formulation({ id: formulation.id, label: formulation.name});
+                                  jq('#formulationsSelect').append(jq('<option>').text(formulation.name).attr('value', formulation.id));
                                 });
                             });
                 },
@@ -873,7 +872,8 @@
                     </li>
                     <li>
                         <span>Formulation</span>
-                        <select ></select>
+                        <select id="formulationsSelect" >
+                        </select>
                     </li>
                     <li>
                         <span>Frequency</span>

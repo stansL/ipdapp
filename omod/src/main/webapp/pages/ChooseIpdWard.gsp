@@ -1,5 +1,7 @@
 <% ui.decorateWith("appui", "standardEmrPage") %>
-
+<style>
+ul.select li.selected{background-color: #007FFF; color: #FFF;border-color: transparent}
+</style>
 
 <ul class="select">
     <% listIpd.each { it -> %>

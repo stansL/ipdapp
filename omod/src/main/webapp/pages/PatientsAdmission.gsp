@@ -23,6 +23,7 @@
     .button.task, button.task, input[type="submit"].task, input[type="button"].task, input[type="submit"].task, a.button.task{
         min-width: auto;
     }
+    .dataTables_length{text-align: left}
     </style>
 </head>
 

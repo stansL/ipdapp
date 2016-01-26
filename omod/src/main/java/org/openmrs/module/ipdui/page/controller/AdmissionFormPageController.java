@@ -15,16 +15,13 @@ import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.hospitalcore.util.Money;
 import org.openmrs.module.hospitalcore.util.PatientUtils;
 import org.openmrs.module.ipdui.utils.IpdConstants;
+import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ngarivictor on 1/25/2016.
@@ -32,7 +29,16 @@ import java.util.List;
 public class AdmissionFormPageController {
     /*@RequestMapping(value = "/module/ipd/admission.htm", method = RequestMethod.GET)*/
     public void get(@RequestParam(value = "admissionId", required = false) Integer admissionId, //If that tab is active we will set that tab active when page load.
-                         PageModel model) {
+                    PageModel model,
+                    @RequestParam(value = "tab") Integer tab,
+                    @RequestParam(value = "ipdWard") String ipdWard,
+                    @RequestParam(value = "ipdWardString") String ipdWardString
+    )
+
+    {
+        model.addAttribute("tab", tab);
+        model.addAttribute("ipdWard", ipdWard);
+        model.addAttribute("ipdWardString", ipdWardString);
         IpdService ipdService = Context.getService(IpdService.class);
         Concept ipdConcept = Context.getConceptService().getConceptByName(
                 Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
@@ -43,7 +49,7 @@ public class AdmissionFormPageController {
         model.addAttribute("listIpd", list);
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
 
-       if (admission != null) {
+        if (admission != null) {
             PersonAddress add = admission.getPatient().getPersonAddress();
             String address = add.getAddress1();
             //ghansham 25-june-2013 issue no # 1924 Change in the address format
@@ -62,26 +68,26 @@ public class AdmissionFormPageController {
 
             PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 
-            PersonAttribute maritalStatus  = admission.getPatient().getAttribute("Marital Status");
+            PersonAttribute maritalStatus = admission.getPatient().getAttribute("Marital Status");
 
             PersonAttribute contactNumber = admission.getPatient().getAttribute("Phone Number");
 
             PersonAttribute emailAddress = admission.getPatient().getAttribute("Patient E-mail Address");
 
-            PersonAttribute nationalID  = admission.getPatient().getAttribute("National ID");
+            PersonAttribute nationalID = admission.getPatient().getAttribute("National ID");
 
-            PersonAttribute patientCategory  = admission.getPatient().getAttribute("Payment Category");
+            PersonAttribute patientCategory = admission.getPatient().getAttribute("Payment Category");
 
             PersonAttribute fileNumber = admission.getPatient().getAttribute("File Number");
 
-            model.addAttribute("admission",admission);
+            model.addAttribute("admission", admission);
             model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
             //  issue no # 1924 Change in the address format
             model.addAttribute("district", district);
             model.addAttribute("upazila", upazila);
             model.addAttribute("name", pname);
             model.addAttribute("relationName", relationNameattr.getValue());
-            if(fileNumber!=null){
+            if (fileNumber != null) {
                 model.addAttribute("fileNumber", fileNumber.getValue());
             }
 
@@ -89,7 +95,11 @@ public class AdmissionFormPageController {
 
     }
 
-    public void post(HttpServletRequest request, PageModel model) {
+    public String post(HttpServletRequest request, PageModel model,
+                       @RequestParam(value = "ipdWard", required = false) String ipdWard,
+                       @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
+                       @RequestParam(value = "tab", required = false) Integer tab,
+                       UiUtils uiUtils) {
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
         int id = NumberUtils.toInt(request.getParameter("id"));
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(id);
@@ -154,7 +164,7 @@ public class AdmissionFormPageController {
             if (patientAdmissionLog != null && patientAdmissionLog.getId() != null) {
 
                 BillingService billingService = Context.getService(BillingService.class);
-                Patient patient=admission.getPatient();
+                Patient patient = admission.getPatient();
                 IndoorPatientServiceBill bill = new IndoorPatientServiceBill();
 
                 bill.setCreatedDate(new Date());
@@ -169,12 +179,12 @@ public class AdmissionFormPageController {
                 BigDecimal totalActualAmount = new BigDecimal(0);
                 BillableService service;
 
-                ArrayList<Concept> al=new ArrayList<Concept>();
-                Concept concept1=Context.getConceptService().getConcept("ADMISSION FEE");
-                Concept concept2=Context.getConceptService().getConcept("CATERING FEE");
+                ArrayList<Concept> al = new ArrayList<Concept>();
+                Concept concept1 = Context.getConceptService().getConcept("ADMISSION FEE");
+                Concept concept2 = Context.getConceptService().getConcept("CATERING FEE");
                 al.add(concept1);
                 al.add(concept2);
-                for(Concept c:al){
+                for (Concept c : al) {
                     service = billingService.getServiceByConceptId(c.getConceptId());
 
                     mUnitPrice = new Money(service.getPrice());
@@ -216,25 +226,22 @@ public class AdmissionFormPageController {
             PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 
             model.addAttribute("relationName", relationNameattr.getValue());
-            if(relationTypeattr!=null){
+            if (relationTypeattr != null) {
                 model.addAttribute("relationType", relationTypeattr.getValue());
-            }
-            else{
+            } else {
                 model.addAttribute("relationType", "Relative Name");
             }
 
 
-
             PersonAttribute fileNumber_old = admission.getPatient().getAttribute("File Number");
-            if(fileNumber_old!=null){
+            if (fileNumber_old != null) {
                 model.addAttribute("fileNumber", fileNumber_old.getValue());
-            }
-            else{
+            } else {
                 PersonAttributeType type = Context.getPersonService().getPersonAttributeTypeByName("File Number");
                 PersonAttribute attribute = new PersonAttribute();
                 attribute.setAttributeType(type);
                 attribute.setValue(fileNumber);
-                Patient patient=admission.getPatient();
+                Patient patient = admission.getPatient();
                 patient.addAttribute(attribute);
                 model.addAttribute("fileNumber", fileNumber);
             }
@@ -257,8 +264,7 @@ public class AdmissionFormPageController {
             admitted.setFatherName(fathername);
             if (relationTypeattr != null) {
                 relationshipType = relationTypeattr.getValue();
-            }
-            else{
+            } else {
                 relationshipType = "Relative Name";
             }
 
@@ -268,7 +274,7 @@ public class AdmissionFormPageController {
             treatingD = Context.getUserService().getUser(treatingDoctor);
 
             admitted.setIpdAdmittedUser(treatingD);
-            if(patientAdmissionLog!=null){
+            if (patientAdmissionLog != null) {
                 admitted.setPatient(patientAdmissionLog.getPatient());
             }
             admitted.setPatientAddress(StringUtils.isNotBlank(address) ? address : "");
@@ -288,8 +294,7 @@ public class AdmissionFormPageController {
             model.addAttribute("admitted", admitted);
 
             //delete admission
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", e.getMessage());
            /* return "module/ipd/admissionForm";*/
@@ -307,17 +312,15 @@ public class AdmissionFormPageController {
 
         PersonAttribute emailAddress = admission.getPatient().getAttribute("Patient E-mail Address");
 
-        if(contactNumber!=null){
+        if (contactNumber != null) {
             model.addAttribute("contactNumber", contactNumber.getValue());
-        }
-        else{
+        } else {
             model.addAttribute("contactNumber", "");
         }
 
-        if(emailAddress!=null){
+        if (emailAddress != null) {
             model.addAttribute("emailAddress", emailAddress.getValue());
-        }
-        else{
+        } else {
             model.addAttribute("emailAddress", "");
         }
 
@@ -343,7 +346,13 @@ public class AdmissionFormPageController {
             encounter = Context.getEncounterService().saveEncounter(encounter);
             admission.setIpdEncounter(encounter);
             ipdService.saveIpdPatientAdmission(admission);
+
         }
+        Map<String,Object> params=new HashMap<String, Object>();
+        params.put("tab",tab);
+        params.put("ipdWard",ipdWard);
+        params.put("ipdWardString",ipdWardString);
+        return "redirect:"+uiUtils.pageLink("ipdui","patientsAdmission",params);
 
     }
 

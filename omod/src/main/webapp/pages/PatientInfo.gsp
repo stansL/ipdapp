@@ -511,6 +511,55 @@
         jq("#addDrugsButton").on("click", function(e){
             adddrugdialog.show();
         });
+
+
+        //add drug autocomplete
+        jq(".drug-name").on("focus.autocomplete", function () {
+            var selectedInput = this;
+            jq(this).autocomplete({
+                source: function( request, response ) {
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getDrugs") }',
+                            {
+                                q: request.term
+                            }
+                    ).success(function(data) {
+                                var results = [];
+                                for (var i in data) {
+                                    var result = { label: data[i].name, value: data[i].id};
+                                    results.push(result);
+                                }
+                                response(results);
+                            });
+                },
+                minLength: 3,
+                select: function( event, ui ) {
+                    event.preventDefault();
+                    jq(selectedInput).val(ui.item.label);
+                },
+                change: function (event, ui) {
+                    event.preventDefault();
+                    jq(selectedInput).val(ui.item.label);
+
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getFormulationByDrugName") }',
+                            {
+                                "drugName": ui.item.name
+                            }
+                    ).success(function(data) {
+                                var formulations = jq.map(data, function (formulation) {
+                                    console.log(formulation);
+                                    return new Formulation({ id: formulation.id, label: formulation.name});
+                                });
+                            });
+                },
+                open: function() {
+                    jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                },
+                close: function() {
+                    jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                }
+            });
+        });
+
     });
 </script>
 <style>
@@ -697,7 +746,7 @@
         </section>
     </div>
     <div id="tabs-3">
-        <div id="content2" class="container">
+        <div id="content" class="container">
 
             <h1>Treatment</h1>
 
@@ -782,23 +831,23 @@
                 <ul>
                     <li>
                         <span>Drug</span>
-                        <input class="drug-name" type="text" data-bind="value: name, valueUpdate: 'blur'" >
+                        <input class="drug-name" type="text" >
                     </li>
                     <li>
                         <span>Formulation</span>
-                        <select data-bind="options: formulationOpts, value: formulation, optionsText: 'label'"></select>
+                        <select ></select>
                     </li>
                     <li>
                         <span>Frequency</span>
-                        <select data-bind="options: frequencyOpts, value: frequency, optionsText: 'label'"></select>
+                        <select ></select>
                     </li>
                     <li>
                         <span>Number of Days</span>
-                        <input type="text" data-bind="value: numberOfDays" >
+                        <input type="text"  >
                     </li>
                     <li>
                         <span>Comment</span>
-                        <textarea data-bind="value: comment"></textarea>
+                        <textarea ></textarea>
                     </li>
                 </ul>
 
@@ -856,7 +905,7 @@
         </section>
     </div>
     <div id="tabs-5">
-        <div id="content" class="container">
+        <div id="content2" class="container">
 
             <h1>Discharge Patient</h1>
 

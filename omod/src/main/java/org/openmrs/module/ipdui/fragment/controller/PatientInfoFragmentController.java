@@ -273,8 +273,9 @@ public class PatientInfoFragmentController {
         billingService.savePatientServiceBill(patientServiceBill);
 
     }
+
     public void treatment(@RequestParam(value ="patientId", required = false) Integer patientId,
-                          @RequestParam(value = "drugOrder", required = false) String[] drugOrder,
+                          //@RequestParam(value = "drugOrder", required = false) String[] drugOrder,
                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
                           @RequestParam(value ="selectedProcedureList[]", required = false) Integer[] selectedProcedureList,
                           @RequestParam(value ="selectedInvestigationList[]", required = false) Integer[] selectedInvestigationList,
@@ -418,63 +419,63 @@ public class PatientInfoFragmentController {
             }
         }
 
-        if (!ArrayUtils.isEmpty(selectedProcedureList))) {
-            Concept conpro = Context.getConceptService().getConceptByName(procedure
-                    .getPropertyValue());
+        if (!ArrayUtils.isEmpty(selectedProcedureList)) {
+        Concept conpro = Context.getConceptService().getConceptByName(procedure
+                .getPropertyValue());
 
-            Concept concept = Context.getConceptService().getConcept(
-                    "MINOR OPERATION");
-            Collection<ConceptAnswer> allMinorOTProcedures = null;
-            List<Integer> id = new ArrayList<Integer>();
-            if (concept != null) {
-                allMinorOTProcedures = concept.getAnswers();
-                for (ConceptAnswer c : allMinorOTProcedures) {
-                    id.add(c.getAnswerConcept().getId());
-                }
+        Concept concept = Context.getConceptService().getConcept(
+                "MINOR OPERATION");
+        Collection<ConceptAnswer> allMinorOTProcedures = null;
+        List<Integer> id = new ArrayList<Integer>();
+        if (concept != null) {
+            allMinorOTProcedures = concept.getAnswers();
+            for (ConceptAnswer c : allMinorOTProcedures) {
+                id.add(c.getAnswerConcept().getId());
             }
-
-            Concept concept2 = Context.getConceptService().getConcept(
-                    "MAJOR OPERATION");
-            Collection<ConceptAnswer> allMajorOTProcedures = null;
-            List<Integer> id2 = new ArrayList<Integer>();
-            if (concept2 != null) {
-                allMajorOTProcedures = concept2.getAnswers();
-                for (ConceptAnswer c : allMajorOTProcedures) {
-                    id2.add(c.getAnswerConcept().getId());
-                }
-            }
-
-            int conId;
-            for (Integer pId : selectedProcedureList) {
-                BillableService billableService = billingService
-                        .getServiceByConceptId(pId);
-                OpdTestOrder opdTestOrder = new OpdTestOrder();
-                opdTestOrder.setPatient(patient);
-                opdTestOrder.setEncounter(admitted.getPatientAdmissionLog().getIpdEncounter());
-                opdTestOrder.setConcept(conpro);
-                opdTestOrder.setTypeConcept(DepartmentConcept.TYPES[1]);
-                opdTestOrder.setValueCoded(Context.getConceptService().getConcept(pId));
-                opdTestOrder.setCreator(user);
-                opdTestOrder.setCreatedOn(date);
-                opdTestOrder.setBillingStatus(1);
-                opdTestOrder.setBillableService(billableService);
-
-                conId = Context.getConceptService().getConcept(pId).getId();
-                if (id.contains(conId)) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(
-                            "dd/MM/yyyy");
-                }
-
-                if (id2.contains(conId)) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(
-                            "dd/MM/yyyy");
-                }
-                opdTestOrder.setIndoorStatus(1);
-                opdTestOrder.setFromDept(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
-                patientDashboardService.saveOrUpdateOpdOrder(opdTestOrder);
-            }
-
         }
+
+        Concept concept2 = Context.getConceptService().getConcept(
+                "MAJOR OPERATION");
+        Collection<ConceptAnswer> allMajorOTProcedures = null;
+        List<Integer> id2 = new ArrayList<Integer>();
+        if (concept2 != null) {
+            allMajorOTProcedures = concept2.getAnswers();
+            for (ConceptAnswer c : allMajorOTProcedures) {
+                id2.add(c.getAnswerConcept().getId());
+            }
+        }
+
+        int conId;
+        for (Integer pId : selectedProcedureList) {
+            BillableService billableService = billingService
+                    .getServiceByConceptId(pId);
+            OpdTestOrder opdTestOrder = new OpdTestOrder();
+            opdTestOrder.setPatient(patient);
+            opdTestOrder.setEncounter(admitted.getPatientAdmissionLog().getIpdEncounter());
+            opdTestOrder.setConcept(conpro);
+            opdTestOrder.setTypeConcept(DepartmentConcept.TYPES[1]);
+            opdTestOrder.setValueCoded(Context.getConceptService().getConcept(pId));
+            opdTestOrder.setCreator(user);
+            opdTestOrder.setCreatedOn(date);
+            opdTestOrder.setBillingStatus(1);
+            opdTestOrder.setBillableService(billableService);
+
+            conId = Context.getConceptService().getConcept(pId).getId();
+            if (id.contains(conId)) {
+                SimpleDateFormat sdf = new SimpleDateFormat(
+                        "dd/MM/yyyy");
+            }
+
+            if (id2.contains(conId)) {
+                SimpleDateFormat sdf = new SimpleDateFormat(
+                        "dd/MM/yyyy");
+            }
+            opdTestOrder.setIndoorStatus(1);
+            opdTestOrder.setFromDept(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
+            patientDashboardService.saveOrUpdateOpdOrder(opdTestOrder);
+        }
+
+    }
         if (!ArrayUtils.isEmpty(selectedInvestigationList)) {
             Concept coninvt = Context.getConceptService()
                     .getConceptByName(investigationn.getPropertyValue());

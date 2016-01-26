@@ -497,6 +497,48 @@
         });
 
 
+        //treatment: send post information
+        jq("#treatmentSubmit").click(function(event){
+
+            var treatmentForm = jq("#treatmentForm");
+
+            //get the list of selected procedures and store them in an array
+            var selectedProc = new Array;
+
+            jq("#selectedProcedureList option").each  ( function() {
+                selectedProc.push ( jq(this).val() );
+            });
+
+            //fetch the selected discharge diagnoses and store in an array
+            var selectedInv = new Array;
+
+            jq("#selectedInvestigationList option").each  ( function() {
+                selectedInv.push ( jq(this).val() );
+            });
+
+
+
+            var treatmentFormData = {
+                'patientId': jq('#treatmentPatientID').val(),
+                'selectedInvestigationList': selectedInv,
+                'selectedProcedureList': selectedProc,
+                'ipdWard': jq('#treatmentIPDWard').val(),
+                'otherTreatmentInstructions': jq('#otherTreatmentInstructions').val(),
+            };
+
+            dischargeForm.submit(
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "treatment") }',treatmentFormData)
+                            .success(function(data) {
+                                alert('ok');
+                            })
+                            .error(function(xhr, status, err) {
+                                alert('AJAX error ' + err);
+                            })
+            );
+
+        });
+
+
         var adddrugdialog = emr.setupConfirmationDialog({
             selector: '#addDrugDialog',
             actions: {
@@ -750,7 +792,7 @@
 
             <h1>Treatment</h1>
 
-            <form class="simple-form-ui" id="charges" method="post">
+            <form class="simple-form-ui" id="treatmentForm" method="post">
 
                 <section id="charges-info">
 
@@ -758,25 +800,19 @@
                     <fieldset style="min-width: 500px; width: auto">
 
                         <legend>Procedure</legend>
-
                         <p>
-
                             <input type="text" style="width: 450px" id="procedure" name="procedure" placeholder="Enter Procedure" />
                             <select style="display: none" id="selectedProcedureList"></select>
-                        <div class="selectdiv"  id="selected-procedures"></div>
-                    </p>
-
+                            <div class="selectdiv"  id="selected-procedures"></div>
+                        </p>
                     </fieldset>
-
                     <fieldset>
-
                         <legend>Investigation</legend>
-
                         <p>
                             <input type="text" style="width: 450px" id="investigation" name="investigation" placeholder="Enter Investigations" />
                             <select style="display: none" id="selectedInvestigationList"></select>
-                        <div class="selectdiv"  id="selected-investigations"></div>
-                    </p>
+                            <div class="selectdiv"  id="selected-investigations"></div>
+                        </p>
 
                     </fieldset>
                     <fieldset>
@@ -813,7 +849,9 @@
 
                         <p>
                             <textarea placeholder="Enter Other Instructions" style="width:400px"></textarea>
-                            <a style="margin-top:12px" class="button confirm">Submit</a>
+                            <input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
+                            <input name="treatmentPatientID" id="treatmentPatientID" value="${patientID}" type="hidden">
+                            <a style="margin-top:12px" id="treatmentSubmit" class="button confirm">Submit</a>
                         </p>
 
                     </fieldset>

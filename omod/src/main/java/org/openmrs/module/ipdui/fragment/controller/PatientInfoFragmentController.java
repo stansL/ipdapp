@@ -2,6 +2,7 @@ package org.openmrs.module.ipdui.fragment.controller;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.*;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
@@ -17,6 +18,8 @@ import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -269,5 +272,273 @@ public class PatientInfoFragmentController {
         patientServiceBill.setDischargeStatus(1);
         billingService.savePatientServiceBill(patientServiceBill);
 
+    }
+    public void treatment(@RequestParam(value ="patientId", required = false) Integer patientId,
+                          @RequestParam(value = "drugOrder", required = false) String[] drugOrder,
+                          @RequestParam(value = "ipdWard", required = false) String ipdWard,
+                          @RequestParam(value ="selectedProcedureList[]", required = false) Integer[] selectedProcedureList,
+                          @RequestParam(value ="selectedInvestigationList[]", required = false) Integer[] selectedInvestigationList,
+                          @RequestParam(value ="otherTreatmentInstructions", required = false) String otherTreatmentInstructions)
+    {
+        HospitalCoreService hcs = (HospitalCoreService) Context
+                .getService(HospitalCoreService.class);
+        IpdService ipdService = Context.getService(IpdService.class);
+        IpdPatientAdmitted admitted = ipdService.getAdmittedByPatientId(patientId);
+        Patient patient = Context.getPatientService().getPatient(patientId);
+        BillingService billingService = Context.getService(BillingService.class);
+        AdministrationService administrationService = Context.getAdministrationService();
+        GlobalProperty procedure = administrationService.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_POST_FOR_PROCEDURE);
+        GlobalProperty investigationn = administrationService.getGlobalPropertyObject(PatientDashboardConstants.PROPERTY_FOR_INVESTIGATION);
+        User user = Context.getAuthenticatedUser();
+        Date date = new Date();
+        PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+        Concept cOtherInstructions = Context.getConceptService().getConceptByName("OTHER INSTRUCTIONS");
+        Obs obsGroup = null;
+        obsGroup = hcs.getObsGroupCurrentDate(patient.getPersonId());
+        Encounter encounter = new Encounter();
+        encounter = admitted.getPatientAdmissionLog().getIpdEncounter();
+
+        if (admitted != null) {
+            if (!ArrayUtils.isEmpty(selectedProcedureList)) {
+                Concept cProcedure = Context.getConceptService().getConceptByName(procedure
+                        .getPropertyValue());
+
+                for (Integer pId : selectedProcedureList) {
+                    Obs oProcedure = new Obs();
+                    oProcedure.setObsGroup(obsGroup);
+                    oProcedure.setConcept(cProcedure);
+                    oProcedure.setValueCoded( Context.getConceptService().getConcept(pId));
+                    oProcedure.setCreator(user);
+                    oProcedure.setDateCreated(date);
+                    oProcedure.setEncounter(encounter);
+                    oProcedure.setPatient(patient);
+                    encounter.addObs(oProcedure);
+                }
+
+            }
+
+            if (!ArrayUtils.isEmpty(selectedInvestigationList)) {
+                Concept coninvt =  Context.getConceptService().getConceptByName(investigationn
+                        .getPropertyValue());
+
+                for (Integer pId : selectedInvestigationList) {
+                    Obs obsInvestigation = new Obs();
+                    obsInvestigation.setObsGroup(obsGroup);
+                    obsInvestigation.setConcept(coninvt);
+                    obsInvestigation.setValueCoded( Context.getConceptService().getConcept(pId));
+                    obsInvestigation.setCreator(user);
+                    obsInvestigation.setDateCreated(date);
+                    obsInvestigation.setEncounter(encounter);
+                    obsInvestigation.setPatient(patient);
+                    encounter.addObs(obsInvestigation);
+                }
+
+            }
+
+            if (StringUtils.isNotBlank(otherTreatmentInstructions)) {
+
+                Obs obs = new Obs();
+                obs.setObsGroup(obsGroup);
+                obs.setConcept(cOtherInstructions);
+                obs.setValueText(otherTreatmentInstructions);
+                obs.setCreator(user);
+                obs.setDateCreated(date);
+                obs.setEncounter(encounter);
+                obs.setPatient(patient);
+                encounter.addObs(obs);
+            }
+
+        }
+
+        IndoorPatientServiceBill bill = new IndoorPatientServiceBill();
+
+        bill.setCreatedDate(new Date());
+        bill.setPatient(patient);
+        bill.setCreator(Context.getAuthenticatedUser());
+
+        IndoorPatientServiceBillItem item;
+        BillableService service;
+        BigDecimal amount = new BigDecimal(0);
+
+        Integer[] al1 = selectedProcedureList;
+        Integer[] al2 = selectedInvestigationList;
+        Integer[] merge = null;
+        if (al1 != null && al2 != null) {
+            merge = new Integer[al1.length + al2.length];
+            int j = 0, k = 0, l = 0;
+            int max = Math.max(al1.length, al2.length);
+            for (int i = 0; i < max; i++) {
+                if (j < al1.length)
+                    merge[l++] = al1[j++];
+                if (k < al2.length)
+                    merge[l++] = al2[k++];
+            }
+        } else if (al1 != null) {
+            merge = selectedProcedureList;
+        } else if (al2 != null) {
+            merge = selectedInvestigationList;
+        }
+
+        boolean serviceAvailable = false;
+        if (merge != null) {
+            for (Integer iId : merge) {
+                Concept c = Context.getConceptService().getConcept(iId);
+                service = billingService.getServiceByConceptId(c
+                        .getConceptId());
+                if(service!=null){
+                    serviceAvailable = true;
+                    amount = service.getPrice();
+                    item = new IndoorPatientServiceBillItem();
+                    item.setCreatedDate(new Date());
+                    item.setName(service.getName());
+                    item.setIndoorPatientServiceBill(bill);
+                    item.setQuantity(1);
+                    item.setService(service);
+                    item.setUnitPrice(service.getPrice());
+                    item.setAmount(amount);
+                    item.setActualAmount(amount);
+                    item.setOrderType("SERVICE");
+                    bill.addBillItem(item);
+                }
+            }
+            bill.setAmount(amount);
+            bill.setActualAmount(amount);
+            bill.setEncounter(admitted.getPatientAdmissionLog()
+                    .getIpdEncounter());
+            if(serviceAvailable ==true){
+                bill = billingService.saveIndoorPatientServiceBill(bill);
+            }
+
+            IndoorPatientServiceBill indoorPatientServiceBill = billingService
+                    .getIndoorPatientServiceBillById(bill
+                            .getIndoorPatientServiceBillId());
+            if (indoorPatientServiceBill != null) {
+                billingService
+                        .saveBillEncounterAndOrderForIndoorPatient(indoorPatientServiceBill);
+            }
+        }
+
+        if (!ArrayUtils.isEmpty(selectedProcedureList))) {
+            Concept conpro = Context.getConceptService().getConceptByName(procedure
+                    .getPropertyValue());
+
+            Concept concept = Context.getConceptService().getConcept(
+                    "MINOR OPERATION");
+            Collection<ConceptAnswer> allMinorOTProcedures = null;
+            List<Integer> id = new ArrayList<Integer>();
+            if (concept != null) {
+                allMinorOTProcedures = concept.getAnswers();
+                for (ConceptAnswer c : allMinorOTProcedures) {
+                    id.add(c.getAnswerConcept().getId());
+                }
+            }
+
+            Concept concept2 = Context.getConceptService().getConcept(
+                    "MAJOR OPERATION");
+            Collection<ConceptAnswer> allMajorOTProcedures = null;
+            List<Integer> id2 = new ArrayList<Integer>();
+            if (concept2 != null) {
+                allMajorOTProcedures = concept2.getAnswers();
+                for (ConceptAnswer c : allMajorOTProcedures) {
+                    id2.add(c.getAnswerConcept().getId());
+                }
+            }
+
+            int conId;
+            for (Integer pId : selectedProcedureList) {
+                BillableService billableService = billingService
+                        .getServiceByConceptId(pId);
+                OpdTestOrder opdTestOrder = new OpdTestOrder();
+                opdTestOrder.setPatient(patient);
+                opdTestOrder.setEncounter(admitted.getPatientAdmissionLog().getIpdEncounter());
+                opdTestOrder.setConcept(conpro);
+                opdTestOrder.setTypeConcept(DepartmentConcept.TYPES[1]);
+                opdTestOrder.setValueCoded(Context.getConceptService().getConcept(pId));
+                opdTestOrder.setCreator(user);
+                opdTestOrder.setCreatedOn(date);
+                opdTestOrder.setBillingStatus(1);
+                opdTestOrder.setBillableService(billableService);
+
+                conId = Context.getConceptService().getConcept(pId).getId();
+                if (id.contains(conId)) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(
+                            "dd/MM/yyyy");
+                }
+
+                if (id2.contains(conId)) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(
+                            "dd/MM/yyyy");
+                }
+                opdTestOrder.setIndoorStatus(1);
+                opdTestOrder.setFromDept(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
+                patientDashboardService.saveOrUpdateOpdOrder(opdTestOrder);
+            }
+
+        }
+        if (!ArrayUtils.isEmpty(selectedInvestigationList)) {
+            Concept coninvt = Context.getConceptService()
+                    .getConceptByName(investigationn.getPropertyValue());
+
+
+            for (Integer iId : selectedInvestigationList) {
+                BillableService billableService = billingService
+                        .getServiceByConceptId(iId);
+                OpdTestOrder opdTestOrder = new OpdTestOrder();
+                opdTestOrder.setPatient(patient);
+                opdTestOrder.setEncounter(admitted.getPatientAdmissionLog().getIpdEncounter());
+                opdTestOrder.setConcept(coninvt);
+                opdTestOrder.setTypeConcept(DepartmentConcept.TYPES[2]);
+                opdTestOrder.setValueCoded(Context.getConceptService().getConcept(iId));
+                opdTestOrder.setCreator(user);
+                opdTestOrder.setCreatedOn(date);
+                opdTestOrder.setBillingStatus(1);
+                opdTestOrder.setBillableService(billableService);
+                opdTestOrder.setScheduleDate(date);
+                opdTestOrder.setIndoorStatus(1);
+                opdTestOrder.setFromDept( Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
+                patientDashboardService.saveOrUpdateOpdOrder(opdTestOrder);
+            }
+        }
+
+        //Drug save logic
+/*        Integer formulationId;
+        Integer frequencyId;
+        Integer noOfDays;
+        String comments;
+        if (drugOrder != null) {
+            for (String drugName : drugOrder) {
+                InventoryCommonService inventoryCommonService = Context
+                        .getService(InventoryCommonService.class);
+                InventoryDrug inventoryDrug = inventoryCommonService
+                        .getDrugByName(drugName);
+                if (inventoryDrug != null) {
+                    formulationId = Integer.parseInt(request
+                            .getParameter(drugName + "_formulationId"));
+                    frequencyId = Integer.parseInt(request
+                            .getParameter(drugName + "_frequencyId"));
+                    noOfDays = Integer.parseInt(request.getParameter(drugName
+                            + "_noOfDays"));
+                    comments = request.getParameter(drugName + "_comments");
+                    InventoryDrugFormulation inventoryDrugFormulation = inventoryCommonService
+                            .getDrugFormulationById(formulationId);
+                    Concept freCon = Context.getConceptService().getConcept(frequencyId);
+
+                    OpdDrugOrder opdDrugOrder = new OpdDrugOrder();
+                    opdDrugOrder.setPatient(patient);
+                    opdDrugOrder.setEncounter(encounter);
+                    opdDrugOrder.setInventoryDrug(inventoryDrug);
+                    opdDrugOrder
+                            .setInventoryDrugFormulation(inventoryDrugFormulation);
+                    opdDrugOrder.setFrequency(freCon);
+                    opdDrugOrder.setNoOfDays(noOfDays);
+                    opdDrugOrder.setComments(comments);
+                    opdDrugOrder.setCreator(user);
+                    opdDrugOrder.setCreatedOn(date);
+                    opdDrugOrder.setReferralWardName(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
+                    patientDashboardService
+                            .saveOrUpdateOpdDrugOrder(opdDrugOrder);
+                }
+            }
+        }*/
     }
 }

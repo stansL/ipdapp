@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,12 +44,14 @@ public class AdmissionFormPageController {
         }
         model.addAttribute("listIpd", list);
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
-        if (admission != null) {
+
+       if (admission != null) {
             PersonAddress add = admission.getPatient().getPersonAddress();
             String address = add.getAddress1();
             //ghansham 25-june-2013 issue no # 1924 Change in the address format
             String district = add.getCountyDistrict();
             String upazila = add.getCityVillage();
+            String pname = add.getPerson().getGivenName();
 
             String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
             Role doctorRole = Context.getUserService().getRole(doctorRoleProps);
@@ -73,10 +76,12 @@ public class AdmissionFormPageController {
 
             PersonAttribute fileNumber = admission.getPatient().getAttribute("File Number");
 
+            model.addAttribute("admission",admission);
             model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
             //  issue no # 1924 Change in the address format
             model.addAttribute("district", district);
             model.addAttribute("upazila", upazila);
+            model.addAttribute("name", pname);
             model.addAttribute("relationName", relationNameattr.getValue());
             if(fileNumber!=null){
                 model.addAttribute("fileNumber", fileNumber.getValue());
@@ -86,9 +91,7 @@ public class AdmissionFormPageController {
 
     }
 
-    public void admissionSubmit(
-
-            HttpServletRequest request, PageModel model) {
+    public void post(HttpServletRequest request, PageModel model) {
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
         int id = NumberUtils.toInt(request.getParameter("id"));
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(id);
@@ -256,7 +259,6 @@ public class AdmissionFormPageController {
             admitted.setFatherName(fathername);
             if (relationTypeattr != null) {
                 relationshipType = relationTypeattr.getValue();
-
             }
             else{
                 relationshipType = "Relative Name";
@@ -320,6 +322,7 @@ public class AdmissionFormPageController {
         else{
             model.addAttribute("emailAddress", "");
         }
+
         /*patient is accepted into the ward*/
         int acceptStatus = 1;
         PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);

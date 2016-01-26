@@ -535,7 +535,6 @@
                                 alert('AJAX error ' + err);
                             })
             );
-
         });
 
 
@@ -543,6 +542,9 @@
             selector: '#addDrugDialog',
             actions: {
                 confirm: function() {
+                    var tbody = jq('#drugsTable').children('tbody');
+                    var table = tbody.length ? tbody : jq('#drugsTable');
+                    table.append('<tr><td>'+jq("#drugName").val()+'</td><td>'+jq("#formulationsSelect option:selected").text()+'</td><td>'+jq("#drugFrequency option:selected").text()+'</td><td>'+jq("#drugDays").val()+'</td><td>'+jq("#drugComment").val()+'</td></tr>');
                     adddrugdialog.close();
                 },
                 cancel: function() {
@@ -818,7 +820,7 @@
 
                         <legend>Prescription</legend>
 
-                        <table>
+                        <table id="drugsTable">
                             <thead>
                             <th>Drug Name</th>
                             <th>Formulation</th>
@@ -826,18 +828,7 @@
                             <th>Number of Days</th>
                             <th>Comment</th>
                             </thead>
-                            <tbody data-bind="foreach: drugs">
-                            <td>
-
-                            </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
+                            <tbody>
                             </tbody>
                         </table>
                         <input type="button" value="Add" class="button confirm" name="addDrugsButton" id="addDrugsButton">
@@ -868,7 +859,7 @@
                 <ul>
                     <li>
                         <span>Drug</span>
-                        <input class="drug-name" type="text" >
+                        <input class="drug-name" id="drugName" type="text" >
                     </li>
                     <li>
                         <span>Formulation</span>
@@ -891,15 +882,15 @@
                     </li>
                     <li>
                         <span>Number of Days</span>
-                        <input type="text"  >
+                        <input id="drugDays" type="text"  >
                     </li>
                     <li>
                         <span>Comment</span>
-                        <textarea ></textarea>
+                        <textarea id="drugComment" ></textarea>
                     </li>
                 </ul>
 
-                <span class="button confirm right"> Confirm </span>
+                <span class="button confirm right" > Confirm </span>
                 <span class="button cancel"> Cancel </span>
             </div>
         </div>

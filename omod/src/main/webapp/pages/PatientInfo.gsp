@@ -873,11 +873,21 @@
                     <li>
                         <span>Formulation</span>
                         <select id="formulationsSelect" >
+                            <option>Select Formulation</option>
                         </select>
                     </li>
                     <li>
                         <span>Frequency</span>
-                        <select ></select>
+                        <select id="drugFrequency">
+                            <option>Select Frequency</option>
+                            <% if (drugFrequencyList!=null &&drugFrequencyList!=""){ %>
+                            <% drugFrequencyList.each { dfl -> %>
+                            <option  value="${dfl.name}.${dfl.conceptId}">
+                              ${dfl.name}
+                            </option>
+                            <% } %>
+                            <% } %>
+                        </select>
                     </li>
                     <li>
                         <span>Number of Days</span>

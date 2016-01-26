@@ -4,6 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.*;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.hospitalcore.InventoryCommonService;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.IpdPatientVitalStatistics;
@@ -62,6 +63,14 @@ public class PatientInfoPageController {
         Concept outComeList = Context.getConceptService().getConceptByName(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
 
         model.addAttribute("listOutCome", outComeList.getAnswers());
+
+        //fetch drug frequencies
+        InventoryCommonService inventoryCommonService = Context
+                .getService(InventoryCommonService.class);
+        List<Concept> drugFrequencyConcept = inventoryCommonService
+                .getDrugFrequency();
+        model.addAttribute("drugFrequencyList", drugFrequencyConcept);
+
 
     }
 

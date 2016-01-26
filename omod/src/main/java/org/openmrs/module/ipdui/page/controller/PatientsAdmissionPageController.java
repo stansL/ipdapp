@@ -30,6 +30,9 @@ public class PatientsAdmissionPageController {
                     @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
                     @RequestParam(value = "tab", required = false) Integer tab, //If that tab is active we will set that tab active when page load.
                     @RequestParam(value = "doctorString", required = false) String doctorString, Model model) {
+        model.addAttribute("tab",tab);
+        model.addAttribute("ipdWard",ipdWard);
+        model.addAttribute("ipdWardString",ipdWardString);
 
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
 
@@ -72,8 +75,5 @@ public class PatientsAdmissionPageController {
         model.addAttribute("mapRelationName", mapRelationName);
         model.addAttribute("mapRelationType", mapRelationType);
         model.addAttribute("dateTime", new Date().toString());
-
-
-
     }
 }

@@ -44,7 +44,7 @@
 <ul style=" margin-top: 10px;" class="grid"></ul>
 <div class="patient-header new-patient-header">
     <div>
-        <form method="post">
+        <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}">
             <input type="hidden" name="id" value="${admission.id}">
             Admitted Ward:<br/>
             <span class="select-arrow" style="width: 250px;">

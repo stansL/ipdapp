@@ -3,6 +3,7 @@
   {
     "id": "ipdui.ipdApp",        // unique id for this app, unique across all apps, typically starts with your module id
     "description": "App for managing lab operations",        // plain text or a message code (not displayed to end-users)
+    "order":6,
     "extensions": [
       {
         "id": "ipdui.ipduiHomepageLink",

@@ -41,9 +41,9 @@
             <table cellpadding="5" cellspacing="0" width="100%" id="queueList">
                 <thead>
                 <tr align="center">
-                    <th>${ui.message("ipd.patient.admissionAdvisedOn")}</th>
-                    <th>${ui.message("ipd.patient.patientId")}</th>
-                    <th>${ui.message("ipd.patient.patientName")}</th>
+                    <th>Admission Advised On</th>
+                    <th>Patients ID</th>
+                    <th>Patients Name</th>
                     <th></th>
                 </tr>
                 </thead>

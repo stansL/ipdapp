@@ -497,46 +497,8 @@
         });
 
 
-        //treatment: send post information
-        jq("#treatmentSubmit").click(function(event){
 
-            var treatmentForm = jq("#treatmentForm");
-
-            //get the list of selected procedures and store them in an array
-            var selectedProc = new Array;
-
-            jq("#selectedProcedureList option").each  ( function() {
-                selectedProc.push ( jq(this).val() );
-            });
-
-            //fetch the selected discharge diagnoses and store in an array
-            var selectedInv = new Array;
-
-            jq("#selectedInvestigationList option").each  ( function() {
-                selectedInv.push ( jq(this).val() );
-            });
-
-
-
-            var treatmentFormData = {
-                'patientId': jq('#treatmentPatientID').val(),
-                'selectedInvestigationList': selectedInv,
-                'selectedProcedureList': selectedProc,
-                'ipdWard': jq('#treatmentIPDWard').val(),
-                'otherTreatmentInstructions': jq('#otherTreatmentInstructions').val(),
-            };
-
-            dischargeForm.submit(
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "treatment") }',treatmentFormData)
-                            .success(function(data) {
-                                alert('ok');
-                            })
-                            .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
-                            })
-            );
-        });
-
+        var drugOrder = [];
 
         var adddrugdialog = emr.setupConfirmationDialog({
             selector: '#addDrugDialog',
@@ -545,6 +507,15 @@
                     var tbody = jq('#drugsTable').children('tbody');
                     var table = tbody.length ? tbody : jq('#drugsTable');
                     table.append('<tr><td>'+jq("#drugName").val()+'</td><td>'+jq("#formulationsSelect option:selected").text()+'</td><td>'+jq("#drugFrequency option:selected").text()+'</td><td>'+jq("#drugDays").val()+'</td><td>'+jq("#drugComment").val()+'</td></tr>');
+                    drugOrder.push(
+                            {
+                                name: jq("#drugName").val(),
+                                formulation: jq("#formulationsSelect").val(),
+                                frequency: jq("#drugFrequency").val(),
+                                days: jq("#drugDays").val(),
+                                comment: jq("#drugComment").val()
+                            }
+                    );
                     adddrugdialog.close();
                 },
                 cancel: function() {
@@ -601,6 +572,49 @@
                     jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
                 }
             });
+        });
+
+        //treatment: send post information
+        jq("#treatmentSubmit").click(function(event){
+
+            console.log(drugOrder);
+
+            var treatmentForm = jq("#treatmentForm");
+
+            //get the list of selected procedures and store them in an array
+            var selectedProc = new Array;
+
+            jq("#selectedProcedureList option").each  ( function() {
+                selectedProc.push ( jq(this).val() );
+            });
+
+            //fetch the selected discharge diagnoses and store in an array
+            var selectedInv = new Array;
+
+            jq("#selectedInvestigationList option").each  ( function() {
+                selectedInv.push ( jq(this).val() );
+            });
+
+
+
+            var treatmentFormData = {
+                'patientId': jq('#treatmentPatientID').val(),
+                'selectedInvestigationList': selectedInv,
+                'selectedProcedureList': selectedProc,
+                'drugOrder':drugOrder,
+                'ipdWard': jq('#treatmentIPDWard').val(),
+                'otherTreatmentInstructions': jq('#otherTreatmentInstructions').val(),
+            };
+
+            treatmentForm.submit(
+                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "treatment") }',treatmentFormData)
+                            .success(function(data) {
+                                alert('ok');
+                            })
+                            .error(function(xhr, status, err) {
+                                alert('AJAX error ' + err);
+                            })
+            );
         });
 
     });

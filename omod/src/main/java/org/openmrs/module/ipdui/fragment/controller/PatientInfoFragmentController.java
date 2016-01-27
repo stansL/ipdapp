@@ -502,7 +502,7 @@ public class PatientInfoFragmentController {
         }
 
         //Drug save logic
-/*        Integer formulationId;
+        /* Integer formulationId;
         Integer frequencyId;
         Integer noOfDays;
         String comments;

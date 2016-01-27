@@ -65,7 +65,7 @@
                             <ul>
                                 <li>
 
-                                    <a href="http://localhost:9001/openmrs/ipdui/admissionForm.page?admissionId=${pAdmission.id}&tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}"><i class="icon-signin"></i>
+                                    <a href="${ui.pageLink("ipdui", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}href="${ui.pageLink("ipdui", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}"><i class="icon-signin"></i>
                                         Admit</a>
                                 </li>
 

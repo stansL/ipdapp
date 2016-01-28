@@ -111,6 +111,7 @@
                     <th>${ui.message("ipd.patient.patientId")}</th>
                     <th>${ui.message("ipd.patient.patientName")}</th>
                     <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -122,7 +123,10 @@
                     <td>${queue.patientName}</td>
                     <td><a class="button task"
                            href="${ui.pageLink("ipdui", "patientInfo", [search: queue.patientIdentifier])}" style=""><i
-                                class="icon-plus-sign"></i>  View More</a></td>
+                                class="icon-plus-sign"></i> More</a></td>
+                    <td><a class="button task"
+                           href="${ui.pageLink("ipdui", "DischargePatient", [search: queue.patientIdentifier])}" style=""><i
+                                class="icon-signin"></i> Discharge</a></td>
                 </tr>
                 <% } %>
                 <% } else { %>

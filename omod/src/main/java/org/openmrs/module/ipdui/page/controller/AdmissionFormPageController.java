@@ -67,9 +67,10 @@ public class AdmissionFormPageController {
             PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
 
             PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
+            model.addAttribute("relative",relationNameattr);
 
             PersonAttribute maritalStatus = admission.getPatient().getAttribute("Marital Status");
-
+            model.addAttribute("maritalStatus",maritalStatus);
             PersonAttribute contactNumber = admission.getPatient().getAttribute("Phone Number");
 
             PersonAttribute emailAddress = admission.getPatient().getAttribute("Patient E-mail Address");

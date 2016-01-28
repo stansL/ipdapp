@@ -29,6 +29,22 @@
                 <span>${admission.gender}<em>gender</em></span>
                 <span>${admission.birthDate}<em>date of birth</em></span>
             </div>
+            <div class="status-container">
+            <span class="status active"></span>
+            Marital Status:
+            <div class="tag">${maritalStatus}</div>
+        </div>
+        <div class="gender-age">
+            <span><b>Address:</b></span>
+            <span>${address}</span>
+        </div>
+        <div class="gender-age">
+            <span><b>Relative Name:</b></span>
+            <span>${relative}</span>
+        </div>
+
+
+
             <br>
         </div>
         <div class="identifiers">

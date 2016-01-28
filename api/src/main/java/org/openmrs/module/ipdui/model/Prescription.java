@@ -5,7 +5,7 @@ package org.openmrs.module.ipdui.model;
  */
 public class Prescription {
     private String name;
-    private Integer frequency;
+    private String frequency;
     private Integer formulation;
     private Integer days;
     private String comment;
@@ -34,11 +34,11 @@ public class Prescription {
         this.formulation = formulation;
     }
 
-    public Integer getFrequency() {
+    public String getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(Integer frequency) {
+    public void setFrequency(String frequency) {
         this.frequency = frequency;
     }
 
@@ -51,5 +51,14 @@ public class Prescription {
         this.name = name;
     }
 
-
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "name='" + name + '\'' +
+                ", frequency='" + frequency + '\'' +
+                ", formulation=" + formulation +
+                ", days=" + days +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }

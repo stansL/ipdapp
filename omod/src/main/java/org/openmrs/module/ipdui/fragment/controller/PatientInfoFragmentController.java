@@ -1,8 +1,12 @@
 package org.openmrs.module.ipdui.fragment.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.openmrs.*;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
@@ -12,12 +16,18 @@ import org.openmrs.module.hospitalcore.*;
 import org.openmrs.module.hospitalcore.model.*;
 import org.openmrs.module.hospitalcore.util.ConceptComparator;
 import org.openmrs.module.hospitalcore.util.PatientDashboardConstants;
+import org.openmrs.module.ipdui.model.PrescriptionList;
 import org.openmrs.module.ipdui.model.Procedure;
+import org.openmrs.module.ipdui.model.Prescription;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,6 +36,8 @@ import java.util.*;
  * Created by Francis on 1/12/2016.
  */
 public class PatientInfoFragmentController {
+    private static Logger log = LoggerFactory.getLogger(PatientInfoFragmentController.class);
+
     //get the list of procedures starting with a certain string
     public List<SimpleObject> getProcedures(@RequestParam(value = "q") String name, UiUtils ui) {
         List<Concept> procedures = Context.getService(PatientDashboardService.class).searchProcedure(name);
@@ -273,14 +285,33 @@ public class PatientInfoFragmentController {
         billingService.savePatientServiceBill(patientServiceBill);
 
     }
+    //method to convert drugs
+    public List<Prescription> getPrescriptions(String json){
+        ObjectMapper mapper = new ObjectMapper();
+        List<Prescription> list = null;        try {
+            list = mapper.readValue(json,
+                    TypeFactory.defaultInstance().constructCollectionType(List.class,
+                            Prescription.class));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }        return  list;
+    }
 
     public void treatment(@RequestParam(value ="patientId", required = false) Integer patientId,
-                          //@RequestParam(value = "drugOrder", required = false) String[] drugOrder,
+                          @RequestParam(value = "drugOrder", required = false) String drugOrder,
                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
                           @RequestParam(value ="selectedProcedureList[]", required = false) Integer[] selectedProcedureList,
                           @RequestParam(value ="selectedInvestigationList[]", required = false) Integer[] selectedInvestigationList,
                           @RequestParam(value ="otherTreatmentInstructions", required = false) String otherTreatmentInstructions)
     {
+
+
+        List<Prescription> prescriptionList = getPrescriptions(drugOrder);
+
+        /*List<Prescription> list = mapper.readValue(drugOrder, new TypeReference<List<Prescription>>() { });
+        Prescription[] array = mapper.readValue(drugOrder, Prescription[].class);*/
+
         HospitalCoreService hcs = (HospitalCoreService) Context
                 .getService(HospitalCoreService.class);
         IpdService ipdService = Context.getService(IpdService.class);
@@ -501,45 +532,32 @@ public class PatientInfoFragmentController {
             }
         }
 
-        //Drug save logic
-        /* Integer formulationId;
-        Integer frequencyId;
-        Integer noOfDays;
-        String comments;
-        if (drugOrder != null) {
-            for (String drugName : drugOrder) {
-                InventoryCommonService inventoryCommonService = Context
-                        .getService(InventoryCommonService.class);
-                InventoryDrug inventoryDrug = inventoryCommonService
-                        .getDrugByName(drugName);
-                if (inventoryDrug != null) {
-                    formulationId = Integer.parseInt(request
-                            .getParameter(drugName + "_formulationId"));
-                    frequencyId = Integer.parseInt(request
-                            .getParameter(drugName + "_frequencyId"));
-                    noOfDays = Integer.parseInt(request.getParameter(drugName
-                            + "_noOfDays"));
-                    comments = request.getParameter(drugName + "_comments");
-                    InventoryDrugFormulation inventoryDrugFormulation = inventoryCommonService
-                            .getDrugFormulationById(formulationId);
-                    Concept freCon = Context.getConceptService().getConcept(frequencyId);
+        for(Prescription p: prescriptionList)
+        {
+            //System.out.println(p.getName());
 
-                    OpdDrugOrder opdDrugOrder = new OpdDrugOrder();
-                    opdDrugOrder.setPatient(patient);
-                    opdDrugOrder.setEncounter(encounter);
-                    opdDrugOrder.setInventoryDrug(inventoryDrug);
-                    opdDrugOrder
-                            .setInventoryDrugFormulation(inventoryDrugFormulation);
-                    opdDrugOrder.setFrequency(freCon);
-                    opdDrugOrder.setNoOfDays(noOfDays);
-                    opdDrugOrder.setComments(comments);
-                    opdDrugOrder.setCreator(user);
-                    opdDrugOrder.setCreatedOn(date);
-                    opdDrugOrder.setReferralWardName(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
-                    patientDashboardService
-                            .saveOrUpdateOpdDrugOrder(opdDrugOrder);
-                }
-            }
-        }*/
+            InventoryCommonService inventoryCommonService = Context
+                    .getService(InventoryCommonService.class);
+            InventoryDrug inventoryDrug = inventoryCommonService
+                    .getDrugByName(p.getName());
+            InventoryDrugFormulation inventoryDrugFormulation = inventoryCommonService
+                    .getDrugFormulationById(p.getFormulation());
+            Concept freCon = Context.getConceptService().getConcept(p.getFrequency());
+
+            OpdDrugOrder opdDrugOrder = new OpdDrugOrder();
+            opdDrugOrder.setPatient(patient);
+            opdDrugOrder.setEncounter(encounter);
+            opdDrugOrder.setInventoryDrug(inventoryDrug);
+            opdDrugOrder
+                    .setInventoryDrugFormulation(inventoryDrugFormulation);
+            opdDrugOrder.setFrequency(freCon);
+            opdDrugOrder.setNoOfDays(p.getDays());
+            opdDrugOrder.setComments(p.getComment());
+            opdDrugOrder.setCreator(user);
+            opdDrugOrder.setCreatedOn(date);
+            opdDrugOrder.setReferralWardName(Context.getConceptService().getConcept(Integer.parseInt(ipdWard)).getName().toString());
+            patientDashboardService
+                    .saveOrUpdateOpdDrugOrder(opdDrugOrder);
+        }
     }
 }

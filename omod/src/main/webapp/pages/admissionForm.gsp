@@ -3,6 +3,56 @@
 <body></body>
 <header>
 </header>
+<script>
+    var jq = jQuery;
+    //treatment: send post information
+    var getJSON = function (dataToParse) {
+        if (typeof dataToParse === "string") {
+            return JSON.parse(dataToParse);
+        }
+        return dataToParse;
+    }
+
+    jq(function() {
+        jq("#admittedWard").on("change",function () {
+            var currentID = jq(this).val();
+            alert(currentID);
+
+                jq.getJSON('${ ui.actionLink("ipdui", "BedStrength", "getBedStrength")  }',{
+                    wardId: currentID
+                })
+                        .success(function(data) {
+
+                            for (var property in data) {
+                                if (data.hasOwnProperty(property)) {
+                                    
+                                }
+                            }
+
+                        })
+                        .error(function(xhr, status, err) {
+                            alert('AJAX error ' + err);
+                        })
+        });
+        var adddrugdialog = emr.setupConfirmationDialog({
+            selector: '#addDrugDialog',
+            actions: {
+                confirm: function() {
+
+                },
+                cancel: function() {
+                    adddrugdialog.close();
+                }
+            }
+        });
+        jq("#bedButton").on("click", function(e) {
+            adddrugdialog.show();
+        });
+    });
+
+
+
+</script>
 <div class="clear"></div>
 <div class="container">
     <div class="example">
@@ -60,6 +110,7 @@
 <ul style=" margin-top: 10px;" class="grid"></ul>
 <div class="patient-header new-patient-header">
     <div>
+
         <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}">
             <input type="hidden" name="id" value="${admission.id}">
             Admitted Ward:<br/>
@@ -75,6 +126,8 @@
                     <%}%>
                 </select>
             </span>
+
+
             <div>
                 <ul style=" margin-top: 10px;"></ul>
                 Doctor on Call: <br/>
@@ -103,6 +156,7 @@
             <ul style=" margin-top: 10px;"></ul>
             <label for="BedNo" style="width: 400px;">Bed Number:</label>
             <input id="BedNo" type="text" name="bedNumber" style="min-width: 200px;" placeholder="Select Bed number">
+            <a class="button" id="bedButton"> bed</a>
 
             <div><ul style=" margin-top: 10px;"></ul>
                 Comments:
@@ -112,11 +166,27 @@
             <div style="width: 100%" align="center">
                 <div style="width: 50%">
                     <input type="reset" class="button cancel" style="float: left" value="Reset">
-                    <input type="submit" value="submit" class="button confirm" style="float: right">
+                    <input id="testdubmit" type="submit" value="submit" class="button confirm" style="float: right">
 
                 </div>
             </div>
         </form>
+        <div id="addDrugDialog" class="dialog">
+            <div class="dialog-header">
+                <i class="icon-folder-open"></i>
+                <h3>bednumber</h3>
+            </div>
+            <div class="dialog-content">
+                <ul>
+                    <li>
+                        <span>Comment</span>
+                        <textarea id="drugComment" ></textarea>
+                    </li>
+                </ul>
+                <span class="button confirm right" > Confirm </span>
+                <span class="button cancel"> Cancel </span>
+            </div>
+        </div>
     </div>
 
 

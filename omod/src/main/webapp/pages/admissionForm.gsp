@@ -5,6 +5,7 @@
 </header>
 <script>
     var jq = jQuery;
+    var pasteBed = '';
     //treatment: send post information
     var getJSON = function (dataToParse) {
         if (typeof dataToParse === "string") {
@@ -14,6 +15,7 @@
     }
 
     jq(function() {
+
         jq("#admittedWard").on("change",function () {
             var currentID = jq(this).val();
             alert(currentID);
@@ -23,11 +25,27 @@
                 })
                         .success(function(data) {
 
-                            for (var property in data) {
-                                if (data.hasOwnProperty(property)) {
-                                    
+                            jq('#dump-bed').html('');
+
+                            dta = JSON.stringify(data);
+
+                            for (var key in data) {
+                                if (data.hasOwnProperty(key)) {
+                                    var val = data[key];
+
+                                 for(var i in val){
+                                     if(val.hasOwnProperty(i)){
+                                         var j = val[i];
+
+                                         pasteBed += ' Bed No. ' + i + ' People: ' + j;
+                                     }
+                                 }
+
                                 }
                             }
+
+
+                            jq('#dump-bed').html(pasteBed);
 
                         })
                         .error(function(xhr, status, err) {
@@ -110,8 +128,8 @@
 <ul style=" margin-top: 10px;" class="grid"></ul>
 <div class="patient-header new-patient-header">
     <div>
-
-        <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}">
+        <div id="dump-bed"></div>
+        <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}>
             <input type="hidden" name="id" value="${admission.id}">
             Admitted Ward:<br/>
             <span class="select-arrow" style="width: 250px;">
@@ -171,6 +189,7 @@
                 </div>
             </div>
         </form>
+
         <div id="addDrugDialog" class="dialog">
             <div class="dialog-header">
                 <i class="icon-folder-open"></i>

@@ -4,9 +4,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.WardBedStrength;
+import org.openmrs.ui.framework.SimpleObject;
+import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +18,8 @@ import java.util.Map;
  * Created by USER on 1/28/2016.
  */
 public class BedStrengthFragmentController {
-    public void get (@RequestParam(value="wardId",required=false) Integer wardId, PageModel model) {
+    public SimpleObject getBedStrength(@RequestParam(value="wardId",required=false) Integer wardId,
+                                             UiUtils uiUtils,PageModel model) {
 
 
         //System.out.println("in getBedStrength: wardId = "+wardId);
@@ -66,7 +70,7 @@ public class BedStrengthFragmentController {
                 }
             }
         }else{
-            model.addAttribute("bedStrengthValueAvailable", "false");
+//            model.addAttribute("bedStrengthValueAvailable", "false");
         }
 
         for (Long key : bedStrengthMap.keySet()){
@@ -74,15 +78,15 @@ public class BedStrengthFragmentController {
         }
 
 
-        model.addAttribute("bedStrengthMap", bedStrengthMap);
-        model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
+       // model.addAttribute("bedStrengthMap", bedStrengthMap);
+       // model.addAttribute("size", Math.round(Math.sqrt(bedStrengthMap.size())) + 1 );
         //ghanshyam 7-august-2013 code review bug
         float bedStrengthSize= bedStrengthMap.size();
-        model.addAttribute("bedMax", Math.round(bedStrengthSize));
+        //model.addAttribute("bedMax", Math.round(bedStrengthSize));
+        List<Integer> integers= new ArrayList<Integer>();
 
-/*
-        return "module/ipd/ajax/bedStrength";
-*/
+         return SimpleObject.create("bedStrength",bedStrengthMap);
+
     }
 
 }

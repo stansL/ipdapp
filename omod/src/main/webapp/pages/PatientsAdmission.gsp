@@ -65,19 +65,19 @@
                             <ul>
                                 <li>
 
-                                    <a href="${ui.pageLink("ipdui", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}href="${ui.pageLink("ipdui", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}"><i class="icon-signin"></i>
+                                    <a href="${ui.pageLink("ipdui", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}"><i class="icon-signin"></i>
                                         Admit</a>
                                 </li>
 
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "patientsAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 1])}
+                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 1])}
                                     ">
                                         <i class="icon-remove"></i>
                                         Remove
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "patientsAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 2])}
+                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 2])}
                                     ">
                                         <i class="icon-thumbs-down "></i>
                                         No bed

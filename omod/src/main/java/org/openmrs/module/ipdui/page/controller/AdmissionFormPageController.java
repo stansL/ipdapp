@@ -27,7 +27,6 @@ import java.util.*;
  * Created by ngarivictor on 1/25/2016.
  */
 public class AdmissionFormPageController {
-    /*@RequestMapping(value = "/module/ipd/admission.htm", method = RequestMethod.GET)*/
     public void get(@RequestParam(value = "admissionId", required = false) Integer admissionId, //If that tab is active we will set that tab active when page load.
                     PageModel model,
                     @RequestParam(value = "tab") Integer tab,
@@ -307,7 +306,7 @@ public class AdmissionFormPageController {
         model.addAttribute("urlS", "main.htm");
 
         // patient category
-        model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
+        //model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
 
         PersonAttribute contactNumber = admission.getPatient().getAttribute("Phone Number");
 

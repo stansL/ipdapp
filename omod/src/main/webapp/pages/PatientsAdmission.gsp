@@ -125,7 +125,7 @@
                            href="${ui.pageLink("ipdui", "patientInfo", [search: queue.patientIdentifier])}" style=""><i
                                 class="icon-plus-sign"></i> More</a></td>
                     <td><a class="button task"
-                           href="${ui.pageLink("ipdui", "DischargePatient", [search: queue.patientIdentifier])}" style=""><i
+                           href="${ui.pageLink("ipdui", "dischargePatient", [search: queue.patientIdentifier])}" style=""><i
                                 class="icon-signin"></i> Discharge</a></td>
                 </tr>
                 <% } %>

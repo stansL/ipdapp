@@ -425,6 +425,7 @@
                 'drugOrder':drugOrder,
                 'ipdWard': jq('#treatmentIPDWard').val(),
                 'otherTreatmentInstructions': jq('#otherTreatmentInstructions').val(),
+                'physicalExamination' : jq('#physicalExamination').val()
             };
             console.log(drugOrder);
             treatmentForm.submit(
@@ -643,6 +644,15 @@
                         </p>
                     </fieldset>
                     <fieldset>
+
+                        <legend>Physical Examination</legend>
+
+                        <p>
+                            <textarea id="physicalExamination" name="PhysicalExamination" placeholder="Physical Examination" style="width:400px"></textarea>
+                        </p>
+
+                    </fieldset>
+                    <fieldset>
                         <legend>Investigation</legend>
                         <p>
                             <input type="text" style="width: 450px" id="investigation" name="investigation" placeholder="Enter Investigations" />
@@ -673,7 +683,7 @@
                         <legend>Other Instructions</legend>
 
                         <p>
-                            <textarea placeholder="Enter Other Instructions" style="width:400px"></textarea>
+                            <textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
                             <input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
                             <input name="treatmentPatientID" id="treatmentPatientID" value="${patientID}" type="hidden">
                             <a style="margin-top:12px" id="treatmentSubmit" class="button confirm">Submit</a>

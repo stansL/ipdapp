@@ -303,7 +303,8 @@ public class PatientInfoFragmentController {
                           @RequestParam(value = "ipdWard", required = false) String ipdWard,
                           @RequestParam(value ="selectedProcedureList[]", required = false) Integer[] selectedProcedureList,
                           @RequestParam(value ="selectedInvestigationList[]", required = false) Integer[] selectedInvestigationList,
-                          @RequestParam(value ="otherTreatmentInstructions", required = false) String otherTreatmentInstructions)
+                          @RequestParam(value ="otherTreatmentInstructions", required = false) String otherTreatmentInstructions,
+                          @RequestParam(value = "physicalExamination", required = false) String physicalExamination)
     {
 
 
@@ -325,6 +326,9 @@ public class PatientInfoFragmentController {
         Date date = new Date();
         PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
         Concept cOtherInstructions = Context.getConceptService().getConceptByName("OTHER INSTRUCTIONS");
+
+        Concept cPhysicalExamination = Context.getConceptService().getConceptByName("PHYSICAL EXAMINATION");
+
         Obs obsGroup = null;
         obsGroup = hcs.getObsGroupCurrentDate(patient.getPersonId());
         Encounter encounter = new Encounter();
@@ -343,7 +347,7 @@ public class PatientInfoFragmentController {
                     oProcedure.setCreator(user);
                     oProcedure.setDateCreated(date);
                     oProcedure.setEncounter(encounter);
-                    oProcedure.setPatient(patient);
+                    oProcedure.setPerson(patient);
                     encounter.addObs(oProcedure);
                 }
 
@@ -361,7 +365,7 @@ public class PatientInfoFragmentController {
                     obsInvestigation.setCreator(user);
                     obsInvestigation.setDateCreated(date);
                     obsInvestigation.setEncounter(encounter);
-                    obsInvestigation.setPatient(patient);
+                    obsInvestigation.setPerson(patient);
                     encounter.addObs(obsInvestigation);
                 }
 
@@ -376,9 +380,23 @@ public class PatientInfoFragmentController {
                 obs.setCreator(user);
                 obs.setDateCreated(date);
                 obs.setEncounter(encounter);
-                obs.setPatient(patient);
+                obs.setPerson(patient);
                 encounter.addObs(obs);
             }
+
+            if (StringUtils.isNotBlank(physicalExamination)) {
+
+                Obs obs = new Obs();
+                obs.setObsGroup(obsGroup);
+                obs.setConcept(cPhysicalExamination);
+                obs.setValueText(physicalExamination);
+                obs.setCreator(user);
+                obs.setDateCreated(date);
+                obs.setEncounter(encounter);
+                obs.setPerson(patient);
+                encounter.addObs(obs);
+            }
+
 
         }
 

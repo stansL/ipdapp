@@ -125,7 +125,6 @@ public class AdmissionFormPageController {
 
             Date date = new Date();
 
-            //copy admission to log
             IpdPatientAdmissionLog patientAdmissionLog = new IpdPatientAdmissionLog();
             patientAdmissionLog.setAdmissionDate(date);
             patientAdmissionLog.setAdmissionWard(Context.getConceptService().getConcept(admittedWard));
@@ -139,6 +138,7 @@ public class AdmissionFormPageController {
             patientAdmissionLog.setStatus(IpdConstants.STATUS[0]);
             patientAdmissionLog.setIndoorStatus(1);
 
+
             //save ipd encounter
             User user = Context.getAuthenticatedUser();
             EncounterType encounterType = Context.getService(HospitalCoreService.class).insertEncounterTypeByKey(
@@ -148,7 +148,7 @@ public class AdmissionFormPageController {
             Location location = new Location(1);
             encounter.setPatient(admission.getPatient());
             encounter.setCreator(user);
-            encounter.setProvider(user);
+            Provider p = new Provider();
             encounter.setEncounterDatetime(date);
             encounter.setEncounterType(encounterType);
             encounter.setLocation(location);
@@ -164,7 +164,7 @@ public class AdmissionFormPageController {
             if (patientAdmissionLog != null && patientAdmissionLog.getId() != null) {
 
                 BillingService billingService = Context.getService(BillingService.class);
-                Patient patient = admission.getPatient();
+                Patient patient=admission.getPatient();
                 IndoorPatientServiceBill bill = new IndoorPatientServiceBill();
 
                 bill.setCreatedDate(new Date());
@@ -179,12 +179,13 @@ public class AdmissionFormPageController {
                 BigDecimal totalActualAmount = new BigDecimal(0);
                 BillableService service;
 
-                ArrayList<Concept> al = new ArrayList<Concept>();
-                Concept concept1 = Context.getConceptService().getConcept("ADMISSION FEE");
-                Concept concept2 = Context.getConceptService().getConcept("CATERING FEE");
+                ArrayList<Concept> al=new ArrayList<Concept>();
+                Concept concept1=Context.getConceptService().getConcept("ADMISSION FEE");
+                Concept concept2=Context.getConceptService().getConcept("CATERING FEE");
                 al.add(concept1);
                 al.add(concept2);
-                for (Concept c : al) {
+
+                for(Concept c:al){
                     service = billingService.getServiceByConceptId(c.getConceptId());
 
                     mUnitPrice = new Money(service.getPrice());
@@ -204,6 +205,7 @@ public class AdmissionFormPageController {
 
                     bill.addBillItem(item);
                 }
+
                 bill.setAmount(totalAmount.getAmount());
                 bill.setActualAmount(totalActualAmount);
                 bill.setEncounter(admission.getIpdEncounter());
@@ -218,36 +220,27 @@ public class AdmissionFormPageController {
             // ghansham 25-june-2013 issue no # 1924 Change in the address format
             String district = add.getCountyDistrict();
             String upazila = add.getCityVillage();
-            model.addAttribute("address", StringUtils.isNotBlank(address) ? address : "");
-            model.addAttribute("district", district);
-            model.addAttribute("upazila", upazila);
+
+
 
             PersonAttribute relationNameattr = admission.getPatient().getAttribute("Father/Husband Name");
             PersonAttribute relationTypeattr = admission.getPatient().getAttribute("Relative Name Type");
 
-            model.addAttribute("relationName", relationNameattr.getValue());
-            if (relationTypeattr != null) {
-                model.addAttribute("relationType", relationTypeattr.getValue());
-            } else {
-                model.addAttribute("relationType", "Relative Name");
-            }
+
 
 
             PersonAttribute fileNumber_old = admission.getPatient().getAttribute("File Number");
-            if (fileNumber_old != null) {
-                model.addAttribute("fileNumber", fileNumber_old.getValue());
-            } else {
+            if (fileNumber_old == null) {
                 PersonAttributeType type = Context.getPersonService().getPersonAttributeTypeByName("File Number");
                 PersonAttribute attribute = new PersonAttribute();
                 attribute.setAttributeType(type);
                 attribute.setValue(fileNumber);
                 Patient patient = admission.getPatient();
                 patient.addAttribute(attribute);
-                model.addAttribute("fileNumber", fileNumber);
             }
 
 
-            model.addAttribute("dateAdmission", date);
+//            model.addAttribute("dateAdmission", date);
 
             //save in admitted
             IpdPatientAdmitted admitted = new IpdPatientAdmitted();
@@ -258,13 +251,16 @@ public class AdmissionFormPageController {
             admitted.setComments(comments);
             admitted.setBirthDate(admission.getPatient().getBirthdate());
             admitted.setCaste(caste);
+
             if (relationNameattr != null) {
                 fathername = relationNameattr.getValue();
             }
             admitted.setFatherName(fathername);
             if (relationTypeattr != null) {
                 relationshipType = relationTypeattr.getValue();
-            } else {
+
+            }
+            else{
                 relationshipType = "Relative Name";
             }
 
@@ -274,9 +270,10 @@ public class AdmissionFormPageController {
             treatingD = Context.getUserService().getUser(treatingDoctor);
 
             admitted.setIpdAdmittedUser(treatingD);
-            if (patientAdmissionLog != null) {
+            if(patientAdmissionLog!=null){
                 admitted.setPatient(patientAdmissionLog.getPatient());
             }
+
             admitted.setPatientAddress(StringUtils.isNotBlank(address) ? address : "");
             admitted.setPatientAdmissionLog(patientAdmissionLog);
             admitted.setPatientIdentifier(admission.getPatientIdentifier());
@@ -291,42 +288,36 @@ public class AdmissionFormPageController {
             PatientSearch patientSearch = hospitalCoreService.getPatient(patientAdmissionLog.getPatient().getPatientId());
             patientSearch.setAdmitted(true);
             hospitalCoreService.savePatientSearch(patientSearch);
-            model.addAttribute("admitted", admitted);
 
             //delete admission
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("message", e.getMessage());
-           /* return "module/ipd/admissionForm";*/
         }
-        model.addAttribute("treatingDoctor", treatingD);
-        model.addAttribute("relationName", fathername);
-        model.addAttribute("relationType", relationshipType);
-        model.addAttribute("message", "Succesfully");
-        model.addAttribute("urlS", "main.htm");
-
-        // patient category
-        //model.addAttribute("patCategory", PatientUtils.getPatientCategory(admission.getPatient()));
 
         PersonAttribute contactNumber = admission.getPatient().getAttribute("Phone Number");
 
         PersonAttribute emailAddress = admission.getPatient().getAttribute("Patient E-mail Address");
 
-        if (contactNumber != null) {
-            model.addAttribute("contactNumber", contactNumber.getValue());
-        } else {
-            model.addAttribute("contactNumber", "");
-        }
-
-        if (emailAddress != null) {
-            model.addAttribute("emailAddress", emailAddress.getValue());
-        } else {
-            model.addAttribute("emailAddress", "");
-        }
 
         /*patient is accepted into the ward*/
+        Boolean accepted = this.accept(admission.getId());
+
+        if(accepted){
+            Map<String,Object> params=new HashMap<String, Object>();
+            params.put("tab",tab);
+            params.put("ipdWard",ipdWard);
+            params.put("ipdWardString",ipdWardString);
+            return "redirect:"+uiUtils.pageLink("ipdui","patientsAdmission",params);
+        }
+        else return null;
+    }
+
+    public boolean accept(Integer admissionId) {
         int acceptStatus = 1;
         PatientDashboardService patientDashboardService = Context.getService(PatientDashboardService.class);
+        IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+        IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
 
         if (admission != null) {
             admission.setAcceptStatus(acceptStatus);
@@ -346,13 +337,8 @@ public class AdmissionFormPageController {
             encounter = Context.getEncounterService().saveEncounter(encounter);
             admission.setIpdEncounter(encounter);
             ipdService.saveIpdPatientAdmission(admission);
-
         }
-        Map<String,Object> params=new HashMap<String, Object>();
-        params.put("tab",tab);
-        params.put("ipdWard",ipdWard);
-        params.put("ipdWardString",ipdWardString);
-        return "redirect:"+uiUtils.pageLink("ipdui","patientsAdmission",params);
+        return true;
 
     }
 

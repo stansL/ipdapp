@@ -18,7 +18,6 @@
 
         jq("#admittedWard").on("change",function () {
             var currentID = jq(this).val();
-            alert(currentID);
 
                 jq.getJSON('${ ui.actionLink("ipdui", "BedStrength", "getBedStrength")  }',{
                     wardId: currentID
@@ -128,8 +127,8 @@
 <ul style=" margin-top: 10px;" class="grid"></ul>
 <div class="patient-header new-patient-header">
     <div>
-        <div id="dump-bed"></div>
-        <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}>
+
+        <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}">
             <input type="hidden" name="id" value="${admission.id}">
             Admitted Ward:<br/>
             <span class="select-arrow" style="width: 250px;">
@@ -171,9 +170,13 @@
 
             <input id="FileNo" type="text" name="fileNumber" style="min-width: 200px;" placeholder="Enter File Number">
             <br/>
+
+            <li>
+                <label for="BedNo" style="width: 400px;">Bed Number:</label>
+                <input id="BedNo" type="text" name="bedNumber" style="min-width: 200px;" placeholder="Select Bed number">
+            </li>
+
             <ul style=" margin-top: 10px;"></ul>
-            <label for="BedNo" style="width: 400px;">Bed Number:</label>
-            <input id="BedNo" type="text" name="bedNumber" style="min-width: 200px;" placeholder="Select Bed number">
             <a class="button" id="bedButton"> bed</a>
 
             <div><ul style=" margin-top: 10px;"></ul>
@@ -197,10 +200,8 @@
             </div>
             <div class="dialog-content">
                 <ul>
-                    <li>
-                        <span>Comment</span>
-                        <textarea id="drugComment" ></textarea>
-                    </li>
+                    <div id="dump-bed"></div>
+
                 </ul>
                 <span class="button confirm right" > Confirm </span>
                 <span class="button cancel"> Cancel </span>

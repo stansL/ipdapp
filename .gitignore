@@ -9,3 +9,8 @@
 /.idea
 **/bin
 **/*.classpath
+.idea/misc.xml
+.idea/workspace.xml
+api/ipdui-api.iml
+omod/ipdui-omod.iml
+

@@ -70,7 +70,10 @@ public class PatientsAdmissionPageController {
             else{
                 mapRelationType.put(admit.getId(), "Relative Name");
             }
-            mapRelationName.put(admit.getId(), relationNameattr.getValue());
+            //added condition 18-7-2016 (Throws bug since person attribute is null
+            if(relationNameattr!=null) {
+                mapRelationName.put(admit.getId(), relationNameattr.getValue());
+            }
         }
         model.addAttribute("mapRelationName", mapRelationName);
         model.addAttribute("mapRelationType", mapRelationType);

@@ -24,6 +24,11 @@
 		-->
 		
 		<!-- Begin OpenMRS modules -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.6.3</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
@@ -47,7 +52,16 @@
 			<artifactId>uilibrary-api</artifactId>
 												
 		</dependency>
-						
+
+		<dependency>
+
+			<groupId>org.openmrs.module</groupId>
+
+			<artifactId>hospitalcore-api</artifactId>
+
+		</dependency>
+
+
 		<!-- End OpenMRS modules -->
 		
 

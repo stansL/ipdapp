@@ -23,6 +23,11 @@
 
     jq(function() {
         jq( "#tabs" ).tabs();
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            jq("#tabs").tabs( "option", "active", activeTab);
+        }
+        localStorage.removeItem('activeTab');
 
         var getJSON = function (dataToParse) {
             if (typeof dataToParse === "string") {
@@ -258,13 +263,11 @@
                 'notes': jq('#vitalStatisticsComment').val(),
                 'ipdWard': jq('#vitalStatisticsIPDWard').val(),
             };
-            console.log(vitalStatisticsFormData);
-
-
             vitalStatisticsForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "saveVitalStatistics") }',vitalStatisticsFormData)
                             .success(function(data) {
-                                alert('ok');
+                                localStorage.setItem('activeTab',jq("#tabs").tabs("option","selected"));
+                                location.reload();
                             })
                             .error(function(xhr, status, err) {
                                 alert('AJAX error ' + err);

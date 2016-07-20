@@ -33,7 +33,7 @@
 
         jq("#procedure").autocomplete({
             source: function( request, response ) {
-                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getProcedures") }',
+                jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getProcedures") }',
                         {
                             q: request.term
                         }
@@ -124,7 +124,7 @@
         //investigations autocomplete functionality
         jq("#investigation").autocomplete({
             source: function( request, response ) {
-                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getInvestigations") }',
+                jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getInvestigations") }',
                         {
                             q: request.term
                         }
@@ -235,7 +235,7 @@
 
 
             transferForm.submit(
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "transferPatient") }',transferFormData)
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "transferPatient") }',transferFormData)
                             .success(function(data) {
                                 alert('ok');
                             })
@@ -262,7 +262,7 @@
 
 
             vitalStatisticsForm.submit(
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "saveVitalStatistics") }',vitalStatisticsFormData)
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "saveVitalStatistics") }',vitalStatisticsFormData)
                             .success(function(data) {
                                 alert('ok');
                             })
@@ -305,7 +305,7 @@
             };
 
             dischargeForm.submit(
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "dischargePatient") }',dischargeFormData)
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "dischargePatient") }',dischargeFormData)
                             .success(function(data) {
                                 alert('ok');
                             })
@@ -353,7 +353,7 @@
             var selectedInput = this;
             jq(this).autocomplete({
                 source: function( request, response ) {
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getDrugs") }',
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getDrugs") }',
                             {
                                 q: request.term
                             }
@@ -375,7 +375,7 @@
                     event.preventDefault();
                     jq(selectedInput).val(ui.item.label);
 
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getFormulationByDrugName") }',
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getFormulationByDrugName") }',
                             {
                                 "drugName": ui.item.label
                             }
@@ -430,7 +430,7 @@
             console.log(drugOrder);
             treatmentForm.submit(
 
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "treatment") }',treatmentFormData)
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "treatment") }',treatmentFormData)
                             .success(function(data) {
                                 alert('ok');
                             })
@@ -545,10 +545,10 @@
 
         <div style="margin-top: 30px;">
             <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
-            <a class="button confirm morebuttons" href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
+            <a class="button confirm morebuttons" href="${ui.actionLink("ipdapp", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
             <% } %>
             <% if (patientInformation.absconded != 1 && patientInformation.requestForDischargeStatus != 1) { %>
-            <a class="button confirm morebuttons"  href="${ui.actionLink("ipdui", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
+            <a class="button confirm morebuttons"  href="${ui.actionLink("ipdapp", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
             <% } %>
             <a class="button confirm morebuttons" id="printButton">Print</a>
             <div class="clearboth"></div>

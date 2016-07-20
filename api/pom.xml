@@ -4,13 +4,13 @@
 
 	<parent>
 		<groupId>org.openmrs.module</groupId>
-		<artifactId>ipdui</artifactId>
+		<artifactId>ipdapp</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ipdui-api</artifactId>
+	<artifactId>ipdapp-api</artifactId>
 	<packaging>jar</packaging>
-	<name>ipd Module API</name>
+	<name>In-patient Module API</name>
 	<description>API project for ipd</description>
 
 	<dependencies>

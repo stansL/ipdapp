@@ -65,19 +65,19 @@
                             <ul>
                                 <li>
 
-                                    <a href="${ui.pageLink("ipdui", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}"><i class="icon-signin"></i>
+                                    <a href="${ui.pageLink("ipdapp", "admissionForm", [admissionId: pAdmission.id,tab:tab,ipdWard:ipdWard,ipdWardString:ipdWardString])}"><i class="icon-signin"></i>
                                         Admit</a>
                                 </li>
 
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 1])}
+                                    <a href="${ui.actionLink("ipdapp", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 1])}
                                     ">
                                         <i class="icon-remove"></i>
                                         Remove
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="${ui.actionLink("ipdui", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 2])}
+                                    <a href="${ui.actionLink("ipdapp", "PatientAdmission", "removeOrNoBed", [admissionId: pAdmission.id, action: 2])}
                                     ">
                                         <i class="icon-thumbs-down "></i>
                                         No bed
@@ -122,10 +122,10 @@
                     <td>${queue.patientIdentifier}</td>
                     <td>${queue.patientName}</td>
                     <td><a class="button task"
-                           href="${ui.pageLink("ipdui", "patientInfo", [search: queue.patientIdentifier])}" style=""><i
+                           href="${ui.pageLink("ipdapp", "patientInfo", [search: queue.patientIdentifier])}" style=""><i
                                 class="icon-plus-sign"></i> More</a></td>
                     <td><a class="button task"
-                           href="${ui.pageLink("ipdui", "dischargePatient", [search: queue.patientIdentifier])}" style=""><i
+                           href="${ui.pageLink("ipdapp", "dischargePatient", [search: queue.patientIdentifier])}" style=""><i
                                 class="icon-signin"></i> Discharge</a></td>
                 </tr>
                 <% } %>

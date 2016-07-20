@@ -26,7 +26,7 @@
         //autocomplete for the discharge tab
         jq("#dischargeProcedures").autocomplete({
             source: function( request, response ) {
-                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getProcedures") }',
+                jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getProcedures") }',
                         {
                             q: request.term
                         }
@@ -118,7 +118,7 @@
         //diagnoses autocomplete functionality
         jq("#diagnosis").autocomplete({
             source: function( request, response ) {
-                jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "getDiagnosis") }',
+                jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getDiagnosis") }',
                         {
                             q: request.term
                         }
@@ -236,7 +236,7 @@
             };
 
             dischargeForm.submit(
-                    jq.getJSON('${ ui.actionLink("ipdui", "PatientInfo", "dischargePatient") }',dischargeFormData)
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "dischargePatient") }',dischargeFormData)
                             .success(function(data) {
                                 alert('ok');
                             })

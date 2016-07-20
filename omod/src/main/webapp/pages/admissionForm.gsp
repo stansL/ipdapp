@@ -19,7 +19,7 @@
         jq("#admittedWard").on("change",function () {
             var currentID = jq(this).val();
 
-                jq.getJSON('${ ui.actionLink("ipdui", "BedStrength", "getBedStrength")  }',{
+                jq.getJSON('${ ui.actionLink("ipdapp", "BedStrength", "getBedStrength")  }',{
                     wardId: currentID
                 })
                         .success(function(data) {

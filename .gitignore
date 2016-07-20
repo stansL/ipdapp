@@ -1,16 +1,12 @@
-/.metadata
-/.git
+.idea/
+.metadata/
+.git/
 .project
-.settings
+.settings/
 **/.project
 **/.settings
 **/target
-*.iml
-/.idea
+**/*.iml
 **/bin
 **/*.classpath
-.idea/misc.xml
-.idea/workspace.xml
-api/ipdui-api.iml
-omod/ipdui-omod.iml
 

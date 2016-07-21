@@ -86,7 +86,12 @@ public class AdmissionFormPageController {
             model.addAttribute("district", district);
             model.addAttribute("upazila", upazila);
             model.addAttribute("name", pname);
-            model.addAttribute("relationName", relationNameattr.getValue());
+            //added condition 21/7/16 (Throws bug since person attribute is null
+            String relationNameattrStr = "";
+            if(relationNameattr!=null) {
+                 relationNameattrStr = relationNameattr.getValue();
+            }
+            model.addAttribute("relationName", relationNameattrStr);
             if (fileNumber != null) {
                 model.addAttribute("fileNumber", fileNumber.getValue());
             }

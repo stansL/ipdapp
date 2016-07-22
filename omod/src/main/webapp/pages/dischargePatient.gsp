@@ -206,8 +206,6 @@
 
         //dicharge patient send post information
         jq("#dischargeSubmit").click(function(event){
-
-            alert("The discharge submit button has bee clicked");
             var dischargeForm = jq("#dischargeForm");
 
             //fetch the selected discharge diagnoses and store in an array
@@ -238,10 +236,10 @@
             dischargeForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "dischargePatient") }',dischargeFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Patient has been discharged");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
 

@@ -48,7 +48,7 @@
 
                         })
                         .error(function(xhr, status, err) {
-                            alert('AJAX error ' + err);
+                            jq().toastmessage('showErrorToast', "Error:" + err);
                         })
         });
         var adddrugdialog = emr.setupConfirmationDialog({

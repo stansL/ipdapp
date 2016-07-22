@@ -242,10 +242,10 @@
             transferForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "transferPatient") }',transferFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Patient has been transferred");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
 
@@ -270,7 +270,7 @@
                                 location.reload();
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
         });
@@ -278,8 +278,6 @@
 
         //dicharge patient send post information
         jq("#dischargeSubmit").click(function(event){
-
-            alert("The discharge submit button has bee clicked");
             var dischargeForm = jq("#dischargeForm");
 
             //fetch the selected discharge diagnoses and store in an array
@@ -310,10 +308,10 @@
             dischargeForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "dischargePatient") }',dischargeFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Discharge form  submitted");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
 
@@ -435,10 +433,10 @@
 
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "treatment") }',treatmentFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Patient has been transferred");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
         });

@@ -15,7 +15,6 @@
 
 <script>
     var jq = jQuery;
-
     var NavigatorController
     jq(function(){
         NavigatorController = new KeyboardController();
@@ -24,9 +23,24 @@
     jq(function() {
         jq( "#tabs" ).tabs();
         var activeTab = localStorage.getItem('activeTab');
-        if (activeTab) {
+        console.log(activeTab);
+        if (activeTab == 0) {
+            jq("#tabs").tabs( "option", "active", activeTab);
+            var requestType = localStorage.getItem('requestType');
+            if(requestType=="discharge"){
+                jq().toastmessage('showNoticeToast', "Discharge request sent!");
+            }
+            else if(requestType=="abscond") {
+                jq().toastmessage('showNoticeToast', "Abscond request sent!");
+            }
+            localStorage.removeItem('requestType');
+        }
+
+        else if(activeTab == 1)
+        {
             jq("#tabs").tabs( "option", "active", activeTab);
         }
+
         localStorage.removeItem('activeTab');
 
         var getJSON = function (dataToParse) {
@@ -242,10 +256,10 @@
             transferForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "transferPatient") }',transferFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Patient has been transferred");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
 
@@ -270,7 +284,7 @@
                                 location.reload();
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
         });
@@ -278,8 +292,6 @@
 
         //dicharge patient send post information
         jq("#dischargeSubmit").click(function(event){
-
-            alert("The discharge submit button has bee clicked");
             var dischargeForm = jq("#dischargeForm");
 
             //fetch the selected discharge diagnoses and store in an array
@@ -310,10 +322,10 @@
             dischargeForm.submit(
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "dischargePatient") }',dischargeFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Discharge form  submitted");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
 
@@ -435,15 +447,52 @@
 
                     jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "treatment") }',treatmentFormData)
                             .success(function(data) {
-                                alert('ok');
+                                jq().toastmessage('showNoticeToast', "Patient has been transferred");
                             })
                             .error(function(xhr, status, err) {
-                                alert('AJAX error ' + err);
+                                jq().toastmessage('showErrorToast', "Error:" + err);
                             })
             );
         });
 
     });
+
+    //reqeust for discharge
+    function requestForDischarge(id,ipdWard,obStatus) {
+        var dischargeData = {
+            'id': id,
+            'ipdWard': ipdWard,
+            'obStatus':obStatus
+        };
+
+        jq.getJSON('${ ui.actionLink("ipdapp", "patientInfo", "requestForDischarge") }', dischargeData)
+                .success(function (data) {
+                    localStorage.setItem('activeTab',jq("#tabs").tabs("option","selected"));
+                    localStorage.setItem('requestType',"discharge");
+                    location.reload();
+                })
+                .error(function (xhr, status, err) {
+                    jq().toastmessage('showNoticeToast', "AJAX error!" + err);
+                })
+    }
+    //Abscond
+    function abscond(id,ipdWard,obStatus) {
+        var abscondData = {
+            'id': id,
+            'ipdWard': ipdWard,
+            'obStatus':obStatus
+        };
+
+        jq.getJSON('${ ui.actionLink("ipdapp", "patientInfo", "requestForDischarge") }', abscondData)
+                .success(function (data) {
+                    localStorage.setItem('activeTab',jq("#tabs").tabs("option","selected"));
+                    localStorage.setItem('requestType',"abscond");
+                    location.reload();
+                })
+                .error(function (xhr, status, err) {
+                    jq().toastmessage('showNoticeToast', "AJAX error!" + err);
+                })
+    }
 </script>
 <style>
 .persondatalabel{
@@ -548,10 +597,10 @@
 
         <div style="margin-top: 30px;">
             <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
-            <a class="button confirm morebuttons" href="${ui.actionLink("ipdapp", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:0])}">Request for Discharge</a>
+            <a class="button confirm morebuttons" onclick='requestForDischarge(${patientInformation.id}, ${patientInformation.admittedWard},0)'>Request for Discharge</a>
             <% } %>
             <% if (patientInformation.absconded != 1 && patientInformation.requestForDischargeStatus != 1) { %>
-            <a class="button confirm morebuttons"  href="${ui.actionLink("ipdapp", "PatientInfo", "requestForDischarge", [id: patientInformation.id, ipdWard:patientInformation.admittedWard,obStatus:1])}">Abscord</a>
+            <a class="button confirm morebuttons" onclick='abscond(${patientInformation.id}, ${patientInformation.admittedWard},1)'>Abscord</a>
             <% } %>
             <a class="button confirm morebuttons" id="printButton">Print</a>
             <div class="clearboth"></div>

@@ -4,8 +4,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.openmrs.*;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.hospitalcore.IpdService;
+import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
 import org.openmrs.module.hospitalcore.util.ConceptAnswerComparator;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
+import org.openmrs.module.ipdapp.WardOverview;
 import org.openmrs.module.ipdapp.utils.IpdConstants;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.ui.Model;
@@ -17,27 +20,20 @@ import java.util.*;
  * Created by ngarivictor on 1/12/2016.
  */
 public class ChooseIpdWardPageController {
-    public void get(
-            @RequestParam(value = "ipdWard", required = false) String[] ipdWard,
-            @RequestParam(value = "tab", required = false) Integer tab,
-            PageModel model) {
-        creatConceptQuestionAndAnswer(Context.getConceptService(), Context.getAuthenticatedUser(), HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME, new String[]{"Improve", "Cured", "Discharge on request", "LAMA", "Absconding", "Death"});
+    public void get(PageModel model) {
         Concept ipdConcept = Context.getConceptService().getConceptByName(Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));
-        List<ConceptAnswer> list = (ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
-        if (CollectionUtils.isNotEmpty(list)) {
-            Collections.sort(list, new ConceptAnswerComparator());
+        List<ConceptAnswer> ipdWardsList = (ipdConcept != null ? new ArrayList<ConceptAnswer>(ipdConcept.getAnswers()) : null);
+        List<WardOverview> wardOverviewList = new ArrayList<WardOverview>();
+        IpdService ipdService = Context.getService(IpdService.class);
+        if (CollectionUtils.isNotEmpty(ipdWardsList)) {
+            for (ConceptAnswer ward : ipdWardsList) {
+                Integer patientCount = ipdService.searchIpdPatientAdmitted(null, null, null, null, ward.getAnswerConcept().getConceptId().toString(), "").size();
+                Integer bedCount = ipdService.getWardBedStrengthByWardId(ward.getAnswerConcept().getConceptId()).getBedStrength();
+                WardOverview wardOverview = new WardOverview(bedCount, patientCount, ward.getAnswerConcept());
+                wardOverviewList.add(wardOverview);
+            }
         }
-        model.addAttribute("listIpd", list);
-        String doctorRoleProps = Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_NAME_DOCTOR_ROLE);
-        Role doctorRole = Context.getUserService().getRole(doctorRoleProps);
-        if (doctorRole != null) {
-            List<User> listDoctor = Context.getUserService().getUsersByRole(doctorRole);
-            model.addAttribute("listDoctor", listDoctor);
-        }
-        tab = 0;
-        model.addAttribute("ipdWard", ipdWard);
-        model.addAttribute("tab", tab.intValue());
-
+        model.addAttribute("wardOverviewList", wardOverviewList);
     }
     public void creatConceptQuestionAndAnswer(ConceptService conceptService,  User user ,String conceptParent, String...conceptChild) {
         // System.out.println("========= insertExternalHospitalConcepts =========");

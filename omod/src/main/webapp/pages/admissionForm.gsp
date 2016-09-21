@@ -128,7 +128,7 @@
 <div class="patient-header new-patient-header">
     <div>
 
-        <form method="post" action = "admissionForm.page?tab=${tab}&ipdWard=${ipdWard}&ipdWardString=${ipdWardString}">
+        <form method="post" action = "admissionForm.page?ipdWard=${ipdWard}">
             <input type="hidden" name="id" value="${admission.id}">
             Admitted Ward:<br/>
             <span class="select-arrow" style="width: 250px;">

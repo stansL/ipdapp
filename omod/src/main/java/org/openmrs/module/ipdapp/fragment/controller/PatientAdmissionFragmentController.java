@@ -73,9 +73,11 @@ public class PatientAdmissionFragmentController {
                 ipdService.removeIpdPatientAdmission(admission);
             }
 
-            OpdPatientQueueLog opdPatientQueueLog=patientAdmissionLog.getOpdLog();
-            opdPatientQueueLog.setVisitOutCome("no bed");
-            queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
+            OpdPatientQueueLog opdPatientQueueLog = patientAdmissionLog.getOpdLog();
+            if (opdPatientQueueLog != null){
+                opdPatientQueueLog.setVisitOutCome("no bed");
+                queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
+            }
         }
 
     }

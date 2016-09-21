@@ -1,4 +1,4 @@
-<% ui.decorateWith("appui", "standardEmrPage", [title: "In Patient"]) %>
+<% ui.decorateWith("appui", "standardEmrPage", [title: "In Patient Wards"]) %>
 
 <script>
 	jq(function () {
@@ -7,28 +7,28 @@
 </script>
 
 <style>
-	ul.select li {
+	ul.select.wards li {
 		border: 1px solid #efefef;
 		margin: 0 1px 4px 0;
 		width: 18.4%;
 	}
-	ul.select li.selected{
+	ul.select.wards li.selected{
 		background-color: #007FFF; 
 		color: #fff!important;
 		border-color: transparent
 	}
-	ul.select li:hover a {
+	ul.select.wards li:hover a {
 		color: #fff;
 		text-decoration: none;
 	}
-	ul.select li:hover .desc {
+	ul.select.wards li:hover .desc {
 		color: #fff;		
 		-moz-transition:color .3s ease-in;
 		-o-transition:color .3s ease-in;
 		-webkit-transition:color .3s ease-in;
 		transition:color .3s ease-in;
 	}	
-	ul.select li .desc{
+	ul.select.wards li .desc{
 		border-top: 1px solid #efefef;
 		color: #f26522;
 		padding-top: 4px;
@@ -92,10 +92,10 @@
 	</div>
 </div>
 
-<ul class="select">
+<ul class="select wards">
     <% wardOverviewList.each { it -> %>
 		<li>
-			<a href='${ui.pageLink("ipdapp", "patientsAdmission", [tab: 0, ipdWard: it.wardConcept.id, ipdWardString:it.wardConcept.id ])}'> 
+			<a href='${ui.pageLink("ipdapp", "patientsAdmission", [ipdWard: it.wardConcept.id ])}'>
 				<div style="display: inline-block">
 					<i class="icon-hospital" style="width: auto;"></i>					
 				</div>

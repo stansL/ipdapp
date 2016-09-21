@@ -5,14 +5,9 @@ import org.openmrs.*;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.hospitalcore.IpdService;
-import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
-import org.openmrs.module.hospitalcore.util.ConceptAnswerComparator;
-import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.ipdapp.WardOverview;
 import org.openmrs.module.ipdapp.utils.IpdConstants;
 import org.openmrs.ui.framework.page.PageModel;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 

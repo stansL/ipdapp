@@ -29,15 +29,11 @@ import java.util.*;
 public class AdmissionFormPageController {
     public void get(@RequestParam(value = "admissionId", required = false) Integer admissionId, //If that tab is active we will set that tab active when page load.
                     PageModel model,
-                    @RequestParam(value = "tab") Integer tab,
-                    @RequestParam(value = "ipdWard") String ipdWard,
-                    @RequestParam(value = "ipdWardString") String ipdWardString
+                    @RequestParam(value = "ipdWard") String ipdWard
     )
 
     {
-        model.addAttribute("tab", tab);
         model.addAttribute("ipdWard", ipdWard);
-        model.addAttribute("ipdWardString", ipdWardString);
         IpdService ipdService = Context.getService(IpdService.class);
         Concept ipdConcept = Context.getConceptService().getConceptByName(
                 Context.getAdministrationService().getGlobalProperty(IpdConstants.PROPERTY_IPDWARD));

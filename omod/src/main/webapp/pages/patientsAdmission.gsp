@@ -28,6 +28,7 @@
 		jq('li.ui-corner-top a').click(function(){
 			if (jq(this).attr('href') == '#ipd-patients'){
 				jq('#refresher a').html('<i class="icon-refresh"></i>Refresh Patients');
+				getAdmittedPatients();
 			}
 			else{
 				jq('#refresher a').html('<i class="icon-refresh"></i>Refresh Queue');
@@ -58,6 +59,9 @@
 	}
 	#queueList td:nth-child(6){
 		padding: 5px 0;
+	}
+	#admittedList td:nth-child(6){
+		padding: 5px 2px;
 	}
 	#breadcrumbs a, #breadcrumbs a:link, #breadcrumbs a:visited {
 		text-decoration: none;

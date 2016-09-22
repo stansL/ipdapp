@@ -597,10 +597,12 @@
 
         <div style="margin-top: 30px;">
             <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
-            <a class="button confirm morebuttons" onclick='requestForDischarge(${patientInformation.id}, ${patientInformation.admittedWard},0)'>Request for Discharge</a>
-            <% } %>
-            <% if (patientInformation.absconded != 1 && patientInformation.requestForDischargeStatus != 1) { %>
-            <a class="button confirm morebuttons" onclick='abscond(${patientInformation.id}, ${patientInformation.admittedWard},1)'>Abscord</a>
+				<a class="button confirm morebuttons" onclick='requestForDischarge(${patientInformation.id}, ${patientInformation.admittedWard},0)'>Request for Discharge</a>
+				<a class="button confirm morebuttons" onclick='abscond(${patientInformation.id}, ${patientInformation.admittedWard},1)'>Abscord</a>
+            <% } else { %>
+				<a class="button task morebuttons"
+			   href="${ui.pageLink("ipdapp", "dischargePatient", [search: patientIdentifier])}"><i
+					class="icon-signin"></i> Discharge</a>
             <% } %>
             <a class="button confirm morebuttons" id="printButton">Print</a>
             <div class="clearboth"></div>
@@ -639,7 +641,7 @@
                     <div class="vitalstatisticselements">
                         <input required name="vitalStatisticsAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
                         <input value="${patientInformation.admittedWard.id}" name="vitalStatisticsIPDWard" id="vitalStatisticsIPDWard" type="hidden">
-                        <input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patientID}" type="hidden">
+                        <input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patient.patientId}" type="hidden">
                         <a id="vitalStatisticsButton" name="vitalStatisticsButton" class="button confirm">Submit</a>
                     </div>
                 </div>
@@ -737,7 +739,7 @@
                         <p>
                             <textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
                             <input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
-                            <input name="treatmentPatientID" id="treatmentPatientID" value="${patientID}" type="hidden">
+                            <input name="treatmentPatientID" id="treatmentPatientID" value="${patient.patientId}" type="hidden">
                             <a style="margin-top:12px" id="treatmentSubmit" class="button confirm">Submit</a>
                         </p>
 

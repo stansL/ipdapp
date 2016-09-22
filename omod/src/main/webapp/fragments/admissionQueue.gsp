@@ -11,7 +11,7 @@
 			toDate:			jq('#outsDate-field').val()
 		}
 		
-		jq.getJSON('${ ui.actionLink("ipdapp", "admissionQueue", "listAdmissionQueuePatients") }', requestData)
+		jq.getJSON('${ ui.actionLink("ipdapp", "PatientAdmission", "listAdmissionQueuePatients") }', requestData)
 			.success(function (data) {
 				updateAdmissionQueueResults(data);
 			}).error(function (xhr, status, err) {
@@ -111,7 +111,6 @@
 		
 		getAdmissionQueue();
 	});
-
 </script>
 
 <table cellpadding="5" cellspacing="0" width="100%" id="queueList">

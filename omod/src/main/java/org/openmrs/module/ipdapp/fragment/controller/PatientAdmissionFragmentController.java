@@ -7,19 +7,25 @@ import org.openmrs.module.hospitalcore.IpdService;
 import org.openmrs.module.hospitalcore.PatientQueueService;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmission;
 import org.openmrs.module.hospitalcore.model.IpdPatientAdmissionLog;
+import org.openmrs.module.hospitalcore.model.IpdPatientAdmitted;
 import org.openmrs.module.hospitalcore.model.OpdPatientQueueLog;
 import org.openmrs.module.hospitalcore.util.HospitalCoreConstants;
 import org.openmrs.module.ipdapp.utils.IpdConstants;
+import org.openmrs.ui.framework.SimpleObject;
+import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.page.PageModel;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Date;
-
+import java.util.List;
 
 /**
  * Created by USER on 1/30/2016.
  */
+
 public class PatientAdmissionFragmentController {
+    IpdService ipdService = (IpdService) Context.getService(IpdService.class);
+
     public void removeOrNoBed(@RequestParam(value = "admissionId", required = false) Integer admissionId, //If that tab is active we will set that tab active when page load.
                               @RequestParam(value = "action", required = false) Integer action, PageModel model) {
 
@@ -79,8 +85,22 @@ public class PatientAdmissionFragmentController {
                 queueService.saveOpdPatientQueueLog(opdPatientQueueLog);
             }
         }
-
     }
 
+    public List<SimpleObject> listAdmissionQueuePatients(@RequestParam("ipdWard") String ipdWard,
+                                                         @RequestParam(value = "fromDate", required = false) String fromDate,
+                                                         @RequestParam(value = "toDate", required = false) String toDate,
+                                                         UiUtils uiUtils) {
 
+        List<IpdPatientAdmission> admissionQueue = ipdService.searchIpdPatientAdmission(null, null, fromDate, toDate, ipdWard, "");
+        return SimpleObject.fromCollection(admissionQueue, uiUtils, "id", "admissionDate", "patient", "patientName", "patientIdentifier", "birthDate", "gender", "admissionWard", "status", "opdAmittedUser", "opdLog", "acceptStatus", "ipdEncounter");
+    }
+
+    public List<SimpleObject> listAdmittedIpdPatients(@RequestParam("ipdWard") String ipdWard,
+                                                      @RequestParam(value = "fromDate", required = false) String fromDate,
+                                                      @RequestParam(value = "toDate", required = false) String toDate,
+                                                      UiUtils uiUtils) {
+        List<IpdPatientAdmitted> admittedPatients = ipdService.searchIpdPatientAdmitted(null, null, fromDate, toDate, ipdWard, "");
+        return SimpleObject.fromCollection(admittedPatients, uiUtils, "id", "admissionDate", "patient", "patientName", "patientIdentifier", "birthDate", "gender", "admittedWard", "status");
+    }
 }

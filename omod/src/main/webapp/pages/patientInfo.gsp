@@ -1,8 +1,5 @@
-<head>
-
-</head>
 <%
-    ui.decorateWith("appui", "standardEmrPage")
+    ui.decorateWith("appui", "standardEmrPage", [title: "Patient Details"])
     ui.includeJavascript("uicommons", "datetimepicker/bootstrap-datetimepicker.min.js")
     ui.includeJavascript("uicommons", "handlebars/handlebars.min.js", Integer.MAX_VALUE - 1)
     ui.includeJavascript("uicommons", "navigator/validators.js", Integer.MAX_VALUE - 19)
@@ -14,7 +11,6 @@
 %>
 
 <script>
-    var jq = jQuery;
     var NavigatorController
     jq(function(){
         NavigatorController = new KeyboardController();
@@ -494,354 +490,609 @@
                 })
     }
 </script>
+
 <style>
-.persondatalabel{
-    width:50%;
-    border: 1px;
-    float: left;
-    margin-bottom: 15px;
-}
-.clearboth{
-    clear: both;
-}
-.persondatalabel h3{
-    display: inline;
-    width: 50%;
-}
-.persondatalabel h2{
-    display: inline;
-    width: 50%;
-}
-.morebuttons{
-    display: inline;
-    float: left;
-    margin-left: 20px;
-}
-.tableelement{
-    width: auto;
-    min-width: 10px;
-}
-.vitalstatisticselements{
-    float:left;
-    margin-left:10px;
-    margin-bottom: 10px;
-}
-.vitalstatisticselements textarea{
-    height: 23px;
-    width: 183px;
-}
-.selecticon{
-    float: right;
-    vertical-align: middle;
-    font-size: x-large;
-}
-.selectp{
-    min-width: 450px;
-    border-bottom: solid;
-    border-bottom-width: 1px;
-    padding-left: 5px;
-    margin-top:20px;
-}
-.selectdiv{
-    width: 450px;
-    margin-top:10px;
-}
+	.persondatalabel{
+		width:50%;
+		border: 1px;
+		float: left;
+		margin-bottom: 15px;
+	}
+	.clearboth{
+		clear: both;
+	}
+	.persondatalabel h3{
+		display: inline;
+		width: 50%;
+	}
+	.persondatalabel h2{
+		display: inline;
+		width: 50%;
+	}
+	.morebuttons{
+		display: inline;
+		float: left;
+		margin-left: 20px;
+	}
+	.tableelement{
+		width: auto;
+		min-width: 10px;
+	}
+	.vitalstatisticselements{
+		float:left;
+		margin-left:10px;
+		margin-bottom: 10px;
+	}
+	.vitalstatisticselements textarea{
+		height: 23px;
+		width: 183px;
+	}
+	.selecticon{
+		float: right;
+		vertical-align: middle;
+		font-size: x-large;
+	}
+	.selectp{
+		min-width: 450px;
+		border-bottom: solid;
+		border-bottom-width: 1px;
+		padding-left: 5px;
+		margin-top:20px;
+	}
+	.selectdiv{
+		width: 450px;
+		margin-top:10px;
+	}
+	#breadcrumbs a, #breadcrumbs a:link, #breadcrumbs a:visited {
+		text-decoration: none;
+	}
+	.name {
+		color: #f26522;
+	}
+	.new-patient-header .demographics .gender-age {
+		font-size: 14px;
+		margin-left: -55px;
+		margin-top: 12px;
+	}
+	.new-patient-header .demographics .gender-age span {
+		border-bottom: 1px none #ddd;
+	}
+	.new-patient-header .identifiers {
+		margin-top: 5px;
+	}
+	.tag {
+		padding: 2px 10px;
+	}
+	.tad {
+		background: #666 none repeat scroll 0 0;
+		border-radius: 1px;
+		color: white;
+		display: inline;
+		font-size: 0.8em;
+		padding: 2px 10px;
+	}
+	.status-container {
+		padding: 5px 10px 5px 5px;
+	}
+	.catg {
+		color: #363463;
+		margin: 25px 10px 0 0;
+	}
+	#tabs {
+		background: #f9f9f9 none repeat scroll 0 0;
+		padding: 10px;
+	}
+	#tab-container{
+		background: #f9f9f9 none repeat scroll 0 0;
+		margin-top: 3px;
+	}
+	.ui-tabs .ui-tabs-panel {
+		background: #fff none repeat scroll 0 0;
+		padding-top: 0;
+	}
+	.col13{
+		display: inline-block;
+		float: left;
+		width: auto;
+	}
+	.col15 {
+		display: inline-block;
+		float: left;
+		max-width: 22%;
+		min-width: 22%;
+	}
+	.col16 {
+		display: inline-block;
+		float: left;
+		width: 78%;
+	}
+	.dashboard .action-section {
+		background: white none repeat scroll 0 0;
+		border: 1px solid #ddd;
+		margin-top: 35px;
+	}	
+	.dashboard .info-body label {
+		display: inline-block;
+		font-size: 90%;
+		margin-bottom: 6px;
+		margin-left: 5px;
+		width: 115px;
+	}
+	.dashboard .info-body span {
+		color: #000;
+		font-size: 0.9em;
+	}
+	.zero-em{
+		font-size: 0em!important;
+	}	
+	.dashboard .info-header h3 {
+		color: #f26522;
+	}
 </style>
-</head>
-<body>
 
-<div id="tabs">
-    <ul>
-        <li><a href="#tabs-1">Patient Details</a></li>
-        <li><a href="#tabs-2">Daily Vitals</a></li>
-        <li><a href="#tabs-3">Treatment</a></li>
-        <li><a href="#tabs-4">Transfer</a></li>
-    </ul>
-    <div id="tabs-1">
-        <div id="printArea">
-            <div class="persondatalabel">
-                <h2>Admission Date: </h2>
-                <h3> ${ui.formatDatePretty(patientInformation.admissionDate)}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Patient ID: </h2>
-                <h3> ${patientInformation.patientIdentifier}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Name: </h2>
-                <h3> ${patientInformation.patientName}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Bed Number: </h2>
-                <h3> ${patientInformation.bed}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Age: </h2>
-                <h3> ${patientInformation.age}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Gender: </h2>
-                <h3> ${patientInformation.gender}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Admission By: </h2>
-                <h3> ${patientInformation.ipdAdmittedUser.givenName}</h3>
-            </div>
-            <div class="persondatalabel">
-                <h2>Admission Ward :</h2>
-                <h3> ${patientInformation.admittedWard.name}</h3>
-            </div>
-        </div>
+<div class="example">
+	<ul id="breadcrumbs">
+		<li>
+			<a href="${ui.pageLink('referenceapplication','home')}">
+				<i class="icon-home small"></i></a>
+		</li>
+		
+		<li>
+			<i class="icon-chevron-right link"></i>
+			<a href="chooseIpdWard.page">IPD Wards</a>
+		</li>
+		
+		<li>
+			<i class="icon-chevron-right link"></i>
+			<a href="patientsAdmission.page?ipdWard=${patientInformation.admittedWard}">${patientInformation.admittedWard.name}</a>
+		</li>
+		
+		<li>
+			<i class="icon-chevron-right link"></i>
+			Details
+		</li>
+	</ul>
+</div>
 
-        <div class="clearboth"></div>
+<div class="patient-header new-patient-header">
+	<div class="demographics">
+		<h1 class="name">
+			<span id="surname">${patient.familyName},<em>surname</em></span>
+			<span id="othname">${patient.givenName} ${patient.middleName?patient.middleName:''}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<em>other names</em></span>
+			
+			<span class="gender-age">
+				<span>
+					<% if (patient.gender == "F") { %>
+						Female
+					<% } else { %>
+						Male
+					<% } %>
+					</span>
+				<span id="agename">${patient.age} years (${ui.formatDatePretty(patient.birthdate)}) </span>
+				
+			</span>
+		</h1>
+		
+		<br/>
+		<div id="stacont" class="status-container">
+			<span class="status active"></span>
+			Visit Status
+		</div>
+		<div class="tag">Admitted</div>
+		<div class="tad">Bed ${patientInformation.bed}</div>
+	</div>
 
-        <div style="margin-top: 30px;">
-            <% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
-				<a class="button confirm morebuttons" onclick='requestForDischarge(${patientInformation.id}, ${patientInformation.admittedWard},0)'>Request for Discharge</a>
-				<a class="button confirm morebuttons" onclick='abscond(${patientInformation.id}, ${patientInformation.admittedWard},1)'>Abscord</a>
-            <% } else { %>
-				<a class="button task morebuttons"
-			   href="${ui.pageLink("ipdapp", "dischargePatient", [search: patientIdentifier])}"><i
-					class="icon-signin"></i> Discharge</a>
-            <% } %>
-            <a class="button confirm morebuttons" id="printButton">Print</a>
-            <div class="clearboth"></div>
-        </div>
-    </div>
-    <div id="tabs-2">
-        <section>
-            <form method="post" id="vitalStatisticsForm">
-                <div class="simple-form-ui">
+	<div class="identifiers">
+		<em>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Patient ID</em>
+		<span>${patient.getPatientIdentifier()}</span>
+		<br>
+		
+		<div class="catg">
+			<i class="icon-tags small" style="font-size: 16px"></i><small>Category:</small> {category} 
+		</div>
+	</div>
+	<div class="clear"></div>	
+</div>
 
-                    <div class="vitalstatisticselements">
-                        <input id="vitalStatisticsBloodPressure" name="vitalStatisticsBloodPressure" placeholder="Blood Pressure" type="number">
-                    </div>
-                    <div class="vitalstatisticselements">
-                        <input id="vitalStatisticsPulseRate" name="vitalStatisticsPulseRate" placeholder="Pulse Rate(/min)" type="number">
-                    </div>
-                    <div class="vitalstatisticselements" >
-                        <input id="vitalStatisticsTemperature" name="vitalStatisticsTemperature" placeholder="Temperature(C)"  type="number"> </input>
-                    </div>
-                    <div class="vitalstatisticselements" >
-                        <select required name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised" >
-                            <option value="">Select Diet Advised</option>
-                            <% if (dietList!=null && dietList!=""){ %>
-                            <% dietList.each { dl -> %>
-                            <option  value="${dl.name}">
-                                ${dl.name}
-                            </option>
-                            <% } %>
-                            <% } %>
-                        </select>
-                    </div>
+<div id="tab-container">
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">Patient Details</a></li>
+			<li><a href="#tabs-3">Treatment</a></li>
+			<li><a href="#tabs-4">Transfer</a></li>
+		</ul>
+		
+		<div id="tabs-1">
+			<div class="col16 dashboard">
+				<div class="info-section">
+					<div class="info-header">
+						<i class="icon-diagnosis"></i>
 
-                    <div class="vitalstatisticselements">
-                        <textarea name="vitalStatisticsComment" id="vitalStatisticsComment" placeholder="Notes if any"></textarea>
-                    </div>
-                    <div class="vitalstatisticselements">
-                        <input required name="vitalStatisticsAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
-                        <input value="${patientInformation.admittedWard.id}" name="vitalStatisticsIPDWard" id="vitalStatisticsIPDWard" type="hidden">
-                        <input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patient.patientId}" type="hidden">
-                        <a id="vitalStatisticsButton" name="vitalStatisticsButton" class="button confirm">Submit</a>
-                    </div>
-                </div>
-            </form>
-            <div>
-                <table id="vitalSummary">
-                    <thead>
-                    <tr >
-                        <th>S.No</th>
-                        <th>Date/Time</th>
-                        <th>Blood Pressure</th>
-                        <th>Pulse Rate</th>
-                        <th>Temperature</th>
-                        <th>Diet Advised</th>
-                        <th>Notes</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% if (ipdPatientVitalStatistics!=null && ipdPatientVitalStatistics!=""){ %>
-                    <% ipdPatientVitalStatistics.eachWithIndex { ipvs , idx-> %>
-                    <tr>
-                        <td>${idx+1}</td>
-                        <td>${ipvs.createdOn}</td>
-                        <td>${ipvs.bloodPressure}</td>
-                        <td>${ipvs.pulseRate}</td>
-                        <td>${ipvs.temperature}</td>
-                        <td>${ipvs.dietAdvised}</td>
-                        <td>${ipvs.note}</td>
-                    </tr>
-                    <% } %>
-                    <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </div>
-    <div id="tabs-3">
-        <div id="content" class="container">
+						<h3>PATIENT DETAILS</h3>
+					</div>
 
-            <h1>Treatment</h1>
+					<div class="info-body" style="min-height: 180px;">
+						<div class="col13">
+							<img src="${ui.resourceLink('ipdapp', 'images/patient-icon.jpg')}" style="border: 1px solid #f15a3d; height: 190px; margin-right: 10px;" />
+						</div>
+						
+						<div class="col13 last">
+							<label>
+								<i class="status active zero-em"></i>
+								Patient :
+							</label>
+							<span>${patient.familyName} ${patient.givenName} ${patient.middleName?patient.middleName:''}</span>
+							<br/>
 
-            <form class="simple-form-ui" id="treatmentForm" method="post">
+							<label>
+								<i class="status active zero-em"></i>
+								Age :
+							</label>
+							<span>${patientInformation.age.substring(1, patientInformation.age.size())}</span>
+							<br/>
 
-                <section id="charges-info">
+							<label>
+								<i class="status active zero-em"></i>
+								Admitted On:
+							</label>
+							<span>${ui.formatDatePretty(patientInformation.admissionDate)}</span>
+							<br/>
+							
+							<label>
+								<i class="status active zero-em"></i>
+								Ward :
+							</label>
+							<span>${patientInformation.admittedWard.name}</span>
+							<br/>
+
+							<label>
+								<i class="status active zero-em"></i>
+								Bed :
+							</label>
+							<span>00${patientInformation.bed}</span>
+							<br/>
+
+							<label>
+								<i class="status active zero-em"></i>
+								Admitted By:
+							</label>
+							<span>${patientInformation.ipdAdmittedUser.givenName}</span>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
 
 
-                    <fieldset style="min-width: 500px; width: auto">
+			<div class="dashboard col15 last">
+				<div class="action-section">
+					<ul style="min-height: 200px;">
+						<h3>&nbsp; &nbsp;General Actions</h3>
+						
+						<% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
+							<li>
+								<i class="icon-edit"></i>
+								<a href="">Request Discharge</a>
+							</li>
+							
+							<li>
+								<i class="icon-share"></i>
+								<a href="">Patient Abscorded</a>
+							</li>
+						<% } %>
+						
+						<% if (patientInformation.requestForDischargeStatus == 1) { %>
+							<li>
+								<i class="icon-edit"></i>
+								<a href="">Discharge Patient</a>
+							</li>
+						<% } %>
+						
+						<% if (patientInformation.absconded == 1) { %>
+							<li>
+								<i class="icon-user-times"></i>
+								<a href="">Remove Patient</a>
+							</li>
+						<% } %>						
 
-                        <legend>Procedure</legend>
-                        <p>
-                            <input type="text" style="width: 450px" id="procedure" name="procedure" placeholder="Enter Procedure" />
-                            <select style="display: none" id="selectedProcedureList"></select>
-                            <div class="selectdiv"  id="selected-procedures"></div>
-                        </p>
-                    </fieldset>
-                    <fieldset>
+						<li>
+							<i class="icon-print"></i>
+							<a href="">Print Details</a>
+						</li>
+						
+						<h3 style="margin-top: 15px;">&nbsp; &nbsp;Inpatient Actions</h3>
+						<li>
+							<i class="icon-user-md"></i>
+							<a href="">Update Treatment</a>
+						</li>
+						
+						<li>
+							<i class="icon-random"></i>
+							<a href="">Transfer Patient</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="dashboard">
+				<div class="info-section" style="width: 99.5%;">
+					<div class="info-header">
+						<i class="icon-vitals"></i>
+						<h3>DAILY VITALS</h3>
+					</div>
 
-                        <legend>Physical Examination</legend>
+					<div class="info-body">				
+						<form method="post" id="vitalStatisticsForm">
+							<div class="simple-form-ui">
 
-                        <p>
-                            <textarea id="physicalExamination" name="PhysicalExamination" placeholder="Physical Examination" style="width:400px"></textarea>
-                        </p>
+								<div class="vitalstatisticselements">
+									<input id="vitalStatisticsBloodPressure" name="vitalStatisticsBloodPressure" placeholder="Blood Pressure" type="number">
+								</div>
+								<div class="vitalstatisticselements">
+									<input id="vitalStatisticsPulseRate" name="vitalStatisticsPulseRate" placeholder="Pulse Rate(/min)" type="number">
+								</div>
+								<div class="vitalstatisticselements" >
+									<input id="vitalStatisticsTemperature" name="vitalStatisticsTemperature" placeholder="Temperature(C)"  type="number"> </input>
+								</div>
+								<div class="vitalstatisticselements" >
+									<select required name="vitalStatisticsDietAdvised" id="vitalStatisticsDietAdvised" >
+										<option value="">Select Diet Advised</option>
+										<% if (dietList!=null && dietList!=""){ %>
+										<% dietList.each { dl -> %>
+										<option  value="${dl.name}">
+											${dl.name}
+										</option>
+										<% } %>
+										<% } %>
+									</select>
+								</div>
 
-                    </fieldset>
-                    <fieldset>
-                        <legend>Investigation</legend>
-                        <p>
-                            <input type="text" style="width: 450px" id="investigation" name="investigation" placeholder="Enter Investigations" />
-                            <select style="display: none" id="selectedInvestigationList"></select>
-                            <div class="selectdiv"  id="selected-investigations"></div>
-                        </p>
+								<div class="vitalstatisticselements">
+									<textarea name="vitalStatisticsComment" id="vitalStatisticsComment" placeholder="Notes if any"></textarea>
+								</div>
+								<div class="vitalstatisticselements">
+									<input required name="vitalStatisticsAdmittedID" id="vitalStatisticsAdmittedID" value="${patientInformation.id}" type="hidden">
+									<input value="${patientInformation.admittedWard.id}" name="vitalStatisticsIPDWard" id="vitalStatisticsIPDWard" type="hidden">
+									<input name="vitalStatisticsrPatientID" id="vitalStatisticsPatientID" value="${patient.patientId}" type="hidden">
+									<a id="vitalStatisticsButton" name="vitalStatisticsButton" class="button confirm">Submit</a>
+								</div>
+							</div>
+						</form>
+						
+						<div class="clear"></div>
+					</div>
+					
+					<table id="vitalSummary">
+						<thead>
+							<tr >
+								<th style="width: 5px;">#</th>
+								<th>DATE</th>
+								<th>B.P</th>
+								<th>PULSE RATE</th>
+								<th>TEMPERATURE</th>
+								<th>DIET</th>
+								<th>NOTES</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% if (ipdPatientVitalStatistics.size() > 0){ %>
+								<% ipdPatientVitalStatistics.eachWithIndex { ipvs , idx-> %>
+									<tr>
+										<td>${idx+1}</td>
+										<td>${ipvs.createdOn}</td>
+										<td>${ipvs.bloodPressure}</td>
+										<td>${ipvs.pulseRate}</td>
+										<td>${ipvs.temperature}</td>
+										<td>${ipvs.dietAdvised}</td>
+										<td>${ipvs.note}</td>
+									</tr>
+								<% } %>
+							<% } else { %>
+								<tr>
+									<td></td>
+									<td colspan="6">No Vitals Found</td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+		
+				
 
-                    </fieldset>
-                    <fieldset>
+			<div class="clearboth"></div>
 
-                        <legend>Prescription</legend>
+			<div style="margin-top: 30px;">
+				<% if (patientInformation.requestForDischargeStatus != 1 && patientInformation.absconded != 1) { %>
+					<a class="button confirm morebuttons" onclick='requestForDischarge(${patientInformation.id}, ${patientInformation.admittedWard},0)'>Request for Discharge</a>
+					<a class="button confirm morebuttons" onclick='abscond(${patientInformation.id}, ${patientInformation.admittedWard},1)'>Abscord</a>
+				<% } else { %>
+					<a class="button task morebuttons"
+				   href="${ui.pageLink("ipdapp", "dischargePatient", [search: patientIdentifier])}"><i
+						class="icon-signin"></i> Discharge</a>
+				<% } %>
+				<a class="button confirm morebuttons" id="printButton">Print</a>
+				<div class="clearboth"></div>
+			</div>
+		</div>
+		
+		<div id="tabs-3">
+			<div id="content" class="container">
 
-                        <table id="drugsTable">
-                            <thead>
-                            <th>Drug Name</th>
-                            <th>Formulation</th>
-                            <th>Frequency</th>
-                            <th>Number of Days</th>
-                            <th>Comment</th>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <input type="button" value="Add" class="button confirm" name="addDrugsButton" id="addDrugsButton">
-                    </fieldset>
-                    <fieldset>
+				<h1>Treatment</h1>
 
-                        <legend>Other Instructions</legend>
+				<form class="simple-form-ui" id="treatmentForm" method="post">
 
-                        <p>
-                            <textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
-                            <input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
-                            <input name="treatmentPatientID" id="treatmentPatientID" value="${patient.patientId}" type="hidden">
-                            <a style="margin-top:12px" id="treatmentSubmit" class="button confirm">Submit</a>
-                        </p>
+					<section id="charges-info">
 
-                    </fieldset>
-                </section>
 
-            </form>
+						<fieldset style="min-width: 500px; width: auto">
 
-        </div>
-        <div id="addDrugDialog" class="dialog">
-            <div class="dialog-header">
-                <i class="icon-folder-open"></i>
-                <h3>Prescription</h3>
-            </div>
-            <div class="dialog-content">
-                <ul>
-                    <li>
-                        <span>Drug</span>
-                        <input class="drug-name" id="drugName" type="text" >
-                    </li>
-                    <li>
-                        <span>Formulation</span>
-                        <select id="formulationsSelect" >
-                            <option>Select Formulation</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span>Frequency</span>
-                        <select id="drugFrequency">
-                            <option>Select Frequency</option>
-                            <% if (drugFrequencyList!=null &&drugFrequencyList!=""){ %>
-                            <% drugFrequencyList.each { dfl -> %>
-                            <option  value="${dfl.name}.${dfl.conceptId}">
-                              ${dfl.name}
-                            </option>
-                            <% } %>
-                            <% } %>
-                        </select>
-                    </li>
-                    <li>
-                        <span>Number of Days</span>
-                        <input id="drugDays" type="text"  >
-                    </li>
-                    <li>
-                        <span>Comment</span>
-                        <textarea id="drugComment" ></textarea>
-                    </li>
-                </ul>
+							<legend>Procedure</legend>
+							<p>
+								<input type="text" style="width: 450px" id="procedure" name="procedure" placeholder="Enter Procedure" />
+								<select style="display: none" id="selectedProcedureList"></select>
+								<div class="selectdiv"  id="selected-procedures"></div>
+							</p>
+						</fieldset>
+						<fieldset>
 
-                <span class="button confirm right" > Confirm </span>
-                <span class="button cancel"> Cancel </span>
-            </div>
-        </div>
-    </div>
-    <div id="tabs-4">
-        <section>
-            <form method="post" id="transferForm">
-                <div class="simple-form-ui">
-                    <div class="persondatalabel">
-                        <h2>Select Ward: </h2>
-                        <select required  name="transferIpdWard" id="transferIpdWard"  name="ipdWard"  style="width: 150px;">
-                            <option value="">Select Ward</option>
-                            <% if (listIpd!=null && listIpd!="") { %>
-                            <% listIpd.each { ipd -> %>
-                            <option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
-                                ${ipd.answerConcept.name}
-                            </option>
-                            <%}%>
-                            <%}%>
-                        </select>
-                    </div>
+							<legend>Physical Examination</legend>
 
-                    <div class="persondatalabel">
-                        <h2>Select Doctor: </h2>
-                        <select required name="transferDoctor" id="transferDoctor"  name="doctor"  >
-                            <option value="">Select Doctor On Call</option>
-                            <% if (listDoctor!=null && listDoctor!=""){ %>
-                            <% listDoctor.each { doct -> %>
-                            <option title="${doct.givenName}"   value="${doct.id}">
-                                ${doct.givenName}
-                            </option>
-                            <% } %>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="persondatalabel">
-                        <h2>Bed Number</h2>
-                        <input required name="transferBedNumber" id="transferBedNumber" type="number">
-                    </div>
+							<p>
+								<textarea id="physicalExamination" name="PhysicalExamination" placeholder="Physical Examination" style="width:400px"></textarea>
+							</p>
 
-                    <div class="persondatalabel" >
-                        <h2>Comments</h2>
-                        <textarea name="transferComment" id="transferComment"></textarea>
-                    </div>
-                    <div class="persondatalabel" >
-                        <input required name="transferAdmittedID" id="transferAdmittedID" value="${patientInformation.id}" type="hidden">
-                        <a type="submit" class="button confirm" id="transferButton">Submit</a>
-                    </div>
-                </div>
-            </form>
-        </section>
-    </div>
+						</fieldset>
+						<fieldset>
+							<legend>Investigation</legend>
+							<p>
+								<input type="text" style="width: 450px" id="investigation" name="investigation" placeholder="Enter Investigations" />
+								<select style="display: none" id="selectedInvestigationList"></select>
+								<div class="selectdiv"  id="selected-investigations"></div>
+							</p>
+
+						</fieldset>
+						<fieldset>
+
+							<legend>Prescription</legend>
+
+							<table id="drugsTable">
+								<thead>
+								<th>Drug Name</th>
+								<th>Formulation</th>
+								<th>Frequency</th>
+								<th>Number of Days</th>
+								<th>Comment</th>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+							<input type="button" value="Add" class="button confirm" name="addDrugsButton" id="addDrugsButton">
+						</fieldset>
+						<fieldset>
+
+							<legend>Other Instructions</legend>
+
+							<p>
+								<textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
+								<input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
+								<input name="treatmentPatientID" id="treatmentPatientID" value="${patient.patientId}" type="hidden">
+								<a style="margin-top:12px" id="treatmentSubmit" class="button confirm">Submit</a>
+							</p>
+
+						</fieldset>
+					</section>
+
+				</form>
+
+			</div>
+			<div id="addDrugDialog" class="dialog">
+				<div class="dialog-header">
+					<i class="icon-folder-open"></i>
+					<h3>Prescription</h3>
+				</div>
+				<div class="dialog-content">
+					<ul>
+						<li>
+							<span>Drug</span>
+							<input class="drug-name" id="drugName" type="text" >
+						</li>
+						<li>
+							<span>Formulation</span>
+							<select id="formulationsSelect" >
+								<option>Select Formulation</option>
+							</select>
+						</li>
+						<li>
+							<span>Frequency</span>
+							<select id="drugFrequency">
+								<option>Select Frequency</option>
+								<% if (drugFrequencyList!=null &&drugFrequencyList!=""){ %>
+								<% drugFrequencyList.each { dfl -> %>
+								<option  value="${dfl.name}.${dfl.conceptId}">
+								  ${dfl.name}
+								</option>
+								<% } %>
+								<% } %>
+							</select>
+						</li>
+						<li>
+							<span>Number of Days</span>
+							<input id="drugDays" type="text"  >
+						</li>
+						<li>
+							<span>Comment</span>
+							<textarea id="drugComment" ></textarea>
+						</li>
+					</ul>
+
+					<span class="button confirm right" > Confirm </span>
+					<span class="button cancel"> Cancel </span>
+				</div>
+			</div>
+		</div>
+		
+		<div id="tabs-4">
+			<section>
+				<form method="post" id="transferForm">
+					<div class="simple-form-ui">
+						<div class="persondatalabel">
+							<h2>Select Ward: </h2>
+							<select required  name="transferIpdWard" id="transferIpdWard"  name="ipdWard"  style="width: 150px;">
+								<option value="">Select Ward</option>
+								<% if (listIpd!=null && listIpd!="") { %>
+								<% listIpd.each { ipd -> %>
+								<option title="${ipd.answerConcept.name}"   value="${ipd.answerConcept.id}">
+									${ipd.answerConcept.name}
+								</option>
+								<%}%>
+								<%}%>
+							</select>
+						</div>
+
+						<div class="persondatalabel">
+							<h2>Select Doctor: </h2>
+							<select required name="transferDoctor" id="transferDoctor"  name="doctor"  >
+								<option value="">Select Doctor On Call</option>
+								<% if (listDoctor!=null && listDoctor!=""){ %>
+								<% listDoctor.each { doct -> %>
+								<option title="${doct.givenName}"   value="${doct.id}">
+									${doct.givenName}
+								</option>
+								<% } %>
+								<% } %>
+							</select>
+						</div>
+						<div class="persondatalabel">
+							<h2>Bed Number</h2>
+							<input required name="transferBedNumber" id="transferBedNumber" type="number">
+						</div>
+
+						<div class="persondatalabel" >
+							<h2>Comments</h2>
+							<textarea name="transferComment" id="transferComment"></textarea>
+						</div>
+						<div class="persondatalabel" >
+							<input required name="transferAdmittedID" id="transferAdmittedID" value="${patientInformation.id}" type="hidden">
+							<a type="submit" class="button confirm" id="transferButton">Submit</a>
+						</div>
+					</div>
+				</form>
+			</section>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+<div>
+    
+	
 
 
 </div>

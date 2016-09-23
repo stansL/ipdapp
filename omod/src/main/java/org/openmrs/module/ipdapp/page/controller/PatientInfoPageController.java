@@ -71,9 +71,5 @@ public class PatientInfoPageController {
         List<Concept> drugFrequencyConcept = inventoryCommonService
                 .getDrugFrequency();
         model.addAttribute("drugFrequencyList", drugFrequencyConcept);
-
-
     }
-
-
 }

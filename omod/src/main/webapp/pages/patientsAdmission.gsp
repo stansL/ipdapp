@@ -35,6 +35,15 @@
 				getAdmissionQueue();
 			}
 		});
+		
+		jq('#refresher a').click(function(){
+			if (jq('li.ui-state-active').attr('aria-controls') == "ipd-patients"){
+				getAdmittedPatients();
+			}
+			else if (jq('li.ui-state-active').attr('aria-controls') == "ipd-queue"){
+				getAdmissionQueue();
+			}
+		});
 	});
 </script>
 
@@ -84,7 +93,6 @@
 	}
 </style>
 
-
 <div class="example">
 	<ul id="breadcrumbs">
 		<li>
@@ -94,7 +102,7 @@
 		
 		<li>
 			<i class="icon-chevron-right link"></i>
-			<a>IPD Wards</a>
+			<a href="chooseIpdWard.page">IPD Wards</a>
 		</li>
 		
 		<li>

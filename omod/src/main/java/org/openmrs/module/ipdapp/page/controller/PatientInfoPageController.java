@@ -51,25 +51,16 @@ public class PatientInfoPageController {
             model.addAttribute("listDoctor", listDoctor);
         }
 
-        //vital statistics
-        //diet list
+        //Diet list
         List<Concept> dietConcept= ipdService.getDiet();
         model.addAttribute("dietList", dietConcept);
 
-        //existing vital statistics
+        //Vital statistics
         List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patient.getPatientId(), patientInformation.getPatientAdmissionLog().getId());
         model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
 
         //list of discharge outcomes
         Concept outComeList = Context.getConceptService().getConceptByName(HospitalCoreConstants.CONCEPT_ADMISSION_OUTCOME);
-
         model.addAttribute("listOutCome", outComeList.getAnswers());
-
-        //fetch drug frequencies
-        InventoryCommonService inventoryCommonService = Context
-                .getService(InventoryCommonService.class);
-        List<Concept> drugFrequencyConcept = inventoryCommonService
-                .getDrugFrequency();
-        model.addAttribute("drugFrequencyList", drugFrequencyConcept);
     }
 }

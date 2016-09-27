@@ -48,6 +48,9 @@
 </script>
 
 <style>
+	.toast-item {
+        background-color: #222;
+    }
 	.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next{
 		width:auto;
 	}

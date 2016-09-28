@@ -46,7 +46,6 @@
                 selectedProcedure.id = ui.item.value;
                 var selectedProcedureList = document.getElementById("selectedProcedureList");
 
-
                 //adds the selected procedures to the div
                 var selectedProcedureP = document.createElement("div");
                 selectedProcedureP.className = "selectp";
@@ -126,23 +125,17 @@
                 selectedInvestigation.id = ui.item.value;
                 var selectedInvestigationList = document.getElementById("selectedInvestigationList");
 
-
                 //adds the selected procedures to the div
-                var selectedInvestigationP = document.createElement("P");
+                var selectedInvestigationP = document.createElement("div");
                 selectedInvestigationP.className = "selectp";
 
                 var selectedInvestigationT = document.createTextNode(ui.item.label);
                 selectedInvestigationP.id = ui.item.value;
                 selectedInvestigationP.appendChild(selectedInvestigationT);
 
-
-
-                var btnselectedRemoveIcon = document.createElement("p");
+                var btnselectedRemoveIcon = document.createElement("span");
                 btnselectedRemoveIcon.className = "icon-remove selecticon";
                 btnselectedRemoveIcon.id = "investigationRemoveIcon";
-
-
-
 
                 selectedInvestigationP.appendChild(btnselectedRemoveIcon);
 
@@ -162,46 +155,46 @@
                     selectedInvestigationList.appendChild(selectedInvestigation);
                     selectedInvestigationDiv.appendChild(selectedInvestigationP);
                 }
-
+				
+				jq('#task-investigation').show();
+				jq('#investigation-set').val('SET');
             },
             open: function() {
                 jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
             },
             close: function() {
                 jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+				jq(this).val('');
             }
         });
 
-        jq("#selected-investigations").on("click", "#procedureRemoveIcon",function(){
-            var investigationId = jq(this).parent("p").attr("id");
-            var investigationP = jq(this).parent("p");
-
-            var divProcedure = investigationP.parent("div");
-            var selectInputPosition = divProcedure.siblings("p");
-            var selectedProcedure = selectInputPosition.find("select");
-            var removeProcedure = selectedProcedure.find("#" + investigationId);
-
+        jq("#selected-investigations").on("click", "#investigationRemoveIcon", function(){
+            var investigationP = jq(this).parent("div");
+            var investigationId = investigationP.attr("id");			
+            
+            jq('#selectedInvestigationList').find("#" + investigationId).remove();
             investigationP.remove();
-            removeProcedure.remove();
-
+			
+			if (jq('#selectedInvestigationList option').size() == 0){
+				jq('#task-investigation').hide();
+				jq('#investigation-set').val('');
+			}
         });
 		
 		jq(".drug-name").on("focus.autocomplete", function () {
             var selectedInput = this;
             jq(this).autocomplete({
                 source: function( request, response ) {
-                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getDrugs") }',
-                            {
-                                q: request.term
-                            }
-                    ).success(function(data) {
-                                var results = [];
-                                for (var i in data) {
-                                    var result = { label: data[i].name, value: data[i].id};
-                                    results.push(result);
-                                }
-                                response(results);
-                            });
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getDrugs") }', {
+						q: request.term
+					}).success(function(data) {
+						var results = [];
+						for (var i in data) {
+							var result = { label: data[i].name, value: data[i].id};
+							results.push(result);
+						}
+						response(results);
+                    });
                 },
                 minLength: 3,
                 select: function( event, ui ) {
@@ -212,21 +205,19 @@
                     event.preventDefault();
                     jq(selectedInput).val(ui.item.label);
 
-                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getFormulationByDrugName") }',
-                            {
-                                "drugName": ui.item.label
-                            }
-                    ).success(function(data) {
-                                var formulations = jq.map(data, function (formulation) {
-                                  jq('#formulationsSelect').append(jq('<option>').text(formulation.name).attr('value', formulation.id));
-                                });
-                            });
+                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "getFormulationByDrugName") }', {
+						"drugName": ui.item.label
+					}).success(function(data) {
+						var formulations = jq.map(data, function (formulation) {
+						  jq('#formulationsSelect').append(jq('<option>').text(formulation.name + ":" + formulation.dozage).attr('value', formulation.id));
+						});
+					});
                 },
                 open: function() {
-                    jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                    //jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
                 },
                 close: function() {
-                    jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                    //jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
                 }
             });
         });
@@ -235,6 +226,26 @@
             selector: '#addDrugDialog',
             actions: {
                 confirm: function() {
+					if (jq('#drugName').val() == ''){
+						jq().toastmessage('showErrorToast', "Kindly ensure that the drug name has been Entered Correctly");
+						return false;
+					}
+					
+					if (jq('#formulationsSelect').val() == 'Select Formulation'){
+						jq().toastmessage('showErrorToast', "Kindly ensure that the drug Formulation has been selected Correctly");
+						return false;
+					}
+					
+					if (jq('#drugFrequency').val() == 'Select Frequency'){
+						jq().toastmessage('showErrorToast', "Kindly ensure that the drug Frequency has been selected Correctly");
+						return false;
+					}
+					
+					if (!jq.isNumeric(jq('#drugDays').val())){
+						jq().toastmessage('showErrorToast', "Kindly ensure that the number of Days has been filled correctly");
+						return false;
+					}				
+				
                     var tbody = jq('#drugsTable').children('tbody');
                     var table = tbody.length ? tbody : jq('#drugsTable');
                     table.append('<tr><td>'+jq("#drugName").val()+'</td><td>'+jq("#formulationsSelect option:selected").text()+'</td><td>'+jq("#drugFrequency option:selected").text()+'</td><td>'+jq("#drugDays").val()+'</td><td>'+jq("#drugComment").val()+'</td></tr>');
@@ -247,6 +258,7 @@
                                 comment: jq("#drugComment").val()
                             }
                     );
+					jq('#prescription-set').val('SET');
                     adddrugdialog.close();
                 },
                 cancel: function() {
@@ -260,27 +272,23 @@
         });
 		
 		jq("#treatmentSubmit").click(function(event){
-
-            console.log(drugOrder);
-
-            var treatmentForm = jq("#treatmentForm");
-
-            //get the list of selected procedures and store them in an array
-            var selectedProc = new Array;
-
+			jq().toastmessage({
+				sticky: true
+			});
+			var savingMessage = jq().toastmessage('showSuccessToast', 'Please wait as Information is being Saved...');
+			
+            var selectedProc = new Array;			
             jq("#selectedProcedureList option").each  ( function() {
                 selectedProc.push ( jq(this).val() );
             });
 
             //fetch the selected discharge diagnoses and store in an array
             var selectedInv = new Array;
-
             jq("#selectedInvestigationList option").each  ( function() {
                 selectedInv.push ( jq(this).val() );
             });
-            console.log(drugOrder);
 
-           drugOrder = JSON.stringify(drugOrder);
+			drugOrder = JSON.stringify(drugOrder);
 
             var treatmentFormData = {
                 'patientId': jq('#treatmentPatientID').val(),
@@ -291,16 +299,17 @@
                 'otherTreatmentInstructions': jq('#otherTreatmentInstructions').val(),
                 'physicalExamination' : jq('#physicalExamination').val()
             };
-            console.log(drugOrder);
-            treatmentForm.submit(
-
-                    jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "treatment") }',treatmentFormData)
-                            .success(function(data) {
-                                jq().toastmessage('showNoticeToast', "Patient has been transferred");
-                            })
-                            .error(function(xhr, status, err) {
-                                jq().toastmessage('showErrorToast', "Error:" + err);
-                            })
+			
+            jq("#treatmentForm").submit(
+				jq.getJSON('${ ui.actionLink("ipdapp", "PatientInfo", "treatment") }',treatmentFormData)
+				.success(function(data) {
+					jq().toastmessage('removeToast', savingMessage);
+					jq().toastmessage('showSuccessToast', "Patient Treatment has been updated Successfully");
+				})
+				.error(function(xhr, status, err) {
+					jq().toastmessage('removeToast', savingMessage);
+					jq().toastmessage('showErrorToast', "Error:" + err);
+				})
             );
         });
 		
@@ -479,11 +488,14 @@
 		border-bottom: 1px solid darkgrey;
 		margin: 7px 10px;
 		padding-bottom: 3px;
+		padding-left: 5px;
 	}
-	#procedureRemoveIcon{
+	#investigationRemoveIcon,
+	#procedureRemoveIcon {
 		float: right;
 		color: #f00;
 		cursor: pointer;
+		margin: 2px 5px 0 0;
 	}
 	fieldset input[type="text"]{
 		height: 45px
@@ -494,6 +506,55 @@
 		font-family: "OpenSansBold",Arial,sans-serif;
 		font-size: 1.3em;
 		padding-left: 5px;
+	}
+	.dialog-content ul li span{
+		display: inline-block;
+		width: 130px;
+	}
+	.dialog-content ul li input{
+		width: 255px;
+		padding: 5px 10px;
+	}
+	.dialog textarea {
+		width: 255px;
+	}
+	.dialog select {
+		display: inline-block;
+		width: 255px;
+	}
+	.dialog select option {
+		font-size: 1em;
+	}	
+	.dialog .dialog-content li {
+		margin-bottom: 3px;
+	}
+	.dialog select {
+		margin: 0;
+		padding: 5px;
+	}
+	#modal-overlay {
+		background: #000 none repeat scroll 0 0;
+		opacity: 0.4 !important;
+	}
+	#summaryTable tr:nth-child(2n), #summaryTable tr:nth-child(2n+1) {
+		background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+	}
+	#summaryTable {
+		margin: -5px 0 -6px;
+	}
+	#summaryTable tr, #summaryTable th, #summaryTable td {
+		-moz-border-bottom-colors: none;
+		-moz-border-left-colors: none;
+		-moz-border-right-colors: none;
+		-moz-border-top-colors: none;
+		border-color: #eee;
+		border-image: none;
+		border-style: none none solid;
+		border-width: 1px;
+	}
+	#summaryTable td:first-child {
+		vertical-align: top;
+		width: 180px;
 	}
 </style>
 
@@ -595,7 +656,7 @@
 		
 		<fieldset>
 			<legend>Physical Examination</legend>
-			<label class="label title-label" for="investigation" style="width: auto; padding-left: 5px;">
+			<label class="label title-label" style="width: auto; padding-left: 5px;">
 				PHYSICAL EXAMINATION
 				<span class="important"></span>
 			</label>
@@ -614,7 +675,7 @@
 				<input type="hidden" id="investigation-set" name="investigation-set" />
 			</p>
 			
-			<div class="tasks" id="task-investigation" style="display: nonex;">
+			<div class="tasks" id="task-investigation" style="display: none;">
 				<header class="tasks-header">
 					<span id="title-symptom" class="tasks-title">INVESTIGATIONS</span>
 					<a class="tasks-lists"></a>
@@ -627,57 +688,97 @@
 					</div>
 				</div>
 			</div>
-			
-			
-
 		</fieldset>
 		
 		<fieldset>
 			<legend>Prescription</legend>
+			<label class="label title-label" style="width: auto; padding-left: 5px;">
+				PRESCRIBE DRUGS
+				<span class="important"></span>
+			</label>
 		
-			<field>
+			<p style="display: none">
 				<input type="hidden" style="width: 450px" id="prescription-set" name="prescription-set"/>
-				<span id="prescription-lbl" class="field-error" style="display: none"></span>
-			</field>
+			</p>
 
 			<table id="drugsTable">
 				<thead>
-				<th>Drug Name</th>
-				<th>Formulation</th>
-				<th>Frequency</th>
-				<th>Number of Days</th>
-				<th>Comment</th>
+					<th>Drug Name</th>
+					<th>Formulation</th>
+					<th>Frequency</th>
+					<th>Number of Days</th>
+					<th>Comment</th>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
 			<input type="button" value="Add" class="button confirm" name="addDrugsButton" id="addDrugsButton">
 		</fieldset>
+		
 		<fieldset>
-
 			<legend>Other Instructions</legend>
+			<label class="label title-label" style="width: auto; padding-left: 5px;">
+				OTHER INSTRUCTIONS
+				<span class="important"></span>
+			</label>
 
 			<p>
-				<textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="width:400px"></textarea>
+				<textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="height: 129px; width: 100%; resize: none;"></textarea>
 				<input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
 				<input name="treatmentPatientID" id="treatmentPatientID" value="${patient.patientId}" type="hidden">
-				<a style="margin-top:12px" id="treatmentSubmit" class="button confirm">Submit</a>
 			</p>
 		</fieldset>
-		
-		
-		
 	</section>
 	
 	<div id="confirmation" style="min-height: 250px;">
 		<span id="confirmation_label" class="title">Confirmation</span>
 		
-		<div id="confirmationQuestion" class="focused" style="margin-top:20px">		
-			<p style="display: inline"> 
+		<div id="confirmationQuestion" class="focused" style="margin-top:0px">		
+			<p style="display: none"> 
 				<button class="button submit confirm" style="display: none;"></button>
 			</p>
 			
-			<span value="Submit" class="button submit confirm" id="antenatalExaminationSubmitButton">
+			<div class="dashboard">
+				<div class="info-section">
+					<div class="info-header">
+						<i class="icon-list-ul"></i>
+						<h3>TREATMENT SUMMARY &amp; CONFIRMATION</h3>
+					</div>					
+					
+					<div class="info-body">
+						<table id="summaryTable">
+							<tbody>
+								<tr>
+									<td><span class="status active"></span>Procedure</td>
+									<td>N/A</td>
+								</tr>
+								
+								<tr>
+									<td><span class="status active"></span>Physical Examination</td>
+									<td>N/A</td>
+								</tr>
+								
+								<tr>
+									<td><span class="status active"></span>Investigations</td>
+									<td>N/A</td>
+								</tr>
+								
+								<tr>
+									<td><span class="status active"></span>Prescriptions</td>
+									<td>N/A</td>
+								</tr>
+								
+								<tr>
+									<td><span class="status active"></span>Instructions</td>
+									<td>N/A</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>				
+			</div>			
+			
+			<span value="Submit" class="button submit confirm right" id="treatmentSubmit">
 				<i class="icon-save small"></i>
 				Save
 			</span>
@@ -687,21 +788,10 @@
 				Cancel
 			</span>
 		</div>
-		
-		
 	</div>
-
 </form>
 
-
-
-
-
-
-
-
-
-<div id="addDrugDialog" class="dialog">
+<div id="addDrugDialog" class="dialog" style="display: none">
 	<div class="dialog-header">
 		<i class="icon-folder-open"></i>
 		<h3>Prescription</h3>
@@ -741,7 +831,7 @@
 			</li>
 		</ul>
 
-		<span class="button confirm right" > Confirm </span>
+		<span class="button confirm right" style="margin-right: 1px"> Confirm </span>
 		<span class="button cancel"> Cancel </span>
 	</div>
 </div>

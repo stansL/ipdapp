@@ -71,7 +71,7 @@ public class PatientInfoFragmentController {
 
         if(drug != null){
             List<InventoryDrugFormulation> formulations = new ArrayList<InventoryDrugFormulation>(drug.getFormulations());
-            formulationsList = SimpleObject.fromCollection(formulations, ui, "id", "name");
+            formulationsList = SimpleObject.fromCollection(formulations, ui, "id", "name", "dozage");
         }
 
         return formulationsList;

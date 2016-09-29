@@ -84,7 +84,7 @@
 			<% } else if (patientInformation.requestForDischargeStatus == 1) {%>
 				<li>
 					<i class="icon-edit"></i>
-					<a href="${ui.pageLink("ipdapp", "dischargePatient", [search: patientIdentifier])}">Discharge Patient</a>
+					<a href="dischargePatient.page?patientId=${patient.id}">Discharge Patient</a>
 				</li>
 			<% } %>						
 

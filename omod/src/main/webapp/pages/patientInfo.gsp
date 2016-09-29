@@ -351,7 +351,7 @@
 	<ul id="breadcrumbs">
 		<li>
 			<a href="${ui.pageLink('referenceapplication','home')}">
-				<i class="icon-home small"></i></a>
+			<i class="icon-home small"></i></a>
 		</li>
 		
 		<li>
@@ -405,7 +405,7 @@
 		<br>
 		
 		<div class="catg">
-			<i class="icon-tags small" style="font-size: 16px"></i><small>Category:</small> {category} 
+			<i class="icon-tags small" style="font-size: 16px"></i><small>Category:</small> ${patient.getAttribute(14)}
 		</div>
 	</div>
 	<div class="clear"></div>	

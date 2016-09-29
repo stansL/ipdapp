@@ -81,10 +81,8 @@
 				jq('#procedure-set').val('SET');
             },
             open: function() {
-                jq( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
             },
             close: function() {
-                jq( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
 				jq(this).val('');
             }
         });
@@ -100,7 +98,7 @@
 				jq('#task-procedure').hide();
 				jq('#procedure-set').val('');
 			}
-        });		
+        });
 		
 		jq("#investigation").autocomplete({
             source: function( request, response ) {
@@ -369,6 +367,7 @@
 	}
 	#treatmentForm{
 		background: #f9f9f9 none repeat scroll 0 0;
+		margin-top: 3px;
 	}
 	.simple-form-ui section, .simple-form-ui #confirmation, .simple-form-ui form section, .simple-form-ui form #confirmation {
 		min-height: 250px;
@@ -497,7 +496,8 @@
 		cursor: pointer;
 		margin: 2px 5px 0 0;
 	}
-	fieldset input[type="text"]{
+	fieldset input[type="text"],
+	fieldset select {
 		height: 45px
 	}
 	.title-label {
@@ -621,7 +621,7 @@
 		<br>
 		
 		<div class="catg">
-			<i class="icon-tags small" style="font-size: 16px"></i><small>Category:</small> {category} 
+			<i class="icon-tags small" style="font-size: 16px"></i><small>Category:</small> ${patient.getAttribute(14)}
 		</div>
 	</div>
 	<div class="clear"></div>	
@@ -778,12 +778,12 @@
 				</div>				
 			</div>			
 			
-			<span value="Submit" class="button submit confirm right" id="treatmentSubmit">
+			<span value="Submit" class="button submit confirm right" id="treatmentSubmit" style="margin: 5px 10px;">
 				<i class="icon-save small"></i>
 				Save
 			</span>
 			
-			<span id="cancelButton" class="button cancel">
+			<span id="cancelButton" class="button cancel" style="margin: 5px">
 				<i class="icon-remove small"></i>			
 				Cancel
 			</span>

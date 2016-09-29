@@ -22,16 +22,16 @@ import java.util.List;
  * Created by Francis on 1/27/2016.
  */
 public class DischargePatientPageController {
-    public void get(@RequestParam(value = "search",required = true) String search, PageModel model) {
+    public void get(@RequestParam("patientId") Patient patient,
+                    PageModel model) {
 
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
         PatientService patientService = Context.getService(PatientService.class);;
 
-        List<Patient> patientList = patientService.getPatients(null,search, null, true,null,null);
-        int patientiID = patientList.get(0).getPatientId();
-
-        model.addAttribute("patientID", patientiID);
+        List<Patient> patientList = patientService.getPatients(null, patient.getPatientIdentifier().toString(), null, true, null,null);
         IpdPatientAdmitted patientInformation = ipdService.getAdmittedByPatientId(patientList.get(0).getPatientId());
+
+        model.addAttribute("patient", patient);
         model.addAttribute("patientInformation",patientInformation );
 
         //gets list of doctors
@@ -56,7 +56,7 @@ public class DischargePatientPageController {
         model.addAttribute("dietList", dietConcept);
 
         //existing vital statistics
-        List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patientiID,patientInformation.getPatientAdmissionLog().getId());
+        List<IpdPatientVitalStatistics> ipdPatientVitalStatistics=ipdService.getIpdPatientVitalStatistics(patient.getPatientId(), patientInformation.getPatientAdmissionLog().getId());
         model.addAttribute("ipdPatientVitalStatistics", ipdPatientVitalStatistics);
 
         //list of discharge outcomes

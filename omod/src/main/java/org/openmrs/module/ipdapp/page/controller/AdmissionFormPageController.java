@@ -33,6 +33,7 @@ public class AdmissionFormPageController {
     )
 
     {
+
         model.addAttribute("ipdWard", ipdWard);
         IpdService ipdService = Context.getService(IpdService.class);
         Concept ipdConcept = Context.getConceptService().getConceptByName(
@@ -43,6 +44,9 @@ public class AdmissionFormPageController {
         }
         model.addAttribute("listIpd", list);
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(admissionId);
+        IpdPatientAdmitted patientInformation = ipdService.getAdmittedByPatientId(admission.getPatient().getPatientId());
+        model.addAttribute("patientInformation", patientInformation);
+
 
         if (admission != null) {
             PersonAddress add = admission.getPatient().getPersonAddress();
@@ -82,6 +86,8 @@ public class AdmissionFormPageController {
             model.addAttribute("district", district);
             model.addAttribute("upazila", upazila);
             model.addAttribute("name", pname);
+            model.addAttribute("patientInformation", patientInformation);
+
             //added condition 21/7/16 (Throws bug since person attribute is null
             String relationNameattrStr = "";
             if(relationNameattr!=null) {

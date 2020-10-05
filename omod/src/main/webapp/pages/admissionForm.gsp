@@ -18,6 +18,7 @@
         if(document.forms["transferForm"] != undefined)
         {
             document.forms["transferForm"]["bedNumber"].value=checkAlert;
+            jq("#bedsTable").hide();
         }
         else {
             var mpob=parseInt(maxPatientOnBed);
@@ -27,6 +28,7 @@
             }
             else{
                 document.forms["admissionForm"]["bedNumber"].value=checkAlert;
+                jq("#bedsTable").hide();
             }
         }
     }
@@ -46,7 +48,7 @@
                             var size = data.size;
                             var bedCount = 0;
                             var bedOccupied = 0;
-                            var bedMax = data.bedMax
+                            var bedMax = data.bedMax;
                             for (var i = 1; i <= bedMax ; i++) {
                                 bedCount =  bedCount + 1;
                                 if(bedStrengthMap[bedCount] != null && bedStrengthMap[bedCount] > 0){
@@ -66,9 +68,9 @@
                                         if(bedStrengthMap[count] > 0 && bedOccupied < bedMax){
                                             sString+= '<td><input id="validate" name="validateName" style="background-color:red; font-size: 9px !important;" class="f2" value="' + count + '/'+ bedStrengthMap[count] +'" readonly="readonly" />';
                                         }else if(bedStrengthMap[count] > 0 && bedOccupied >= bedMax){
-                                            sString+= '<td><input id="validate" name="validateName" style="background-color:red; font-size: 9px !important;" class="f2" value="'+ count + '/'+ bedStrengthMap[count] +'" readonly="readonly" onclick="javascript:return validateCheck();" />';
+                                            sString+= `<td><input id="validate" name="validateName" style="background-color:red; font-size: 9px !important;" class="f2" value="`+ count + `/`+ bedStrengthMap[count] +`" readonly="readonly" onclick="javascript:return validateCheck(` + count + `,` + bedStrengthMap[count] + `);" />`;
                                         }else{
-                                            sString+='<td style="background-color:green; font-size: 8px !important;" class="f2" ><input id="validate" name="validateName" style="background-color:green"  class="f2" value="'+ count + '/'+ bedStrengthMap[count] +'" readonly="readonly" onclick="javascript:return validateCheck();" />';
+                                            sString+=`<td style="background-color:green; font-size: 8px !important;" class="f2" ><input id="validate" name="validateName" style="background-color:green"  class="f2" value="`+ count + `/`+ bedStrengthMap[count] +`" readonly="readonly" onclick="javascript:return validateCheck(` + count + `,` + bedStrengthMap[count] + `);" />`;
                                         }
                                     }else{
 

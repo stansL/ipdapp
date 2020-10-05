@@ -7,7 +7,7 @@
         </div>
 
         <div class="info-body">
-            <form method="post" id="transferForm" action="admissionForm.page?ipdWard=100126282">
+            <form method="post" id="admissionForm" action="admissionForm.page?ipdWard=100126282">
                 <div style="float: left">
                     <img src="${ui.resourceLink('ipdapp', 'images/patient-transfer.png')}"
                          style="border-right: 1px solid #eee; height: 185px; margin-right: 10px; padding: 5px 15px 0 5px;"/>
@@ -64,10 +64,14 @@
                         <span>
                             <input required name="fileNumber" id="fileNumber" type="number"/>
                         </span>
+                        <label>Adm. Date-Time</label>
+                        <span>
+                            <input type="date" class="date" data-value="2004-03-20" min="2004-02-20"/>
+                        </span>
 
                         <label>Comments</label>
                         <span>
-                            <textarea name="comment" id="comment"></textarea>
+                            <textarea name="comments" id="comments"></textarea>
                         </span>
 
 

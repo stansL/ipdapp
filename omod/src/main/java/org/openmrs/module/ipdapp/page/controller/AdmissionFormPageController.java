@@ -103,12 +103,13 @@ public class AdmissionFormPageController {
     }
 
     public String post(HttpServletRequest request, PageModel model,
+                       @RequestParam(value = "admissionId", required = false) Integer admissionId,
                        @RequestParam(value = "ipdWard", required = false) String ipdWard,
                        @RequestParam(value = "ipdWardString", required = false) String ipdWardString, //ipdWard multiselect
                        @RequestParam(value = "tab", required = false) Integer tab,
                        UiUtils uiUtils) {
         IpdService ipdService = (IpdService) Context.getService(IpdService.class);
-        int id = NumberUtils.toInt(request.getParameter("id"));
+        int id = NumberUtils.toInt(request.getParameter("admissionId"));
         IpdPatientAdmission admission = ipdService.getIpdPatientAdmission(id);
 
         String caste = request.getParameter("caste");

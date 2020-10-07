@@ -14,6 +14,8 @@
         return dataToParse;
     }
 
+
+
     function validateCheck(checkAlert,maxPatientOnBed){
         if(document.forms["transferForm"] != undefined)
         {
@@ -32,8 +34,47 @@
             }
         }
     }
+
+    function validate() {
+        var admittedward = document.forms["admissionForm"]["admittedWard"].value;
+        var treatingdoctor = document.forms["admissionForm"]["treatingDoctor"].value;
+        var bednumber = document.forms["admissionForm"]["bedNumber"].value;
+
+        if (admittedward == null || admittedward == "") {
+            alert("Please select admitted Ward");
+            return false;
+        }
+
+        if (treatingdoctor == null || treatingdoctor == "") {
+            alert("Please select Doctor on Call");
+            return false;
+        }
+        if (bednumber == null || bednumber == "") {
+            alert("Please enter bed Number");
+            return false;
+        }
+        if (bednumber != null) {
+            var checkMaxBed = parseInt(document.forms["admissionForm"]["bedMax"].value);
+            if (isNaN(bednumber)) {
+                alert("Please enter bed number in correct format");
+                return false;
+            }
+            if (bednumber > checkMaxBed) {
+                alert("Please enter correct bed number");
+                return false;
+            }
+        }
+        document.getElementById("admissionForm").submit();
+
+    }
     jq(function() {
 
+
+
+        jq("#admitButton").on("click",function () {
+        //    reDirect to the admission list
+            validate();
+        });
         jq("#admittedWard").on("change",function () {
             var currentID = jq(this).val();
 
@@ -49,6 +90,8 @@
                             var bedCount = 0;
                             var bedOccupied = 0;
                             var bedMax = data.bedMax;
+                            jq("#bedMax").val(bedMax);
+                            jq("#size").val(size);
                             for (var i = 1; i <= bedMax ; i++) {
                                 bedCount =  bedCount + 1;
                                 if(bedStrengthMap[bedCount] != null && bedStrengthMap[bedCount] > 0){

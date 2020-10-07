@@ -93,7 +93,7 @@ public class PatientAdmissionFragmentController {
                                                          UiUtils uiUtils) {
 
         List<IpdPatientAdmission> admissionQueue = ipdService.searchIpdPatientAdmission(null, null, fromDate, toDate, ipdWard, "");
-        return SimpleObject.fromCollection(admissionQueue, uiUtils, "id", "admissionDate", "patient", "patientName", "patientIdentifier", "birthDate", "gender", "admissionWard", "status", "opdAmittedUser", "opdLog", "acceptStatus", "ipdEncounter");
+        return SimpleObject.fromCollection(admissionQueue, uiUtils, "id", "admissionDate", "patient", "patientName", "patientIdentifier", "birthDate", "gender", "admissionWard.conceptId", "status", "opdAmittedUser", "opdLog", "acceptStatus", "ipdEncounter");
     }
 
     public List<SimpleObject> listAdmittedIpdPatients(@RequestParam("ipdWard") String ipdWard,

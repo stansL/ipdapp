@@ -32,6 +32,7 @@ public class PatientInfoPageController {
         IpdPatientAdmitted patientInformation = ipdService.getAdmittedByPatientId(patient.getPatientId());
 
         model.addAttribute("patient", patient);
+        model.addAttribute("gender", patient.getGender());
         model.addAttribute("patientIdentifier", search);
         model.addAttribute("patientInformation", patientInformation);
 

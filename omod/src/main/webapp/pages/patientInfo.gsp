@@ -416,6 +416,8 @@
 		<ul>
 			<li class="tabs1"><a href="#tabs-1">Patient Details</a></li>
 			<li class="tabs2"><a href="#tabs-2">Transfer</a></li>
+			<li class="tabs3"><a href="#tabs-3">Clinical History</a></li>
+			<li class="tabs4"><a href="#tabs-4">Lab Reports</a></li>
 		</ul>
 		
 		<div id="tabs-1">
@@ -424,6 +426,13 @@
 		
 		<div id="tabs-2">
 			${ui.includeFragment("ipdapp", "patientInfoTransfer")}
+		</div>
+
+		<div id="tabs-3">
+			${ ui.includeFragment("patientdashboardapp", "visitSummary", [patientId: patient.patientId]) }
+		</div>
+		<div id="tabs-4">
+			${ ui.includeFragment("patientdashboardapp", "investigations", [patientId: patient.patientId]) }
 		</div>
 	</div>
 </div>

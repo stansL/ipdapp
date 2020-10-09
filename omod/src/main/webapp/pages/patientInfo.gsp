@@ -1,6 +1,10 @@
 <%
     ui.decorateWith("appui", "standardEmrPage", [title: "Patient Details"])
     ui.includeJavascript("uicommons", "datetimepicker/bootstrap-datetimepicker.min.js")
+    ui.includeJavascript("patientdashboardapp", "jq.print.js")
+    ui.includeJavascript("patientdashboardapp", "jq.slimscroll.js")
+
+    ui.includeCss("patientdashboardapp", "patientdashboardapp.css");
 %>
 
 <script>
@@ -188,6 +192,10 @@
 </script>
 
 <style>
+
+    #person-detail{
+        display: none;
+    }
 	.toast-item {
         background-color: #222;
     }
@@ -415,24 +423,26 @@
 	<div id="tabs">
 		<ul>
 			<li class="tabs1"><a href="#tabs-1">Patient Details</a></li>
-			<li class="tabs2"><a href="#tabs-2">Transfer</a></li>
-			<li class="tabs3"><a href="#tabs-3">Clinical History</a></li>
-			<li class="tabs4"><a href="#tabs-4">Lab Reports</a></li>
+            <li class="tabs2"><a href="#tabs-2">Clinical History</a></li>
+            <li class="tabs3"><a href="#tabs-3">Lab Reports</a></li>
+			<li class="tabs4"><a href="#tabs-4">Transfer</a></li>
 		</ul>
 		
 		<div id="tabs-1">
 			${ui.includeFragment("ipdapp", "patientInfoDetails")}
-		</div>		
+		</div>
+
+        <div id="tabs-2">
+            ${ ui.includeFragment("ipdapp", "visitSummary", [patientId: patient.patientId]) }
+        </div>
+        <div id="tabs-3">
+            ${ ui.includeFragment("ipdapp", "investigations", [patientId: patient.patientId]) }
+        </div>
 		
-		<div id="tabs-2">
+		<div id="tabs-4">
 			${ui.includeFragment("ipdapp", "patientInfoTransfer")}
 		</div>
 
-		<div id="tabs-3">
-			${ ui.includeFragment("patientdashboardapp", "visitSummary", [patientId: patient.patientId]) }
-		</div>
-		<div id="tabs-4">
-			${ ui.includeFragment("patientdashboardapp", "investigations", [patientId: patient.patientId]) }
-		</div>
+
 	</div>
 </div>

@@ -57,10 +57,15 @@
                                 <% if (listIpd != null && listIpd != "") { %>
                                 <% listIpd.each { ipd -> %>
 
-                                <option title="${ipd.answerConcept.name}" value="${ipd.answerConcept.id}">
-                                    ${ipd.answerConcept.name}
-                                </option>
-
+                                <% if(ipd.answerConcept.id.toString() == ipdWard.toString()){ %>
+                                    <option title="${ipd.answerConcept.name}" value="${ipd.answerConcept.id}" selected>
+                                        ${ipd.answerConcept.name}
+                                    </option>
+                                <% } else {%>
+                                    <option title="${ipd.answerConcept.name}" value="${ipd.answerConcept.id}">
+                                        ${ipd.answerConcept.name}
+                                    </option>
+                                <% } %>
                                 <% } %>
                                 <% } %>
                             </select>

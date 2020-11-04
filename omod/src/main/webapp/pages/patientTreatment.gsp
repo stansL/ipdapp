@@ -43,6 +43,7 @@
                 var selectedProcedure = document.createElement('option');
                 selectedProcedure.value = ui.item.value;
                 selectedProcedure.text = ui.item.label;
+                appModel.procedureSet.push(ui.item.label);
                 selectedProcedure.id = ui.item.value;
                 var selectedProcedureList = document.getElementById("selectedProcedureList");
 
@@ -120,7 +121,9 @@
                 var selectedInvestigation = document.createElement('option');
                 selectedInvestigation.value = ui.item.value;
                 selectedInvestigation.text = ui.item.label;
-                selectedInvestigation.id = ui.item.value;
+				appModel.investigationSet.push(ui.item.label);
+
+				selectedInvestigation.id = ui.item.value;
                 var selectedInvestigationList = document.getElementById("selectedInvestigationList");
 
                 //adds the selected procedures to the div
@@ -256,6 +259,9 @@
                                 comment: jq("#drugComment").val()
                             }
                     );
+
+                    var lastIn = drugOrder[drugOrder.length-1];
+					appModel.prescriptionSet.push(jq("#drugName").val() + " - " + jq("#formulationsSelect option:selected").text());
 					jq('#prescription-set').val('SET');
                     adddrugdialog.close();
                 },
@@ -641,15 +647,13 @@
 			
 			<div class="tasks" id="task-procedure" style="display: none;">
 				<header class="tasks-header">
-					<span id="title-symptom" class="tasks-title">PROCEDURES APPLIED</span>
+					<span id="title-procedures" class="tasks-title">PROCEDURES APPLIED</span>
 					<a class="tasks-lists"></a>
 				</header>
 				
-				<div class="symptoms-qualifiers" data-bind="foreach: signs">
-					<select style="display: none" id="selectedProcedureList"></select>				
-					<div class="symptom-container selectdiv" id="selected-procedures">						
-						
-					</div>
+				<select style="display: none" id="selectedProcedureList"></select>
+				<div class="symptom-container selectdiv" id="selected-procedures">
+
 				</div>
 			</div>
 		</fieldset>
@@ -662,7 +666,8 @@
 			</label>
 
 			<p>
-				<textarea id="physicalExamination" name="PhysicalExamination" placeholder="Physical Examination" style="height: 129px; width: 100%; resize: none;"></textarea>
+				<textarea data-bind="value: physicalExamination"  id="physicalExamination" name="PhysicalExamination" placeholder="Physical Examination"
+						  style="height: 129px; width: 100%; resize: none;"></textarea>
 			</p>
 
 		</fieldset>
@@ -681,11 +686,9 @@
 					<a class="tasks-lists"></a>
 				</header>
 				
-				<div class="symptoms-qualifiers" data-bind="foreach: signs">
-					<select style="display: none" id="selectedInvestigationList"></select>				
-					<div class="symptom-container selectdiv" id="selected-investigations">						
-						
-					</div>
+				<select style="display: none" id="selectedInvestigationList"></select>
+				<div class="symptom-container selectdiv" id="selected-investigations">
+
 				</div>
 			</div>
 		</fieldset>
@@ -723,7 +726,7 @@
 			</label>
 
 			<p>
-				<textarea id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="height: 129px; width: 100%; resize: none;"></textarea>
+				<textarea data-bind="value: otherTreatmentInstructions" id="otherTreatmentInstructions" name="otherTreatmentInstructions" placeholder="Enter Other Instructions" style="height: 129px; width: 100%; resize: none;"></textarea>
 				<input value="${patientInformation.admittedWard.id}" name="treatmentIPDWard" id="treatmentIPDWard" type="hidden">
 				<input name="treatmentPatientID" id="treatmentPatientID" value="${patient.patientId}" type="hidden">
 			</p>
@@ -750,27 +753,27 @@
 							<tbody>
 								<tr>
 									<td><span class="status active"></span>Procedure</td>
-									<td>N/A</td>
+									<td><span data-bind="foreach: procedureSet"><span data-bind="text: \$data"></span><br></span></td>
 								</tr>
 								
 								<tr>
 									<td><span class="status active"></span>Physical Examination</td>
-									<td>N/A</td>
+									<td><span data-bind="text: physicalExamination">N/A</span></td>
 								</tr>
 								
 								<tr>
 									<td><span class="status active"></span>Investigations</td>
-									<td>N/A</td>
+									<td><span data-bind="foreach: investigationSet"><span data-bind="text: \$data"></span><br></span></td>
 								</tr>
 								
 								<tr>
 									<td><span class="status active"></span>Prescriptions</td>
-									<td>N/A</td>
+									<td><span data-bind="foreach: prescriptionSet"><span data-bind="text: \$data"></span><br></span></td>
 								</tr>
 								
 								<tr>
 									<td><span class="status active"></span>Instructions</td>
-									<td>N/A</td>
+									<td><span data-bind="text: otherTreatmentInstructions">N/A</span></td>
 								</tr>
 							</tbody>
 						</table>
@@ -835,3 +838,18 @@
 		<span class="button cancel"> Cancel </span>
 	</div>
 </div>
+
+<script>
+	function AppViewModel() {
+		this.firstName = "Stanslaus";
+		this.physicalExamination = ko.observable("");
+		this.otherTreatmentInstructions = ko.observable("");
+		this.procedureSet = ko.observableArray([]);
+		this.investigationSet = ko.observableArray([]);
+		this.prescriptionSet = ko.observableArray([]);
+	}
+
+	// Activates knockout.js
+	var appModel = new AppViewModel();
+	ko.applyBindings(appModel, jq("#treatmentForm")[0]);
+</script>
